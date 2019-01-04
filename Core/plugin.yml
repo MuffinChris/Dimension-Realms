@@ -1,0 +1,33 @@
+name: Core
+main: com.core.java.Main
+author: eChris
+version: 0.0.1
+description: Command and Feature Suite
+api-version: 1.13
+commands:
+  help:
+    description: Basic Help Command
+    aliases: [helpme, faq]
+  fly:
+    description: Fly and Speed Control
+    permission: core.mod
+  gmss:
+    description: Alias for Spectator
+    permission: core.mod
+  gms:
+    description: Alias for Survival
+    permission: core.mod
+  gmc:
+    description: Alias for Creative
+    permission: core.mod
+  spawn:
+    description: Teleport to Spawn
+  setspawn:
+    description: Set the Spawn Location
+    permission: core.admin
+  armor:
+    description: View the Armor Types
+  lag:
+    description: View detailed RAM Usage
+    aliases: [gc, top, ram]
+depend: [ArmorEquipEvent]
