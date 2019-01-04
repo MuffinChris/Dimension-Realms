@@ -3,6 +3,9 @@ package com.core.java;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,13 +20,15 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
 
-	public String version = "0.0.1";
-	public String noperm = "&cNo permission!";
+	public final String version = "0.0.1";
+	public final String noperm = "&cNo permission!";
 	
 	private static Main instance;
 	public static Main getInstance() {
 		return instance;
 	}
+	
+	Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
 	
 	@Override
 	public void onEnable() {
@@ -38,24 +43,64 @@ public class Main extends JavaPlugin {
 		getCommand("setspawn").setExecutor(new SpawnCommand());
 		getCommand("armor").setExecutor(new GUICommand());
 		getCommand("lag").setExecutor(new LagCommand());
+		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 		Bukkit.getPluginManager().registerEvents(new Motd(), this);
 		Bukkit.getPluginManager().registerEvents(new ChatFunctions(), this);
-		Bukkit.getPluginManager().registerEvents(new RPGJoinFunctions(), this);
+		Bukkit.getPluginManager().registerEvents(new RPGFunctions(), this);
 		Bukkit.getPluginManager().registerEvents(new Armor(), this);
 		Bukkit.getPluginManager().registerEvents(new EXP(), this);
 		Bukkit.getPluginManager().registerEvents(new Codex(), this);
-		//Bukkit.getPluginManager().registerEvents(new Stuff(), this);
+		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();
+		so("&cCORE&7: &fGUIs Enabled!");
 		
+		manaRegen();
+		hpPeriodic();
+		updatePeriodic();
+		so("&cCORE&7: &fPeriodics Enabled!");
+	}
+	
+	@Override
+	public void onDisable() {
+		
+		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fDisabled!");
+		
+	}
+	
+	public void updatePeriodic() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				so("&cCORE&7: &fPeriodic Update Started.");
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					hashmapUpdate(p);
+				}
+				so("&cCORE&7: &fPeriodic Update Finished.");
+			}
+		}.runTaskTimer(this, 6000L, 12000L);
+	}
+	
+	public void hpPeriodic() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					sendHp(p);
+				}
+			}
+		}.runTaskTimer(this, 20L, 5L);
+	}
+	
+	public void manaRegen() {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					// Make this based on Mana in config. Use hashmap instead of shit loads of files (cause lag)
-					if (p.getLevel() < 5000) {
+					if (p.getLevel() < mana.get(p.getUniqueId())) {
 						if (!p.isDead()) {
 							if (p.isSleeping()) {
 								p.setLevel(p.getLevel() + 20);
@@ -69,22 +114,12 @@ public class Main extends JavaPlugin {
 				}
 			}
 		}.runTaskTimerAsynchronously(this, 20L, 1L);
-		
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-					sendHp(p);
-				}
-			}
-		}.runTaskTimer(this, 5L, 5L);
 	}
 	
-	@Override
-	public void onDisable() {
-		
-		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fDisabled!");
-		
+	public void hashmapUpdate(Player p) {
+		UUID uuid = p.getUniqueId();
+        mana.remove(uuid);
+        mana.put(uuid, Integer.valueOf(getValue(p, "Mana")));
 	}
 	
 	public static void sendHp(Player p) {
