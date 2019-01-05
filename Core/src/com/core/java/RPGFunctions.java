@@ -12,22 +12,31 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 public class RPGFunctions implements Listener {
 	
-	private Main plugin = Main.getInstance();
+	private Plugin plugin = Main.getInstance();
 	
 	@EventHandler
 	public void onLeaveRPG (PlayerQuitEvent e) {
 		UUID uuid = e.getPlayer().getUniqueId();
-        if (plugin.mana.containsKey(uuid)) {
-        	plugin.mana.remove(uuid);
+        if (Main.getInstance().getManaMap().containsKey(uuid)) {
+        	Main.getInstance().getManaMap().remove(uuid);
         }
+	}
+	
+	@EventHandler
+	public void sendHpRegain (EntityRegainHealthEvent e) {
+		if (e.getEntity() instanceof Player) {
+			Main.sendHp((Player) e.getEntity());
+		}
 	}
 	
 	@EventHandler
@@ -47,10 +56,7 @@ public class RPGFunctions implements Listener {
             exception.printStackTrace();
         }
         UUID uuid = e.getPlayer().getUniqueId();
-        if (plugin.mana.containsKey(uuid)) {
-        	plugin.mana.remove(uuid);
-        }
-        plugin.mana.put(uuid, pData.getInt("Mana"));
+        Main.getInstance().getManaMap().put(uuid, pData.getInt("Mana"));
         
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 40.0) {

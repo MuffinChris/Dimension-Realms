@@ -20,8 +20,8 @@ public class EXP implements Listener {
 
 	private Plugin plugin = Main.getInstance();
 	
-	public Map<UUID, ArrayList<Enchantment>> enchants = new HashMap<>();
-	public Map<UUID, ArrayList<Integer>> enchantsC = new HashMap<>();
+	public Map<UUID, ArrayList<Enchantment>> enchants = new HashMap<UUID, ArrayList<Enchantment>>();
+	public Map<UUID, ArrayList<Integer>> enchantsC = new HashMap<UUID, ArrayList<Integer>>();
 	
 	@EventHandler
 	public void onJoin (PlayerJoinEvent e) {

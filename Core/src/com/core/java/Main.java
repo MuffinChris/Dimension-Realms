@@ -22,13 +22,15 @@ public class Main extends JavaPlugin {
 
 	public final String version = "0.0.1";
 	public final String noperm = "&cNo permission!";
-	
-	private static Main instance;
+
 	public static Main getInstance() {
-		return instance;
+		return JavaPlugin.getPlugin(Main.class);
 	}
 	
-	Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
+	public Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
+	public Map<UUID, Integer> getManaMap() {
+		return mana;
+	}
 	
 	@Override
 	public void onEnable() {
@@ -75,9 +77,14 @@ public class Main extends JavaPlugin {
 			@Override
 			public void run() {
 				so("&cCORE&7: &fPeriodic Update Started.");
+				int i = 0;
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					if (mana.containsKey(p.getUniqueId())) {
+						i++;
+					}
 					hashmapUpdate(p);
 				}
+				so("&cCORE&7: &fPeriodic Update Considered " + i + " Hashmap Instances.");
 				so("&cCORE&7: &fPeriodic Update Finished.");
 			}
 		}.runTaskTimer(this, 6000L, 12000L);
@@ -99,16 +106,17 @@ public class Main extends JavaPlugin {
 			@Override
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-					// Make this based on Mana in config. Use hashmap instead of shit loads of files (cause lag)
-					if (p.getLevel() < mana.get(p.getUniqueId())) {
-						if (!p.isDead()) {
-							if (p.isSleeping()) {
-								p.setLevel(p.getLevel() + 20);
+					if (mana.get(p.getUniqueId()) != null) {
+						if (p.getLevel() < mana.get(p.getUniqueId())) {
+							if (!p.isDead()) {
+								if (p.isSleeping()) {
+									p.setLevel(p.getLevel() + 20);
+								} else {
+									p.setLevel(p.getLevel() + 1);
+								}
 							} else {
-								p.setLevel(p.getLevel() + 1);
+								p.setLevel(0);
 							}
-						} else {
-							p.setLevel(0);
 						}
 					}
 				}
@@ -118,8 +126,7 @@ public class Main extends JavaPlugin {
 	
 	public void hashmapUpdate(Player p) {
 		UUID uuid = p.getUniqueId();
-        mana.remove(uuid);
-        mana.put(uuid, Integer.valueOf(getValue(p, "Mana")));
+        mana.replace(uuid, Integer.valueOf(getValue(p, "Mana")));
 	}
 	
 	public static void sendHp(Player p) {

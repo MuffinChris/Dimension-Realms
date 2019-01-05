@@ -158,22 +158,22 @@ public class Armor implements Listener {
 			p.setWalkSpeed(0.15F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 2.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(80.0);
 		} else if (set.equals("iron")) {
 			p.setWalkSpeed(0.18F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(52.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(70.0);
 		} else if (set.equals("golden")) {
 			p.setWalkSpeed(0.19F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(44.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(50.0);
 		} else if (set.equals("chainmail")) {
 			p.setWalkSpeed(0.22F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(46.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
 		} else if (set.equals("leather")) {
 			p.setWalkSpeed(0.26F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 2.0);
