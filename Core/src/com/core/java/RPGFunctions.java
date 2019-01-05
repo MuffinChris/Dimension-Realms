@@ -22,13 +22,13 @@ import org.bukkit.plugin.Plugin;
 
 public class RPGFunctions implements Listener {
 	
-	private Plugin plugin = Main.getInstance();
+	private Main plugin = Main.getInstance();
 	
 	@EventHandler
 	public void onLeaveRPG (PlayerQuitEvent e) {
 		UUID uuid = e.getPlayer().getUniqueId();
-        if (Main.getInstance().getManaMap().containsKey(uuid)) {
-        	Main.getInstance().getManaMap().remove(uuid);
+        if (plugin.getManaMap().containsKey(uuid)) {
+        	plugin.getManaMap().remove(uuid);
         }
 	}
 	
@@ -56,7 +56,7 @@ public class RPGFunctions implements Listener {
             exception.printStackTrace();
         }
         UUID uuid = e.getPlayer().getUniqueId();
-        Main.getInstance().getManaMap().put(uuid, pData.getInt("Mana"));
+        plugin.getManaMap().put(uuid, pData.getInt("Mana"));
         
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 40.0) {

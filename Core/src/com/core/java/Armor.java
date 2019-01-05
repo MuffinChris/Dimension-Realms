@@ -23,8 +23,6 @@ import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class Armor implements Listener {
 	
-	private Plugin plugin = Main.getInstance();
-	
 	public String getSet (Player p) {
 		String helmet = "nothing";
 		String chestplate = "nothing";
