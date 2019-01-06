@@ -23,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 public class RPGFunctions implements Listener {
 	
 	private Main plugin = Main.getInstance();
+	private double hp = plugin.basehp;
 	
 	@EventHandler
 	public void onLeaveRPG (PlayerQuitEvent e) {
@@ -63,53 +64,41 @@ public class RPGFunctions implements Listener {
         plugin.getManaRegenMap().put(uuid, plugin.getManaRegen(e.getPlayer()));
         
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
-		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 40.0) {
-			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
-			e.getPlayer().setHealth(40);
+		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
+			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
+			e.getPlayer().setHealth(hp);
 		}
 		e.getPlayer().setHealthScale(20);
 		
 		if (!e.getPlayer().hasPlayedBefore()) {
-			e.getPlayer().setHealth(40);
-			ItemStack codex = new ItemStack(Material.ENCHANTED_BOOK);
-			ItemMeta meta = codex.getItemMeta();
-			meta.setDisplayName(Main.color("&8» &bGuide Codex &8«"));
-			ArrayList<String> lore = new ArrayList<String>();
-			lore.add("");
-			lore.add(Main.color("&7Right-Click for Help!"));
-			lore.add("");
-			meta.setLore(lore);
-			codex.setItemMeta(meta);
-			e.getPlayer().getInventory().setItem(8, codex);
-			
-			e.getPlayer().getInventory().setItem(0, new ItemStack(Material.WOODEN_SWORD));
-			
-			ItemStack bread = new ItemStack(Material.BREAD);
-			bread.setAmount(8);
-			e.getPlayer().getInventory().setItem(4, bread);
+			e.getPlayer().setHealth(hp);
+			giveSpawnItems(e.getPlayer());
 		}
 		
 	}
 	
 	@EventHandler
 	public void respawnItems (PlayerRespawnEvent e) {
-			Player p = (Player) e.getPlayer();
-			ItemStack codex = new ItemStack(Material.ENCHANTED_BOOK);
-			ItemMeta meta = codex.getItemMeta();
-			meta.setDisplayName(Main.color("&8» &bGuide Codex &8«"));
-			ArrayList<String> lore = new ArrayList<String>();
-			lore.add("");
-			lore.add(Main.color("&7Right-Click for Help!"));
-			lore.add("");
-			meta.setLore(lore);
-			codex.setItemMeta(meta);
-			p.getInventory().setItem(8, codex);
-			
-			p.getInventory().setItem(0, new ItemStack(Material.WOODEN_SWORD));
-			
-			ItemStack bread = new ItemStack(Material.BREAD);
-			bread.setAmount(8);
-			p.getInventory().setItem(4, bread);
+		giveSpawnItems(e.getPlayer());
+	}
+	
+	public void giveSpawnItems(Player p) {
+		ItemStack codex = new ItemStack(Material.ENCHANTED_BOOK);
+		ItemMeta meta = codex.getItemMeta();
+		meta.setDisplayName(Main.color("&8» &bGuide Codex &8«"));
+		ArrayList<String> lore = new ArrayList<String>();
+		lore.add("");
+		lore.add(Main.color("&7Right-Click for Help!"));
+		lore.add("");
+		meta.setLore(lore);
+		codex.setItemMeta(meta);
+		p.getInventory().setItem(8, codex);
+		
+		p.getInventory().setItem(0, new ItemStack(Material.WOODEN_SWORD));
+		
+		ItemStack bread = new ItemStack(Material.BREAD);
+		bread.setAmount(8);
+		p.getInventory().setItem(4, bread);
 	}
 	
 }

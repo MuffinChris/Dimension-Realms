@@ -32,13 +32,15 @@ public class HelpCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			
+			player.openInventory(inv);
+			/*
 			Main.msg(player, "&f&m-----&r &eHelp Menu &f&m-----");
 			Main.msg(player, "&e/help &7- &fBasic Help Command");
 			Main.msg(player, "&e/armor &7- &fView Armor Types");
 			Main.msg(player, "&e/msg &7- &fMessage a Player");
 			Main.msg(player, "&e/lag &7- &fView RAM Usage");
 			//Main.msg(player, "&e/msg &7- &fMessage other Users");
+			 */
 		} else {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "bukkit:help");
 		}

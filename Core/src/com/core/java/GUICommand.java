@@ -27,6 +27,7 @@ public class GUICommand implements CommandExecutor {
 		item.setItemMeta(data);
 		return item;
 	}*/
+	private Main plugin = Main.getInstance();
 	
 	public static Inventory armorInv = Bukkit.createInventory(null, 27, Main.color("&e&lARMOR SETS"));
 	
@@ -49,7 +50,7 @@ public class GUICommand implements CommandExecutor {
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&8 = Hitpoints (0HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.getInstance().leatherA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (30%)"));
 		lore.add(Main.color("&7»&a + Attack Speed (33%)"));
@@ -78,7 +79,7 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (10HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.getInstance().goldenA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (10%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-5%)"));
 		lore.add(Main.color("&7»&c - Attack Speed (-16%)"));
@@ -107,7 +108,7 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (20HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.getInstance().chainmailA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (10%)"));
 		lore.add(Main.color("&7»&a + Attack Speed (16%)"));
@@ -136,7 +137,7 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (30HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.getInstance().ironA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (30%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-10%)"));
 		lore.add(Main.color("&7»&8 = Attack Speed (0%)"));
@@ -165,7 +166,7 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (40HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.getInstance().diamondA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (60%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-25%)"));
 		lore.add(Main.color("&7»&c - Attack Speed (-33%)"));

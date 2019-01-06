@@ -13,7 +13,9 @@ public class DataReloadCommand implements CommandExecutor {
 			Player p = (Player) sender;
 			if (p.hasPermission("core.admin")) {
 				Main.getInstance().updateFunc();
-				Main.msg(p, "&e&lRELOADED DATA FOLDER");
+				Main.msg(p, "");
+				Main.msg(p, "&8» &e&lRELOADED DATA FOLDER");
+				Main.msg(p, "");
 			} else {
 				Main.msg(p, Main.getInstance().noperm);
 			}

@@ -5,7 +5,9 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,6 +24,9 @@ import net.minecraft.server.v1_13_R2.NBTTagList;
 import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class Armor implements Listener {
+	
+	private Main plugin = Main.getInstance();
+	private double hp = plugin.basehp;
 	
 	public String getSet (Player p) {
 		String helmet = "nothing";
@@ -91,6 +96,18 @@ public class Armor implements Listener {
 		}
 	}
 	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void entityDamage (EntityDamageByEntityEvent e) {
+		if (e.getEntity() instanceof Player) {
+			if (e.getDamager() instanceof Player) {
+				return;
+			} else {
+				Player p = (Player) e.getEntity();
+				e.setDamage(e.getDamage() + p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.03D);
+			}
+		}
+	}
+	
 	@EventHandler
 	public void noArmor (ArmorEquipEvent e) {
 		if (e.getMethod() == EquipMethod.SHIFT_CLICK || e.getMethod() == EquipMethod.HOTBAR || e.getMethod() == EquipMethod.HOTBAR_SWAP) {
@@ -156,34 +173,34 @@ public class Armor implements Listener {
 			p.setWalkSpeed(0.15F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 2.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(80.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.diamondA);
 		} else if (set.equals("iron")) {
 			p.setWalkSpeed(0.18F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(70.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.ironA);
 		} else if (set.equals("golden")) {
 			p.setWalkSpeed(0.19F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(50.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.goldenA);
 		} else if (set.equals("chainmail")) {
 			p.setWalkSpeed(0.22F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(60.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.chainmailA);
 		} else if (set.equals("leather")) {
 			p.setWalkSpeed(0.26F);
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 2.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.leatherA);
 		} else {
 			if (p.getWalkSpeed() != 0.2F) {
 				p.setWalkSpeed(0.2F);
 			}
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(6.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40.0);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 		}
 		p.setHealthScale(20);
 	}

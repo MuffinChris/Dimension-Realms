@@ -20,6 +20,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
 
+	public final double basehp = 100;
+	public final double leatherA = 0;
+	public final double goldenA = 25;
+	public final double chainmailA = 50;
+	public final double ironA = 75;
+	public final double diamondA = 100;
+	
 	public final String version = "0.0.1";
 	public final String noperm = "&cNo permission!";
 
