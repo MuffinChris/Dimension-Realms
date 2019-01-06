@@ -108,11 +108,12 @@ public class Main extends JavaPlugin {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (mana.get(p.getUniqueId()) != null) {
 						if (p.getLevel() < mana.get(p.getUniqueId())) {
+							int bonusRegen = Integer.valueOf(String.valueOf(Math.round(((mana.get(p.getUniqueId()) * 1.0D) * 0.01D))));
 							if (!p.isDead()) {
 								if (p.isSleeping()) {
-									p.setLevel(p.getLevel() + 20);
+									p.setLevel(p.getLevel() + 20 + bonusRegen);
 								} else {
-									p.setLevel(p.getLevel() + 1);
+									p.setLevel(p.getLevel() + 1 + bonusRegen);
 								}
 							} else {
 								p.setLevel(0);
