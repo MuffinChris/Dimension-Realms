@@ -30,6 +30,9 @@ public class RPGFunctions implements Listener {
         if (plugin.getManaMap().containsKey(uuid)) {
         	plugin.getManaMap().remove(uuid);
         }
+        if (plugin.getManaRegenMap().containsKey(uuid)) {
+        	plugin.getManaRegenMap().remove(uuid);
+        }
 	}
 	
 	@EventHandler
@@ -57,6 +60,7 @@ public class RPGFunctions implements Listener {
         }
         UUID uuid = e.getPlayer().getUniqueId();
         plugin.getManaMap().put(uuid, pData.getInt("Mana"));
+        plugin.getManaRegenMap().put(uuid, plugin.getManaRegen(e.getPlayer()));
         
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < 40.0) {

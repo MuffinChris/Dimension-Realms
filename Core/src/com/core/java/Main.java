@@ -32,6 +32,15 @@ public class Main extends JavaPlugin {
 		return mana;
 	}
 	
+	public Map<UUID, Integer> manaRegen = new HashMap<UUID, Integer>();
+	public Map<UUID, Integer> getManaRegenMap() {
+		return manaRegen;
+	}
+	
+	public int getManaRegen (Player p) {
+		return Integer.valueOf(String.valueOf(Math.round((Math.sqrt((mana.get(p.getUniqueId()) * 0.0005D))))));
+	}
+	
 	@Override
 	public void onEnable() {
 		
@@ -45,6 +54,7 @@ public class Main extends JavaPlugin {
 		getCommand("setspawn").setExecutor(new SpawnCommand());
 		getCommand("armor").setExecutor(new GUICommand());
 		getCommand("lag").setExecutor(new LagCommand());
+		getCommand("datareload").setExecutor(new DataReloadCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -57,6 +67,7 @@ public class Main extends JavaPlugin {
 		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();
+		HelpCommand.createHelpGui();
 		so("&cCORE&7: &fGUIs Enabled!");
 		
 		manaRegen();
@@ -68,6 +79,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		
+		updateFunc();
 		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fDisabled!");
 		
 	}
@@ -76,18 +88,25 @@ public class Main extends JavaPlugin {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				so("&cCORE&7: &fPeriodic Update Started.");
-				int i = 0;
-				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-					if (mana.containsKey(p.getUniqueId())) {
-						i++;
-					}
-					hashmapUpdate(p);
-				}
-				so("&cCORE&7: &fPeriodic Update Considered " + i + " Hashmap Instances.");
-				so("&cCORE&7: &fPeriodic Update Finished.");
+				updateFunc();
 			}
-		}.runTaskTimer(this, 6000L, 12000L);
+		}.runTaskTimer(this, 6000L, 6000L);
+	}
+	
+	public void updateFunc() {
+		so("&cCORE&7: &fPeriodic Update Started.");
+		int i = 0;
+		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+			if (mana.containsKey(p.getUniqueId())) {
+				i++;
+			}
+			if (manaRegen.containsKey(p.getUniqueId())) {
+				i++;
+			}
+			hashmapUpdate(p);
+		}
+		so("&cCORE&7: &fPeriodic Update Considered " + i + " Hashmap Instances.");
+		so("&cCORE&7: &fPeriodic Update Finished.");
 	}
 	
 	public void hpPeriodic() {
@@ -108,12 +127,11 @@ public class Main extends JavaPlugin {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (mana.get(p.getUniqueId()) != null) {
 						if (p.getLevel() < mana.get(p.getUniqueId())) {
-							int bonusRegen = Integer.valueOf(String.valueOf(Math.round(((mana.get(p.getUniqueId()) * 1.0D) * 0.01D))));
 							if (!p.isDead()) {
 								if (p.isSleeping()) {
-									p.setLevel(p.getLevel() + 20 + bonusRegen);
+									p.setLevel(p.getLevel() + 20 + manaRegen.get(p.getUniqueId()) * 10);
 								} else {
-									p.setLevel(p.getLevel() + 1 + bonusRegen);
+									p.setLevel(p.getLevel() + manaRegen.get(p.getUniqueId()));
 								}
 							} else {
 								p.setLevel(0);
@@ -128,11 +146,12 @@ public class Main extends JavaPlugin {
 	public void hashmapUpdate(Player p) {
 		UUID uuid = p.getUniqueId();
         mana.replace(uuid, Integer.valueOf(getValue(p, "Mana")));
+        manaRegen.replace(uuid, getManaRegen(p));
 	}
 	
 	public static void sendHp(Player p) {
 		DecimalFormat dF = new DecimalFormat("#.##");
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8»---")));
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + getInstance().manaRegen.get(p.getUniqueId()) + " MR " + "&8»---")));
 	}
 	
 	public static void setStringValue(Player p, String text, String value) {

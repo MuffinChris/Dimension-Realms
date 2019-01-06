@@ -28,7 +28,7 @@ public class GUICommand implements CommandExecutor {
 		return item;
 	}*/
 	
-	public static Inventory inv = Bukkit.createInventory(null, 27, Main.color("&e&lARMOR SETS"));
+	public static Inventory armorInv = Bukkit.createInventory(null, 27, Main.color("&e&lARMOR SETS"));
 	
 	public static void createArmorInv() {
 		ItemStack leather = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -176,11 +176,11 @@ public class GUICommand implements CommandExecutor {
 		data.setLore(lore);
 		diamond.setItemMeta(data);
 		
-		inv.setItem(11, leather);
-		inv.setItem(12, golden);
-		inv.setItem(13, chainmail);
-		inv.setItem(14, iron);
-		inv.setItem(15, diamond);
+		armorInv.setItem(11, leather);
+		armorInv.setItem(12, golden);
+		armorInv.setItem(13, chainmail);
+		armorInv.setItem(14, iron);
+		armorInv.setItem(15, diamond);
 	}
 	
 	@Override
@@ -189,7 +189,7 @@ public class GUICommand implements CommandExecutor {
 			Player p = (Player) sender;
 			if (cmd.getName().equalsIgnoreCase("armor")) {
 				
-				p.openInventory(inv);
+				p.openInventory(armorInv);
 				
 			}
 		} else {

@@ -30,4 +30,8 @@ commands:
   lag:
     description: View detailed RAM Usage
     aliases: [gc, top, ram]
+  datareload:
+    description: Reload Data Folder (All Hashmaps)
+    aliases: [reloaddata, refresh]
+    permission: core.admin
 depend: [ArmorEquipEvent]

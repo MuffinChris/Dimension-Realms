@@ -19,7 +19,7 @@ public class Codex implements Listener {
 				if (i.getType() != null) {
 					if (i.getType() == Material.ENCHANTED_BOOK) {
 						if (i.getItemMeta().getDisplayName().contains("Guide Codex")) {
-							p.performCommand("armor");
+							p.performCommand("help");
 							//Add GUI help later
 						}
 					}
