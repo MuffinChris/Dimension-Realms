@@ -34,4 +34,8 @@ commands:
     description: Reload Data Folder (All Hashmaps)
     aliases: [reloaddata, refresh]
     permission: core.admin
+  set:
+    description: Set Hashmap Values for a Player
+    aliases: [setvalue, setmap]
+    permission: core.admin
 depend: [ArmorEquipEvent]

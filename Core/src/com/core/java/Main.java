@@ -62,6 +62,7 @@ public class Main extends JavaPlugin {
 		getCommand("armor").setExecutor(new GUICommand());
 		getCommand("lag").setExecutor(new LagCommand());
 		getCommand("datareload").setExecutor(new DataReloadCommand());
+		getCommand("set").setExecutor(new HashmapCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
