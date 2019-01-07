@@ -15,24 +15,25 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class HelpCommand implements CommandExecutor {
 	
-	public static Inventory inv = Bukkit.createInventory(null, 27, Main.color("&e&lHELP MENU"));
+	public static Inventory helpInv = Bukkit.createInventory(null, 27, Main.color("&e&lHELP MENU"));
 	public static void createHelpGui() {
 		ItemStack armor = new ItemStack(Material.LEATHER_HELMET);
 		ItemMeta armorMeta = armor.getItemMeta();
-		armorMeta.setDisplayName(Main.color("&eARMOR SETS"));
+		armorMeta.setDisplayName(Main.color("&6&lARMOR SETS"));
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7Click for information"));
 		lore.add(Main.color("&7on the different armor sets!"));
+		armorMeta.setLore(lore);
 		armor.setItemMeta(armorMeta);
-		inv.setItem(11, armor);
+		helpInv.setItem(11, armor);
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			player.openInventory(inv);
+			player.openInventory(helpInv);
 			/*
 			Main.msg(player, "&f&m-----&r &eHelp Menu &f&m-----");
 			Main.msg(player, "&e/help &7- &fBasic Help Command");

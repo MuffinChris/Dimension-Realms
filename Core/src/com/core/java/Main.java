@@ -97,7 +97,7 @@ public class Main extends JavaPlugin {
 			public void run() {
 				updateFunc();
 			}
-		}.runTaskTimer(this, 6000L, 6000L);
+		}.runTaskTimer(this, 12000L, 12000L);
 	}
 	
 	public void updateFunc() {

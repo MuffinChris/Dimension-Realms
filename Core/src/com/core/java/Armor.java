@@ -3,6 +3,7 @@ package com.core.java;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
@@ -96,6 +98,7 @@ public class Armor implements Listener {
 		}
 	}
 	
+	/*
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void entityDamage (EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player) {
@@ -104,6 +107,17 @@ public class Armor implements Listener {
 			} else {
 				Player p = (Player) e.getEntity();
 				e.setDamage(e.getDamage() + p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.03D);
+			}
+		}
+	}*/
+	
+	@EventHandler
+	public void entityDamageSpawn (EntitySpawnEvent e) {
+		if (!(e.getEntity() instanceof Player)) {
+			if (e.getEntity() instanceof LivingEntity) {
+				LivingEntity ent = (LivingEntity) e.getEntity();
+				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 2);
 			}
 		}
 	}
