@@ -34,6 +34,9 @@ public class RPGFunctions implements Listener {
         if (plugin.getManaRegenMap().containsKey(uuid)) {
         	plugin.getManaRegenMap().remove(uuid);
         }
+        if (plugin.getAdMap().containsKey(uuid)) {
+        	plugin.getAdMap().remove(uuid);
+        }
 	}
 	
 	@EventHandler
@@ -55,6 +58,9 @@ public class RPGFunctions implements Listener {
             if (!pData.isSet("Mana")) {
             	pData.set("Mana", 5000);
             }
+            if (!pData.isSet("AD")) {
+            	pData.set("AD", 10.0);
+            }
             pData.save(pFile);
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -62,8 +68,10 @@ public class RPGFunctions implements Listener {
         UUID uuid = e.getPlayer().getUniqueId();
         plugin.getManaMap().put(uuid, pData.getInt("Mana"));
         plugin.getManaRegenMap().put(uuid, plugin.getManaRegen(e.getPlayer()));
+        plugin.getAdMap().put(uuid, pData.getDouble("AD"));
         
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
+		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pData.getDouble("AD"));
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
 			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 			e.getPlayer().setHealth(hp);

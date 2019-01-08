@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -44,6 +45,11 @@ public class Main extends JavaPlugin {
 		return manaRegen;
 	}
 	
+	public Map<UUID, Double> ad = new HashMap<UUID, Double>();
+	public Map<UUID, Double> getAdMap() {
+		return ad;
+	}
+	
 	public int getManaRegen (Player p) {
 		return Integer.valueOf(String.valueOf(Math.round((Math.sqrt((mana.get(p.getUniqueId()) * 0.0005D))))));
 	}
@@ -72,6 +78,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new Armor(), this);
 		Bukkit.getPluginManager().registerEvents(new EXP(), this);
 		Bukkit.getPluginManager().registerEvents(new Codex(), this);
+		Bukkit.getPluginManager().registerEvents(new RPGIncreases(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();
@@ -109,6 +116,9 @@ public class Main extends JavaPlugin {
 				i++;
 			}
 			if (manaRegen.containsKey(p.getUniqueId())) {
+				i++;
+			}
+			if (ad.containsKey(p.getUniqueId())) {
 				i++;
 			}
 			hashmapUpdate(p);
@@ -155,11 +165,13 @@ public class Main extends JavaPlugin {
 		UUID uuid = p.getUniqueId();
         mana.replace(uuid, Integer.valueOf(getValue(p, "Mana")));
         manaRegen.replace(uuid, getManaRegen(p));
+        ad.replace(uuid, Double.valueOf(getValue(p, "AD")));
+        p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
 	}
 	
 	public static void sendHp(Player p) {
 		DecimalFormat dF = new DecimalFormat("#.##");
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + getInstance().manaRegen.get(p.getUniqueId()) + " MR " + "&8»---")));
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &4" + getInstance().ad.get(p.getUniqueId()) + " AD &8|| &b" + getInstance().manaRegen.get(p.getUniqueId()) + " MR " + "&8»---")));
 	}
 	
 	public static void setStringValue(Player p, String text, String value) {
