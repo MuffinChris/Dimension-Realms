@@ -70,7 +70,7 @@ public class Armor implements Listener {
 			Player p = (Player) e.getEntity();
 			Main.sendHp(p);
 			String set = getSet(p);
-			if (e.getCause() == DamageCause.MAGIC) {
+			if (e.getCause() == DamageCause.CUSTOM) {
 				if (set.equals("diamond")) {
 					e.setDamage(e.getDamage() * 0.8);
 				} else if (set.equals("iron")) {
@@ -177,7 +177,7 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 2.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.diamondA);
-			if (p.getHealth() >= hp) {
+			if (p.getHealth() >= hp + plugin.diamondA) {
 				p.setHealth(hp + plugin.diamondA);
 			}
 		} else if (set.equals("iron")) {
@@ -185,7 +185,7 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.ironA);
-			if (p.getHealth() >= hp) {
+			if (p.getHealth() >= hp + plugin.ironA) {
 				p.setHealth(hp + plugin.ironA);
 			}
 		} else if (set.equals("golden")) {
@@ -193,7 +193,7 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.goldenA);
-			if (p.getHealth() >= hp) {
+			if (p.getHealth() >= hp + plugin.goldenA) {
 				p.setHealth(hp + plugin.goldenA);
 			}
 		} else if (set.equals("chainmail")) {
@@ -201,7 +201,7 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 1.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.chainmailA);
-			if (p.getHealth() >= hp) {
+			if (p.getHealth() >= hp + plugin.chainmailA) {
 				p.setHealth(hp + plugin.chainmailA);
 			}
 		} else if (set.equals("leather")) {
@@ -209,7 +209,7 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 2.0);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.leatherA);
-			if (p.getHealth() >= hp) {
+			if (p.getHealth() >= hp + plugin.leatherA) {
 				p.setHealth(hp + plugin.leatherA);
 			}
 		} else {
