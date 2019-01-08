@@ -32,6 +32,7 @@ public class HashmapCommand implements CommandExecutor {
 								return false;
 							}
 							Main.msg(p, "&aSet Key " + args[0] + " to Value " + args[1] + " of type " + args[2] + " for Player " + target.getName());
+							plugin.hashmapUpdate(target);
 						} else {
 							Main.msg(p, "&cInvalid Target.");
 						}
@@ -60,6 +61,7 @@ public class HashmapCommand implements CommandExecutor {
 							return false;
 						}
 						Main.so("&aSet Key " + args[0] + " to Value " + args[1] + " of type " + args[2] + " for Player " + target.getName());
+						plugin.hashmapUpdate(target);
 					} else {
 						Main.so("&cInvalid Target.");
 					}
