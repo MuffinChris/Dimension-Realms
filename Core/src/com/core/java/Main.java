@@ -83,6 +83,7 @@ public class Main extends JavaPlugin {
 		
 		GUICommand.createArmorInv();
 		HelpCommand.createHelpGui();
+		GUICommand.createCombatInv();
 		so("&cCORE&7: &fGUIs Enabled!");
 		
 		manaRegen();

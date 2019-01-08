@@ -19,6 +19,11 @@ public class GUIListener implements Listener {
 								e.getWhoClicked().openInventory(GUICommand.armorInv);
 								return;
 							}
+							if (e.getCurrentItem().getType() == Material.DIAMOND_SWORD) {
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().openInventory(GUICommand.combatInv);
+								return;
+							}
 						}
 					}
 					e.setCancelled(true);

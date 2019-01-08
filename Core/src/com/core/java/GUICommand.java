@@ -18,16 +18,47 @@ import net.minecraft.server.v1_13_R2.NBTTagList;
 import net.minecraft.server.v1_13_R2.NBTTagString;
 
 public class GUICommand implements CommandExecutor {
-	
-	/*public ItemStack createItem(Material type, String name) {
-		ItemStack item = null;
-		item.setType(type);
-		ItemMeta data = item.getItemMeta();
-		data.setDisplayName(Main.color(name));
-		item.setItemMeta(data);
-		return item;
-	}*/
+
 	private Main plugin = Main.getInstance();
+	
+	public static Inventory combatInv = Bukkit.createInventory(null, 27, Main.color("&4&lCOMBAT INFO"));
+	
+	public static void createCombatInv() {
+		ItemStack sword = new ItemStack(Material.IRON_SWORD);
+		ItemMeta swordMeta = sword.getItemMeta();
+		swordMeta.setDisplayName(Main.color("&aCUSTOM DAMAGE"));
+		ArrayList<String> lore = new ArrayList<>();
+		lore.add(Main.color(""));
+		lore.add(Main.color("&fThe Value &4AD &frepresents Attack Damage."));
+		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
+		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
+		sword.setItemMeta(swordMeta);
+		combatInv.setItem(11, sword);
+		
+		ItemStack shield = new ItemStack(Material.SHIELD);
+		ItemMeta shieldMeta = shield.getItemMeta();
+		shieldMeta.setDisplayName(Main.color("&aCUSTOM DEFENSES"));
+		lore.clear();
+		lore.add(Main.color(""));
+		lore.add(Main.color("&fThe Value &cHP &frepresents your Health."));
+		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
+		lore.add(Main.color("&cHealth is modified by armor (full sets)."));
+		shield.setItemMeta(shieldMeta);
+		combatInv.setItem(12, shield);
+		
+		ItemStack emerald = new ItemStack(Material.EMERALD);
+		ItemMeta emeraldMeta = emerald.getItemMeta();
+		emeraldMeta.setDisplayName(Main.color("&aDAMAGE TYPES"));
+		lore.clear();
+		lore.add(Main.color(""));
+		lore.add(Main.color("&fThere are three key damage types."));
+		lore.add(Main.color("&cPhysical&f, &bMagic&f, and &f&lTrue&f."));
+		lore.add(Main.color("&cPhysical&f: &fAffected by Armor and Physical Resistance."));
+		lore.add(Main.color("&bMagic&f: &fAffected by Armor and Magic Resistance."));
+		lore.add(Main.color("&f&lTRUE&f: Piece resistances and deals full damage."));
+		emerald.setItemMeta(emeraldMeta);
+		combatInv.setItem(13, emerald);
+	}
 	
 	public static Inventory armorInv = Bukkit.createInventory(null, 27, Main.color("&e&lARMOR SETS"));
 	

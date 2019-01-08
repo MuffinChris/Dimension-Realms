@@ -46,7 +46,6 @@ public class EXP implements Listener {
 				enchs.add(e.getOffers()[i].getEnchantment());
 				enchsCost.add(e.getOffers()[i].getEnchantmentLevel());
 			}
-			
 		}
 		enchants.put(p.getUniqueId(), enchs);
 		enchantsC.put(p.getUniqueId(), enchsCost);

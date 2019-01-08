@@ -26,7 +26,18 @@ public class HelpCommand implements CommandExecutor {
 		lore.add(Main.color("&7on the different armor sets!"));
 		armorMeta.setLore(lore);
 		armor.setItemMeta(armorMeta);
-		helpInv.setItem(11, armor);
+		helpInv.setItem(12, armor);
+		
+		ItemStack combat = new ItemStack(Material.DIAMOND_SWORD);
+		ItemMeta combatMeta = combat.getItemMeta();
+		combatMeta.setDisplayName(Main.color("&4&lCOMBAT INFO"));
+		lore.clear();
+		lore.add(Main.color(""));
+		lore.add(Main.color("&7Click for information"));
+		lore.add(Main.color("&7on the combat system!"));
+		combatMeta.setLore(lore);
+		combat.setItemMeta(combatMeta);
+		helpInv.setItem(11, combat);
 	}
 	
 	@Override
