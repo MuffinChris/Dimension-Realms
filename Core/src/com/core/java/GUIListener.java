@@ -61,4 +61,24 @@ public class GUIListener implements Listener {
 		}
 	}
 	
+	@EventHandler
+	public void combatClick (InventoryClickEvent e) {
+		if (e.getInventory() != null) {
+			if (e.getInventory().getTitle() != null) {
+				if (e.getInventory().getTitle().contains("COMBAT INFO")) {
+					e.setCancelled(true);
+					return;
+				}
+			}
+		}
+		if (e.getClickedInventory() != null) {
+			if (e.getClickedInventory().getTitle() != null) {
+				if (e.getClickedInventory().getTitle().contains("COMBAT INFO")) {
+					e.setCancelled(true);
+					return;
+				}
+			}
+		}
+	}
+	
 }

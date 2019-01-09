@@ -32,6 +32,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&fThe Value &4AD &frepresents Attack Damage."));
 		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
 		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
+		swordMeta.setLore(lore);
 		sword.setItemMeta(swordMeta);
 		combatInv.setItem(11, sword);
 		
@@ -42,7 +43,9 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&fThe Value &cHP &frepresents your Health."));
 		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
-		lore.add(Main.color("&cHealth is modified by armor (full sets)."));
+		lore.add(Main.color("&cHealth &fis modified by armor (full sets)."));
+		lore.add(Main.color(""));
+		shieldMeta.setLore(lore);
 		shield.setItemMeta(shieldMeta);
 		combatInv.setItem(12, shield);
 		
@@ -53,9 +56,12 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&fThere are three key damage types."));
 		lore.add(Main.color("&cPhysical&f, &bMagic&f, and &f&lTrue&f."));
-		lore.add(Main.color("&cPhysical&f: &fAffected by Armor and Physical Resistance."));
-		lore.add(Main.color("&bMagic&f: &fAffected by Armor and Magic Resistance."));
-		lore.add(Main.color("&f&lTRUE&f: Piece resistances and deals full damage."));
+		lore.add(Main.color(""));
+		lore.add(Main.color("&cPhysical&7: &fAffected by Armor and Physical Resistance."));
+		lore.add(Main.color("&bMagic&7: &fAffected by Armor and Magic Resistance."));
+		lore.add(Main.color("&f&lTRUE&7: &fPiece resistances and deals full damage."));
+		lore.add(Main.color(""));
+		emeraldMeta.setLore(lore);
 		emerald.setItemMeta(emeraldMeta);
 		combatInv.setItem(13, emerald);
 	}

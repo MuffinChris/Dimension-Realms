@@ -3,6 +3,7 @@ package com.core.java;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +34,14 @@ public class Main extends JavaPlugin {
 
 	public static Main getInstance() {
 		return JavaPlugin.getPlugin(Main.class);
+	}
+	
+	public ArrayList<Map> maps = new ArrayList<>();
+	
+	public void addToMaps() {
+		maps.add(mana);
+		maps.add(manaRegen);
+		maps.add(ad);
 	}
 	
 	public Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
@@ -113,6 +122,7 @@ public class Main extends JavaPlugin {
 		so("&cCORE&7: &fPeriodic Update Started.");
 		int i = 0;
 		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+			
 			if (mana.containsKey(p.getUniqueId())) {
 				i++;
 			}

@@ -9,7 +9,7 @@ public class Motd implements Listener {
 	@EventHandler
 	public void onPing(ServerListPingEvent e) {
 		
-		e.setMotd(Main.color("&bDimension Realms 2019 Development Server"));
+		e.setMotd(Main.color("&9&lDimension Realms\n&fIn Development"));
 		
 	}
 	

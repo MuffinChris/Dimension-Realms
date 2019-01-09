@@ -19,8 +19,9 @@ public class RPGIncreases implements Listener {
 	public void addDamage (EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
+			double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (e.getCause() == DamageCause.FALL) {
-				e.setDamage(e.getDamage() * 8.0);
+				e.setDamage(e.getDamage() * (hp / 20.0));
 			}
 			if (e.getCause() == DamageCause.MAGIC) {
 				e.setDamage(e.getDamage() * 10.0);
@@ -37,7 +38,7 @@ public class RPGIncreases implements Listener {
 				e.setDamage(10);
 			}
 			if (e.getCause() == DamageCause.WITHER) {
-				e.setDamage(e.getDamage() * 5.0);
+				e.setDamage(e.getDamage() * (hp / 40.0));
 			}
 			if (e.getCause() == DamageCause.PROJECTILE) {
 				e.setDamage(e.getDamage() * 7.0);
@@ -100,8 +101,9 @@ public class RPGIncreases implements Listener {
 	@EventHandler
 	public void bonusRegen (EntityRegainHealthEvent e) {
 		if (e.getEntity() instanceof Player) {
-			if (e.getRegainReason() == RegainReason.REGEN) {
-				e.setAmount(e.getAmount() * 5.0);
+			if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.EATING) {
+				Player p = (Player) e.getEntity();
+				e.setAmount(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.05D);
 			} else {
 				if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
 					e.setAmount(e.getAmount() * 8.0);
