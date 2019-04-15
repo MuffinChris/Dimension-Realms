@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.rpgbase.player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+
+import com.core.java.essentials.Main;
 
 public class EXP implements Listener {
 

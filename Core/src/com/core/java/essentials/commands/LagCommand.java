@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials.commands;
 
 import java.text.DecimalFormat;
 
@@ -7,6 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.core.java.essentials.Main;
 
 public class LagCommand implements CommandExecutor {
 

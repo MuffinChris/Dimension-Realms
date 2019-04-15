@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.rpgbase;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
-public class RPGIncreases implements Listener {
+public class EntityIncreases implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void addDamage (EntityDamageEvent e) {
@@ -104,6 +104,7 @@ public class RPGIncreases implements Listener {
 			if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.EATING) {
 				Player p = (Player) e.getEntity();
 				e.setAmount(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.05D);
+				//not working?
 			} else {
 				if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
 					e.setAmount(e.getAmount() * 8.0);

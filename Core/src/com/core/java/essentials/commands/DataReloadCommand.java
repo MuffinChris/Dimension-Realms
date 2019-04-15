@@ -1,9 +1,11 @@
-package com.core.java;
+package com.core.java.essentials.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.core.java.essentials.Main;
 
 public class DataReloadCommand implements CommandExecutor {
 

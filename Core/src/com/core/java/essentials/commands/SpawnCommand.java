@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials.commands;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import com.core.java.essentials.Main;
 
 public class SpawnCommand implements CommandExecutor {
 	

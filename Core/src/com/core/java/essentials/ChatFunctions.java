@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.rpgbase.player;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -19,6 +19,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
+import com.core.java.essentials.Main;
 
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagDouble;
@@ -30,7 +31,7 @@ public class Armor implements Listener {
 	private Main plugin = Main.getInstance();
 	private double hp = plugin.basehp;
 	
-	public String getSet (Player p) {
+	public static String getSet (Player p) {
 		String helmet = "nothing";
 		String chestplate = "nothing";
 		String leggings = "nothing";

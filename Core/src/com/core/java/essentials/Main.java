@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +17,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.core.java.rpgbase.player.Armor;
+import com.core.java.rpgbase.skills.ArmorSkills;
+import com.core.java.rpgbase.player.EXP;
+import com.core.java.rpgbase.EntityIncreases;
+import com.core.java.rpgbase.RPGFunctions;
+import com.core.java.essentials.commands.Codex;
+import com.core.java.essentials.commands.DataReloadCommand;
+import com.core.java.essentials.commands.FlyCommand;
+import com.core.java.essentials.commands.GUICommand;
+import com.core.java.essentials.commands.GUIListener;
+import com.core.java.essentials.commands.GamemodeCommand;
+import com.core.java.essentials.commands.HashmapCommand;
+import com.core.java.essentials.commands.HelpCommand;
+import com.core.java.essentials.commands.LagCommand;
+import com.core.java.essentials.commands.SpawnCommand;
+
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
-
+	
 	public final double basehp = 100;
 	public final double leatherA = 0;
 	public final double goldenA = 25;
@@ -87,7 +103,8 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new Armor(), this);
 		Bukkit.getPluginManager().registerEvents(new EXP(), this);
 		Bukkit.getPluginManager().registerEvents(new Codex(), this);
-		Bukkit.getPluginManager().registerEvents(new RPGIncreases(), this);
+		Bukkit.getPluginManager().registerEvents(new EntityIncreases(), this);
+		Bukkit.getPluginManager().registerEvents(new ArmorSkills(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();
@@ -226,7 +243,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	public static void so(String text) {
-		System.out.println(ChatColor.translateAlternateColorCodes('&', text));
+		Bukkit.getServer().getConsoleSender().sendMessage((ChatColor.translateAlternateColorCodes('&', text)));
 	}
 	
 	public static String color(String text) {

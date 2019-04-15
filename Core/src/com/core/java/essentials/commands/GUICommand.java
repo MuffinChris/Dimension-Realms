@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials.commands;
 
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.core.java.essentials.Main;
 
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagDouble;
@@ -228,7 +230,7 @@ public class GUICommand implements CommandExecutor {
 			if (cmd.getName().equalsIgnoreCase("armor")) {
 				
 				p.openInventory(armorInv);
-				
+			
 			}
 		} else {
 			Main.so("&cGUI Commands cannot be accessed from the Console");

@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.essentials.commands;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.core.java.essentials.Main;
 
 public class HelpCommand implements CommandExecutor {
 	

@@ -1,4 +1,4 @@
-package com.core.java;
+package com.core.java.rpgbase;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +20,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+
+import com.core.java.essentials.Main;
 
 public class RPGFunctions implements Listener {
 	
