@@ -14,6 +14,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -66,13 +67,17 @@ public class RPGFunctions implements Listener {
 	
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent e) {
-		Armor.updateSet(e.getPlayer(), Armor.getSet(e.getPlayer()));
+		new BukkitRunnable() {
+			public void run() {
+				Armor.updateSet(e.getPlayer(), Armor.getSet(e.getPlayer()));
+			}
+		}.runTaskLater(plugin, 5L);
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void bossbarHP (EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
-			if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
+			if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && e.getEntity().getType() != EntityType.ARMOR_STAND) {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				Player p = (Player) e.getDamager();

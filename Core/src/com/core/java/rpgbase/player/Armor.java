@@ -194,72 +194,74 @@ public class Armor implements Listener {
 	}
 	
 	public static void updateSet(Player p, String set) {
-		double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
-		double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-		if (set.equals("diamond")) {
-			p.setWalkSpeed(0.15F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + diamondAS);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.diamondA);
-			if (p.getHealth() >= hp + Main.diamondA) {
-				p.setHealth(hp + Main.diamondA);
+		if (p.getHealth() > 0) {
+			double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
+			double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+			if (set.equals("diamond")) {
+				p.setWalkSpeed(0.15F);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + diamondAS);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.diamondA);
+				if (p.getHealth() >= hp + Main.diamondA) {
+					p.setHealth(hp + Main.diamondA);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
+			} else if (set.equals("iron")) {
+				p.setWalkSpeed(0.18F);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + ironAS);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.ironA);
+				if (p.getHealth() >= hp + Main.ironA) {
+					p.setHealth(hp + Main.ironA);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
+			} else if (set.equals("golden")) {
+				p.setWalkSpeed(0.19F);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + goldenAS);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.goldenA);
+				if (p.getHealth() >= hp + Main.goldenA) {
+					p.setHealth(hp + Main.goldenA);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
+			} else if (set.equals("chainmail")) {
+				p.setWalkSpeed(0.22F);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + chainmailAS);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.chainmailA);
+				if (p.getHealth() >= hp + Main.chainmailA) {
+					p.setHealth(hp + Main.chainmailA);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
+			} else if (set.equals("leather")) {
+				p.setWalkSpeed(0.26F);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + leatherAS);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.leatherA);
+				if (p.getHealth() >= hp + Main.leatherA) {
+					p.setHealth(hp + Main.leatherA);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
 			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				if (p.getWalkSpeed() != 0.2F) {
+					p.setWalkSpeed(0.2F);
+				}
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(6.0);
+				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
+				if (p.getHealth() >= hp) {
+					p.setHealth(hp);
+				} else {
+					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+				}
 			}
-		} else if (set.equals("iron")) {
-			p.setWalkSpeed(0.18F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + ironAS);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.ironA);
-			if (p.getHealth() >= hp + Main.ironA) {
-				p.setHealth(hp + Main.ironA);
-			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-			}
-		} else if (set.equals("golden")) {
-			p.setWalkSpeed(0.19F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + goldenAS);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.goldenA);
-			if (p.getHealth() >= hp + Main.goldenA) {
-				p.setHealth(hp + Main.goldenA);
-			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-			}
-		} else if (set.equals("chainmail")) {
-			p.setWalkSpeed(0.22F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + chainmailAS);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.chainmailA);
-			if (p.getHealth() >= hp + Main.chainmailA) {
-				p.setHealth(hp + Main.chainmailA);
-			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-			}
-		} else if (set.equals("leather")) {
-			p.setWalkSpeed(0.26F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + leatherAS);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.leatherA);
-			if (p.getHealth() >= hp + Main.leatherA) {
-				p.setHealth(hp + Main.leatherA);
-			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-			}
-		} else {
-			if (p.getWalkSpeed() != 0.2F) {
-				p.setWalkSpeed(0.2F);
-			}
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(6.0);
-			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
-			if (p.getHealth() >= hp) {
-				p.setHealth(hp);
-			} else {
-				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-			}
+			p.setHealthScale(20);
 		}
-		p.setHealthScale(20);
 	}
 	
 	@EventHandler

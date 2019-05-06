@@ -197,8 +197,10 @@ public class Main extends JavaPlugin {
 		new BukkitRunnable() {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-					String set = Armor.getSet(p);
-					Armor.updateSet(p, set);
+					if (!p.isDead()) {
+						String set = Armor.getSet(p);
+						Armor.updateSet(p, set);
+					}
 				}
 			}
 		}.runTaskTimer(this, 200L, 1200L);
