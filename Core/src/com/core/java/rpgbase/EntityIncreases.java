@@ -1,7 +1,6 @@
 package com.core.java.rpgbase;
 
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,8 +16,8 @@ public class EntityIncreases implements Listener {
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void addDamage (EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player) {
-			Player p = (Player) e.getEntity();
+		if (e.getEntity() instanceof LivingEntity) {
+			LivingEntity p = (LivingEntity) e.getEntity();
 			double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (e.getCause() == DamageCause.FALL) {
 				e.setDamage(e.getDamage() * (hp / 20.0));
@@ -41,7 +40,7 @@ public class EntityIncreases implements Listener {
 				e.setDamage(e.getDamage() * (hp / 40.0));
 			}
 			if (e.getCause() == DamageCause.PROJECTILE) {
-				e.setDamage(e.getDamage() * 7.0);
+				e.setDamage(e.getDamage() * 6.0);
 			}
 			if (e.getCause() == DamageCause.FIRE_TICK) {
 				e.setDamage(5.0);
@@ -58,7 +57,13 @@ public class EntityIncreases implements Listener {
 			if (e.getEntity() instanceof LivingEntity) {
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 10.0);
+				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 5.0);
+				ent.setHealth(hp * 5.0);
+				if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+					double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
+					ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad * 5.0);
+				}
+				/*
 				if (ent.getType() != null) {
 					if (ent.getType() == EntityType.ZOMBIE) {
 						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(23);
@@ -76,13 +81,13 @@ public class EntityIncreases implements Listener {
 						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(22);
 					}
 					if (ent.getType() == EntityType.ENDER_DRAGON) {
-						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(40);
+						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(50);
 					}
 					if (ent.getType() == EntityType.WOLF) {
 						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(30);
 					}
 					if (ent.getType() == EntityType.IRON_GOLEM) {
-						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(35);
+						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(40);
 					}
 					if (ent.getType() == EntityType.SILVERFISH) {
 						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(15);
@@ -94,6 +99,7 @@ public class EntityIncreases implements Listener {
 						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25);
 					}
 				}
+				*/
 			}
 		}
 	}
@@ -101,18 +107,19 @@ public class EntityIncreases implements Listener {
 	@EventHandler
 	public void bonusRegen (EntityRegainHealthEvent e) {
 		if (e.getEntity() instanceof Player) {
-			if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.EATING) {
-				Player p = (Player) e.getEntity();
-				e.setAmount(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.05D);
-				//not working?
+			if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.SATIATED) {
+				e.setAmount(e.getAmount() * 5);
 			} else {
 				if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
-					e.setAmount(e.getAmount() * 8.0);
+					e.setAmount(e.getAmount() * 6.0);
 				} else if (e.getRegainReason() == RegainReason.MAGIC) {
-					e.setAmount(e.getAmount() * 8.0);
+					e.setAmount(e.getAmount() * 4.0);
+				} else if (e.getRegainReason() == RegainReason.EATING) {
+					e.setAmount(e.getAmount() * 5.0);
 				}
-			}
+			//}
 		}
 	}
-	
+	//Healing should be main method of health increase
+	}
 }

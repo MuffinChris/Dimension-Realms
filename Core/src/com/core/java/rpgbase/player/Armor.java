@@ -2,7 +2,7 @@ package com.core.java.rpgbase.player;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,15 +21,33 @@ import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
 import com.core.java.essentials.Main;
 
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.NBTTagDouble;
-import net.minecraft.server.v1_13_R2.NBTTagList;
-import net.minecraft.server.v1_13_R2.NBTTagString;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagDouble;
+import net.minecraft.server.v1_14_R1.NBTTagList;
+import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class Armor implements Listener {
 	
+	public static double leatherADDefense = 1.1;
+	public static double goldADDefense = 1.1;
+	public static double chainADDefense = 0.9;
+	public static double ironADDefense = 0.8;
+	public static double diamondADDefense = 0.75;
+	
+	public static double leatherMagDefense = 1.1;
+	public static double goldMagDefense = 0.5;
+	public static double chainMagDefense = 1.45;
+	public static double ironMagDefense = 1.2;
+	public static double diamondMagDefense = 0.8;
+	
+	public static double diamondAS = -2.0;
+	public static double ironAS = 0;
+	public static double goldenAS = -1.0;
+	public static double chainmailAS = 1.0;
+	public static double leatherAS = 2.0;
+	
 	private Main plugin = Main.getInstance();
-	private double hp = plugin.basehp;
+	private static double hp = Main.basehp;
 	
 	public static String getSet (Player p) {
 		String helmet = "nothing";
@@ -73,27 +91,27 @@ public class Armor implements Listener {
 			String set = getSet(p);
 			if (e.getCause() == DamageCause.CUSTOM) {
 				if (set.equals("diamond")) {
-					e.setDamage(e.getDamage() * 0.8);
+					e.setDamage(e.getDamage() * diamondMagDefense);
 				} else if (set.equals("iron")) {
-					e.setDamage(e.getDamage() * 1.2);
+					e.setDamage(e.getDamage() * ironMagDefense);
 				} else if (set.equals("golden")) {
-					e.setDamage(e.getDamage() * 0.5);
+					e.setDamage(e.getDamage() * goldMagDefense);
 				} else if (set.equals("chainmail")) {
-					e.setDamage(e.getDamage() * 1.45);
+					e.setDamage(e.getDamage() * chainMagDefense);
 				} else if (set.equals("leather")) {
-					e.setDamage(e.getDamage() * 1.1);
+					e.setDamage(e.getDamage() * leatherMagDefense);
 				}
 			} else if (e.getCause() == DamageCause.ENTITY_ATTACK || e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK || e.getCause() == DamageCause.PROJECTILE) {
 				if (set.equals("diamond")) {
-					e.setDamage(e.getDamage() * 0.75);
+					e.setDamage(e.getDamage() * diamondADDefense);
 				} else if (set.equals("iron")) {
-					e.setDamage(e.getDamage() * 0.8);
+					e.setDamage(e.getDamage() * ironADDefense);
 				} else if (set.equals("golden")) {
-					e.setDamage(e.getDamage() * 1.1);
+					e.setDamage(e.getDamage() * goldADDefense);
 				} else if (set.equals("chainmail")) {
-					e.setDamage(e.getDamage() * 0.9);
+					e.setDamage(e.getDamage() * chainADDefense);
 				} else if (set.equals("leather")) {
-					e.setDamage(e.getDamage() * 1.1);
+					e.setDamage(e.getDamage() * leatherADDefense);
 				}
 			}
 		}
@@ -116,7 +134,7 @@ public class Armor implements Listener {
 	public void noArmor (ArmorEquipEvent e) {
 		if (e.getMethod() == EquipMethod.SHIFT_CLICK || e.getMethod() == EquipMethod.HOTBAR || e.getMethod() == EquipMethod.HOTBAR_SWAP) {
 			if (e.getNewArmorPiece() != null) {
-				net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getNewArmorPiece());
+				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getNewArmorPiece());
 				NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 				NBTTagList modifiers = new NBTTagList();
 				NBTTagCompound itemC = new NBTTagCompound();
@@ -171,47 +189,62 @@ public class Armor implements Listener {
 			}
 		}
 		
-		double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
+		updateSet(p, set);
 		
+	}
+	
+	public static void updateSet(Player p, String set) {
+		double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
+		double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 		if (set.equals("diamond")) {
 			p.setWalkSpeed(0.15F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 2.0);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + diamondAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.diamondA);
-			if (p.getHealth() >= hp + plugin.diamondA) {
-				p.setHealth(hp + plugin.diamondA);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.diamondA);
+			if (p.getHealth() >= hp + Main.diamondA) {
+				p.setHealth(hp + Main.diamondA);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} else if (set.equals("iron")) {
 			p.setWalkSpeed(0.18F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + ironAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.ironA);
-			if (p.getHealth() >= hp + plugin.ironA) {
-				p.setHealth(hp + plugin.ironA);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.ironA);
+			if (p.getHealth() >= hp + Main.ironA) {
+				p.setHealth(hp + Main.ironA);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} else if (set.equals("golden")) {
 			p.setWalkSpeed(0.19F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS - 1.0);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + goldenAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.goldenA);
-			if (p.getHealth() >= hp + plugin.goldenA) {
-				p.setHealth(hp + plugin.goldenA);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.goldenA);
+			if (p.getHealth() >= hp + Main.goldenA) {
+				p.setHealth(hp + Main.goldenA);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} else if (set.equals("chainmail")) {
 			p.setWalkSpeed(0.22F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 1.0);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + chainmailAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.chainmailA);
-			if (p.getHealth() >= hp + plugin.chainmailA) {
-				p.setHealth(hp + plugin.chainmailA);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.chainmailA);
+			if (p.getHealth() >= hp + Main.chainmailA) {
+				p.setHealth(hp + Main.chainmailA);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} else if (set.equals("leather")) {
 			p.setWalkSpeed(0.26F);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + 2.0);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + leatherAS);
 			p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + plugin.leatherA);
-			if (p.getHealth() >= hp + plugin.leatherA) {
-				p.setHealth(hp + plugin.leatherA);
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.leatherA);
+			if (p.getHealth() >= hp + Main.leatherA) {
+				p.setHealth(hp + Main.leatherA);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		} else {
 			if (p.getWalkSpeed() != 0.2F) {
@@ -222,6 +255,8 @@ public class Armor implements Listener {
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 			if (p.getHealth() >= hp) {
 				p.setHealth(hp);
+			} else {
+				p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 		}
 		p.setHealthScale(20);

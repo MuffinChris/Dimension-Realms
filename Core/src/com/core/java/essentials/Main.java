@@ -5,15 +5,20 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -22,6 +27,8 @@ import com.core.java.rpgbase.skills.ArmorSkills;
 import com.core.java.rpgbase.player.EXP;
 import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
+import com.core.java.rpgbase.bossbars.BossBarManager;
+import com.core.java.economy.EconCommands;
 import com.core.java.essentials.commands.Codex;
 import com.core.java.essentials.commands.DataReloadCommand;
 import com.core.java.essentials.commands.FlyCommand;
@@ -38,18 +45,23 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
 	
-	public final double basehp = 100;
-	public final double leatherA = 0;
-	public final double goldenA = 25;
-	public final double chainmailA = 50;
-	public final double ironA = 75;
-	public final double diamondA = 100;
+	public static final double basehp = 100;
+	public static final double leatherA = 0;
+	public static final double goldenA = 25;
+	public static final double chainmailA = 50;
+	public static final double ironA = 75;
+	public static final double diamondA = 100;
 	
 	public final String version = "0.0.1";
 	public final String noperm = "&cNo permission!";
 
 	public static Main getInstance() {
 		return JavaPlugin.getPlugin(Main.class);
+	}
+	
+	public BossBarManager barManager = new BossBarManager();
+	public BossBarManager getBarManager() {
+		return barManager;
 	}
 	
 	public ArrayList<Map> maps = new ArrayList<>();
@@ -94,6 +106,7 @@ public class Main extends JavaPlugin {
 		getCommand("lag").setExecutor(new LagCommand());
 		getCommand("datareload").setExecutor(new DataReloadCommand());
 		getCommand("set").setExecutor(new HashmapCommand());
+		getCommand("money").setExecutor(new EconCommands());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -115,6 +128,7 @@ public class Main extends JavaPlugin {
 		manaRegen();
 		hpPeriodic();
 		updatePeriodic();
+		armorPeriodic();
 		so("&cCORE&7: &fPeriodics Enabled!");
 	}
 	
@@ -123,6 +137,19 @@ public class Main extends JavaPlugin {
 		
 		updateFunc();
 		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fDisabled!");
+		
+	}
+	
+	public void createRecipes() {
+		ItemStack armorgem = new ItemStack(Material.EMERALD);
+		ItemMeta armorgemmeta = armorgem.getItemMeta();
+		armorgemmeta.setDisplayName(ChatColor.GREEN + "Armor Gem");
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.GRAY + "Used to craft Armor.");
+		armorgemmeta.setLore(lore);
+		armorgem.addEnchantment(Enchantment.MENDING, 1);
+		armorgem.setItemMeta(armorgemmeta);
+		
 		
 	}
 	
@@ -164,6 +191,17 @@ public class Main extends JavaPlugin {
 				}
 			}
 		}.runTaskTimer(this, 20L, 5L);
+	}
+	
+	public void armorPeriodic() {
+		new BukkitRunnable() {
+			public void run() {
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					String set = Armor.getSet(p);
+					Armor.updateSet(p, set);
+				}
+			}
+		}.runTaskTimer(this, 200L, 1200L);
 	}
 	
 	public void manaRegen() {

@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +14,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.core.java.essentials.Main;
 
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.NBTTagDouble;
-import net.minecraft.server.v1_13_R2.NBTTagList;
-import net.minecraft.server.v1_13_R2.NBTTagString;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagDouble;
+import net.minecraft.server.v1_14_R1.NBTTagList;
+import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class GUICommand implements CommandExecutor {
 
@@ -61,7 +61,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&cPhysical&7: &fAffected by Armor and Physical Resistance."));
 		lore.add(Main.color("&bMagic&7: &fAffected by Armor and Magic Resistance."));
-		lore.add(Main.color("&f&lTRUE&7: &fPiece resistances and deals full damage."));
+		lore.add(Main.color("&f&lTRUE&7: &fPierce resistances and deals full damage."));
 		lore.add(Main.color(""));
 		emeraldMeta.setLore(lore);
 		emerald.setItemMeta(emeraldMeta);
@@ -72,7 +72,7 @@ public class GUICommand implements CommandExecutor {
 	
 	public static void createArmorInv() {
 		ItemStack leather = new ItemStack(Material.LEATHER_CHESTPLATE);
-		net.minecraft.server.v1_13_R2.ItemStack nmsStack = CraftItemStack.asNMSCopy(leather);
+		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(leather);
 		NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		NBTTagList modifiers = new NBTTagList();
 		NBTTagCompound itemC = new NBTTagCompound();

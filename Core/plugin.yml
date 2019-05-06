@@ -1,9 +1,9 @@
 name: Core
-main: com.core.java.Main
+main: com.core.java.essentials.Main
 author: eChris
 version: 0.0.1
 description: Command and Feature Suite
-api-version: 1.13
+api-version: 1.14
 commands:
   help:
     description: Basic Help Command
@@ -38,4 +38,7 @@ commands:
     description: Set Hashmap Values for a Player
     aliases: [setvalue, setmap]
     permission: core.admin
+  money:
+    description: Check a player's balance (Gold Ingot Currency)
+    aliases: [balance, bal]
 depend: [ArmorEquipEvent]

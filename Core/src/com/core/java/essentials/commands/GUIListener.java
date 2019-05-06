@@ -10,8 +10,8 @@ public class GUIListener implements Listener {
 	@EventHandler
 	public void helpClick (InventoryClickEvent e) {
 		if (e.getInventory() != null) {
-			if (e.getInventory().getTitle() != null) {
-				if (e.getInventory().getTitle().contains("HELP MENU")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("HELP MENU")) {
 					if (e.getCurrentItem() != null) {
 						if (e.getCurrentItem().getType() != null) {
 							if (e.getCurrentItem().getType() == Material.LEATHER_HELMET) {
@@ -32,8 +32,8 @@ public class GUIListener implements Listener {
 			}
 		}
 		if (e.getClickedInventory() != null) {
-			if (e.getClickedInventory().getTitle() != null) {
-				if (e.getClickedInventory().getTitle().contains("HELP MENU")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("HELP MENU")) {
 					e.setCancelled(true);
 					return;
 				}
@@ -44,16 +44,16 @@ public class GUIListener implements Listener {
 	@EventHandler
 	public void armorClick (InventoryClickEvent e) {
 		if (e.getInventory() != null) {
-			if (e.getInventory().getTitle() != null) {
-				if (e.getInventory().getTitle().contains("ARMOR SETS")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("ARMOR SETS")) {
 					e.setCancelled(true);
 					return;
 				}
 			}
 		}
 		if (e.getClickedInventory() != null) {
-			if (e.getClickedInventory().getTitle() != null) {
-				if (e.getClickedInventory().getTitle().contains("ARMOR SETS")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("ARMOR SETS")) {
 					e.setCancelled(true);
 					return;
 				}
@@ -64,16 +64,16 @@ public class GUIListener implements Listener {
 	@EventHandler
 	public void combatClick (InventoryClickEvent e) {
 		if (e.getInventory() != null) {
-			if (e.getInventory().getTitle() != null) {
-				if (e.getInventory().getTitle().contains("COMBAT INFO")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("COMBAT INFO")) {
 					e.setCancelled(true);
 					return;
 				}
 			}
 		}
 		if (e.getClickedInventory() != null) {
-			if (e.getClickedInventory().getTitle() != null) {
-				if (e.getClickedInventory().getTitle().contains("COMBAT INFO")) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("COMBAT INFO")) {
 					e.setCancelled(true);
 					return;
 				}
