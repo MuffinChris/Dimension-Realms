@@ -16,6 +16,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -119,36 +120,78 @@ public class RPGFunctions implements Listener {
 		}
 	}*/
 	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void hitDelay (EntityDamageByEntityEvent e) {
+		if (e.getDamager() instanceof Player) {
+			if (e.getEntity() instanceof LivingEntity) {
+				LivingEntity ent = (LivingEntity) e.getEntity();
+				new BukkitRunnable() {
+					public void run() {
+						ent.setNoDamageTicks(15);
+					}
+				}.runTaskLater(plugin, 1L);
+			}
+		}
+	}
+	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void bossbarHP (EntityDamageByEntityEvent e) {
-		if (e.getDamager() instanceof Player) {
+		if (e.getDamager() instanceof Player || e.getDamager() instanceof Arrow) {
 			if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && e.getEntity().getType() != EntityType.ARMOR_STAND) {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				LivingEntity ent = (LivingEntity) e.getEntity();
-				Player p = (Player) e.getDamager();
+				Player p;
+				if (e.getDamager() instanceof Player) {
+					p = (Player) e.getDamager();
+				} else {
+					Arrow a = (Arrow) e.getDamager();
+					if (a.getShooter() instanceof Player) {
+						p = (Player) a.getShooter();
+					} else {
+						return;
+					}
+				}
 				BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
-				ent.getWorld().spawnParticle(Particle.BLOCK_CRACK, ent.getLocation(), 50, 0, 1, 0, blood);
+				ent.getWorld().spawnParticle(Particle.BLOCK_DUST, ent.getLocation(), 100, 0, 1, 0, blood);
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						double progress = Math.max((ent.getHealth()) / ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue(), 0.0);
 						plugin.getBarManager().getBS(p).setInfo(Main.color("&c" + ent.getCustomName() + "&8: &f" + dF.format(ent.getHealth())), BarColor.RED, BarStyle.SOLID, progress, true);
-				        if (ent.getHealth() <= 0) {
-				        	plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
-				        }
+					    if (ent.getHealth() <= 0) {
+					        new BukkitRunnable() {
+					        	public void run() {
+					        		plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
+					        	}
+					        }.runTaskLater(plugin, 10L);
+					       }
 					}
 				}.runTaskLater(plugin, 1L);
 			} else if (e.getEntity() instanceof Player) {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				Player ent = (Player) e.getEntity();
-				Player p = (Player) e.getDamager();
+				Player p;
+				if (e.getDamager() instanceof Player) {
+					p = (Player) e.getDamager();
+				} else {
+					Arrow a = (Arrow) e.getDamager();
+					if (a.getShooter() instanceof Player) {
+						p = (Player) a.getShooter();
+					} else {
+						return;
+					}
+				}
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						double progress = Math.max((ent.getHealth()) / ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue(), 0.0);
 						plugin.getBarManager().getBS(p).setInfo(Main.color("&c" + ent.getName() + "&8: &f" + dF.format(ent.getHealth())), BarColor.RED, BarStyle.SOLID, progress, true);
 				        if (ent.getHealth() <= 0) {
-				        	plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
+				        	new BukkitRunnable() {
+				        		public void run() {
+				        			plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
+				        		}
+				        	}.runTaskLater(plugin, 10L);
 				        }
 					}
 				}.runTaskLater(plugin, 1L);
@@ -163,7 +206,7 @@ public class RPGFunctions implements Listener {
         try {
             pData.set("Username", e.getPlayer().getName());
             if (!pData.isSet("Attack Speed")) {
-            	pData.set("Attack Speed", 6.0);
+            	pData.set("Attack Speed", 16.0);
             }
             if (!pData.isSet("Level")) {
             	pData.set("Level", 1);

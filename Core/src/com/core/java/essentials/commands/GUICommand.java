@@ -92,7 +92,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.leatherA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (30%)"));
-		lore.add(Main.color("&7»&a + Attack Speed (33%)"));
+		//lore.add(Main.color("&7»&a + Attack Speed (33%)"));
 		lore.add(Main.color("&7»&a + Physical Resistance (25%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-10%)"));
 		lore.add(Main.color(""));
@@ -121,7 +121,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.goldenA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (10%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-5%)"));
-		lore.add(Main.color("&7»&c - Attack Speed (-16%)"));
+		//lore.add(Main.color("&7»&c - Attack Speed (-16%)"));
 		lore.add(Main.color("&7»&8 = Physical Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Magic Resistance (50%)"));
 		lore.add(Main.color(""));
@@ -150,7 +150,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.chainmailA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (10%)"));
-		lore.add(Main.color("&7»&a + Attack Speed (16%)"));
+		//lore.add(Main.color("&7»&a + Attack Speed (16%)"));
 		lore.add(Main.color("&7»&a + Physical Resistance (40%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-45%)"));
 		lore.add(Main.color(""));
@@ -179,7 +179,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.ironA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (30%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-10%)"));
-		lore.add(Main.color("&7»&8 = Attack Speed (0%)"));
+		//lore.add(Main.color("&7»&8 = Attack Speed (0%)"));
 		lore.add(Main.color("&7»&a + Physical Resistance (55%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-20%)"));
 		lore.add(Main.color(""));
@@ -208,7 +208,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.diamondA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (60%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-25%)"));
-		lore.add(Main.color("&7»&c - Attack Speed (-33%)"));
+		//lore.add(Main.color("&7»&c - Attack Damage (-33%)"));
 		lore.add(Main.color("&7»&a + Physical Resistance (65%)"));
 		lore.add(Main.color("&7»&a + Magic Resistance (20%)"));
 		lore.add(Main.color(""));

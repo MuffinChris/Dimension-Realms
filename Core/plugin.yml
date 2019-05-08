@@ -43,5 +43,13 @@ commands:
     aliases: [balance, bal]
   level:
     description: Check your level information
-    aliases: [exp, experience, levelup]
+    aliases: [exp, experience, levelup, lvl]
+  setlevel:
+    description: Sets a player's level
+  addlevel:
+    description: Add levels to a player
+  setexp:
+    description: Set a player's exp
+  addexp:
+    description: Add exp to a player
 depend: [ArmorEquipEvent]

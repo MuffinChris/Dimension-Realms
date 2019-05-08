@@ -71,7 +71,6 @@ public class ArmorSkills implements Listener {
 								entities.add(e.getPlayer());
 								new BukkitRunnable() {
 									int amount = 4;
-									int count = 0;
 									public void run() {
 										amount--;
 										e.getPlayer().setFallDistance(0);
@@ -81,13 +80,10 @@ public class ArmorSkills implements Listener {
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
 												ent.getWorld().spawnParticle(Particle.BLOCK_CRACK, ent.getLocation(), 100, 1, 1, 1, blood);
-												e.getPlayer().getWorld().playSound(ent.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
+												e.getPlayer().getWorld().playSound(ent.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, 1.0F);
 											}
-											count++;
 										}
 										if (amount <= 0) {
-											e.getPlayer().removePotionEffect(PotionEffectType.ABSORPTION);
-											e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100 + 20 * count, count + 2));
 											cancel();
 										}
 									}

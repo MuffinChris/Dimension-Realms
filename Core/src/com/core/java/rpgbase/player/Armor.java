@@ -41,11 +41,11 @@ public class Armor implements Listener {
 	public static double ironMagDefense = 1.2;
 	public static double diamondMagDefense = 0.8;
 	
-	public static double diamondAS = -2.0;
+	public static double diamondAS = 0;//-2.0;
 	public static double ironAS = 0;
-	public static double goldenAS = -1.0;
-	public static double chainmailAS = 1.0;
-	public static double leatherAS = 2.0;
+	public static double goldenAS = 0;//-1.0;
+	public static double chainmailAS = 0;//1.0;
+	public static double leatherAS = 0;//2.0;
 	
 	private Main plugin = Main.getInstance();
 	private static double hp = Main.basehp;
@@ -262,7 +262,7 @@ public class Armor implements Listener {
 				if (p.getWalkSpeed() != 0.2F) {
 					p.setWalkSpeed(0.2F);
 				}
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(6.0);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 				if (p.getHealth() >= hp) {

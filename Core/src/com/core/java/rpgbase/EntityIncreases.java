@@ -26,18 +26,18 @@ public class EntityIncreases implements Listener {
 				e.setDamage(e.getDamage() * (hp / 20.0));
 			}
 			if (e.getCause() == DamageCause.MAGIC) {
-				e.setDamage(e.getDamage() * 10.0);
+				e.setDamage(e.getDamage() * 4.0);
 			}
 			if (e.getCause() == DamageCause.POISON) {
-				if (p.getHealth() > (e.getDamage() * 2.5)) {
-					e.setDamage(e.getDamage() * 2.5);
+				if (p.getHealth() > (hp * 0.025)) {
+					e.setDamage(hp * 0.025);
 				}
 			}
 			if (e.getCause() == DamageCause.STARVATION) {
-				e.setDamage(10);
+				e.setDamage(hp * 0.01);
 			}
 			if (e.getCause() == DamageCause.DROWNING) {
-				e.setDamage(10);
+				e.setDamage(hp * 0.01);
 			}
 			if (e.getCause() == DamageCause.WITHER) {
 				e.setDamage(e.getDamage() * (hp / 40.0));
@@ -46,10 +46,16 @@ public class EntityIncreases implements Listener {
 				e.setDamage(e.getDamage() * 6.0);
 			}
 			if (e.getCause() == DamageCause.FIRE_TICK) {
-				e.setDamage(5.0);
+				e.setDamage(hp * 0.04);
 			}
 			if (e.getCause() == DamageCause.LAVA) {
-				e.setDamage(25.0);
+				e.setDamage(hp * 0.2);
+			}
+			if (e.getCause() == DamageCause.ENTITY_EXPLOSION) {
+				e.setDamage(e.getDamage() * 2);
+			}
+			if (e.getCause() == DamageCause.BLOCK_EXPLOSION) {
+				e.setDamage(e.getDamage() * 1.2);
 			}
 		}
 	}
@@ -72,9 +78,12 @@ public class EntityIncreases implements Listener {
 				if (terms > 0) {
 					level/=terms;
 				}
+				if (level == 0) {
+					level = 1;
+				}
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-				double hpmod = (10 * (hp/20)) * level;
-				double admod = 1 * level;
+				double hpmod = (10 * (hp/20.0)) * level;
+				double admod = 0.5 * level;
 				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
 				ent.setHealth(hp * 4 + hpmod);
 				if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {

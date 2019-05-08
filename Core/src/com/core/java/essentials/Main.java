@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -144,6 +145,10 @@ public class Main extends JavaPlugin {
 		getCommand("set").setExecutor(new HashmapCommand());
 		getCommand("money").setExecutor(new EconCommands());
 		getCommand("level").setExecutor(new ExpCommand());
+		getCommand("setlevel").setExecutor(new ExpCommand());
+		getCommand("addlevel").setExecutor(new ExpCommand());
+		getCommand("setexp").setExecutor(new ExpCommand());
+		getCommand("addexp").setExecutor(new ExpCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -202,33 +207,9 @@ public class Main extends JavaPlugin {
 	
 	public void updateFunc() {
 		so("&cCORE&7: &fPeriodic Update Started.");
-		int i = 0;
 		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-			
-			if (mana.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (manaRegen.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (ad.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (abilities.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (level.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (exp.containsKey(p.getUniqueId())) {
-				i++;
-			}
-			if (sp.containsKey(p.getUniqueId())) {
-				i++;
-			}
 			hashmapUpdate(p);
 		}
-		so("&cCORE&7: &fPeriodic Update Considered " + i + " Hashmap Instances.");
 		so("&cCORE&7: &fPeriodic Update Finished.");
 	}
 	
@@ -320,9 +301,35 @@ public class Main extends JavaPlugin {
         p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
 	}
 	
+	public void levelup (Player p) {
+		while (getExpMax(p) <= getExp(p) && getLevel(p) < 100) {
+			int maxlevel = getExpMax(p);
+			int newexp = (getExp(p) - maxlevel);
+			int newlevel = getLevel(p) + 1;
+			getLevelMap().replace(p.getUniqueId(), newlevel);
+			setIntValue(p, "Level", newlevel);
+			maxlevel = getExpMax(p);
+			getExpMap().replace(p.getUniqueId(), newexp);
+			setIntValue(p, "Exp", newexp);
+			int newsp = getSPMap().get(p.getUniqueId()) + 2;
+			getSPMap().replace(p.getUniqueId(), newsp);
+			setIntValue(p, "SP", newsp);
+			Main.msg(p, "&7&m--------------------------");
+			Main.msg(p, "");
+			Main.msg(p, "&7» &e&lLEVEL UP: &6" + (newlevel - 1) + " &f-> &6" + newlevel);
+			Main.msg(p, "&7» &e&lSP INCREASE: &f+2");
+			Main.msg(p, "");
+			Main.msg(p, "&7&m--------------------------");
+			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+		}
+	}
+	
 	public static void sendHp(Player p) {
 		DecimalFormat dF = new DecimalFormat("#.##");
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &a" + dF.format(p.getExp() * 100) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
+		int max = getInstance().getExpMax(p);
+		int exp = getInstance().getExp(p);
+		double exppercent = ((1.0 * exp) / (1.0 * max)) * 100;
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
 	}
 	
 	public void setStringValue(Player p, String text, String value) {
