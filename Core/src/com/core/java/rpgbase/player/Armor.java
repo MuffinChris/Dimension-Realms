@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -28,11 +29,11 @@ import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class Armor implements Listener {
 	
-	public static double leatherADDefense = 1.1;
-	public static double goldADDefense = 1.1;
-	public static double chainADDefense = 0.9;
-	public static double ironADDefense = 0.8;
-	public static double diamondADDefense = 0.75;
+	public static double leatherADDefense = 0.75;
+	public static double goldADDefense = 1.0;
+	public static double chainADDefense = 0.6;
+	public static double ironADDefense = 0.45;
+	public static double diamondADDefense = 0.35;
 	
 	public static double leatherMagDefense = 1.1;
 	public static double goldMagDefense = 0.5;
@@ -81,6 +82,17 @@ public class Armor implements Listener {
 			set = "nothing";
 		}
 		return set;
+	}
+	
+	@EventHandler
+	public void armorDurability (PlayerItemDamageEvent e) {
+		String s = e.getItem().getType().toString().toLowerCase();
+		if ((s.contains("helmet") || 
+				s.contains("chestplate") || s.contains("leggings") ||
+				s.contains("boots") || s.contains("cap") || 
+				s.contains("tunic") || s.contains("pants"))) {
+			e.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
@@ -188,13 +200,12 @@ public class Armor implements Listener {
 				}
 			}
 		}
-		
 		updateSet(p, set);
 		
 	}
 	
 	public static void updateSet(Player p, String set) {
-		if (p.getHealth() > 0) {
+		if (p.getHealth() > 0.0) {
 			double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
 			double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (set.equals("diamond")) {

@@ -41,4 +41,7 @@ commands:
   money:
     description: Check a player's balance (Gold Ingot Currency)
     aliases: [balance, bal]
+  level:
+    description: Check your level information
+    aliases: [exp, experience, levelup]
 depend: [ArmorEquipEvent]

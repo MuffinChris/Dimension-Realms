@@ -1,6 +1,7 @@
 package com.core.java.rpgbase;
 
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntitySpawnEvent;
+
+import com.core.java.essentials.Main;
 
 public class EntityIncreases implements Listener {
 
@@ -54,15 +57,32 @@ public class EntityIncreases implements Listener {
 	@EventHandler
 	public void entityDamageSpawn (EntitySpawnEvent e) {
 		if (!(e.getEntity() instanceof Player)) {
+			e.getEntity().setCustomName(e.getEntity().getName());
 			if (e.getEntity() instanceof LivingEntity) {
 				LivingEntity ent = (LivingEntity) e.getEntity();
+				int level = 0;
+				int terms = 0;
+				for (Entity en : ent.getNearbyEntities(64, 64, 64)) {
+					if (en instanceof Player) {
+						Player p = (Player) en;
+						terms++;
+						level+=Main.getInstance().getLevelMap().get(p.getUniqueId());
+					}
+				}
+				if (terms > 0) {
+					level/=terms;
+				}
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 5.0);
-				ent.setHealth(hp * 5.0);
+				double hpmod = (10 * (hp/20)) * level;
+				double admod = 1 * level;
+				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
+				ent.setHealth(hp * 4 + hpmod);
 				if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
 					double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
-					ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad * 5.0);
+					ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad * 3 + admod);
 				}
+				ent.setCustomName(Main.color("&8[&6" + level + "&8] &f" + ent.getName()));
+				ent.setCustomNameVisible(true);
 				/*
 				if (ent.getType() != null) {
 					if (ent.getType() == EntityType.ZOMBIE) {
@@ -107,17 +127,21 @@ public class EntityIncreases implements Listener {
 	@EventHandler
 	public void bonusRegen (EntityRegainHealthEvent e) {
 		if (e.getEntity() instanceof Player) {
-			if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.SATIATED) {
-				e.setAmount(e.getAmount() * 5);
+			if (e.getEntity().isDead()) {
+				e.setCancelled(true);
 			} else {
-				if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
-					e.setAmount(e.getAmount() * 6.0);
-				} else if (e.getRegainReason() == RegainReason.MAGIC) {
-					e.setAmount(e.getAmount() * 4.0);
-				} else if (e.getRegainReason() == RegainReason.EATING) {
-					e.setAmount(e.getAmount() * 5.0);
-				}
-			//}
+				if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.SATIATED) {
+					e.setAmount(e.getAmount() * 5);
+				} else {
+					if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
+						e.setAmount(e.getAmount() * 6.0);
+					} else if (e.getRegainReason() == RegainReason.MAGIC) {
+						e.setAmount(e.getAmount() * 4.0);
+					} else if (e.getRegainReason() == RegainReason.EATING) {
+						e.setAmount(e.getAmount() * 5.0);
+					}
+				//}
+			}
 		}
 	}
 	//Healing should be main method of health increase

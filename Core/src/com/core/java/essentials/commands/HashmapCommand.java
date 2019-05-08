@@ -24,11 +24,11 @@ public class HashmapCommand implements CommandExecutor {
 						if (Bukkit.getPlayer(args[3]) instanceof Player) {
 							Player target = Bukkit.getPlayer(args[3]);
 							if (args[2].toLowerCase().equals("double")) {
-								Main.setDoubleValue(target, args[0], Double.valueOf(args[1]));
+								plugin.setDoubleValue(target, args[0], Double.valueOf(args[1]));
 							} else if (args[2].toLowerCase().equals("string")) {
-								Main.setStringValue(target, args[0], args[1]);
+								plugin.setStringValue(target, args[0], args[1]);
 							} else if (args[2].toLowerCase().equals("int")) {
-								Main.setIntValue(target, args[0], Integer.valueOf(args[1]));
+								plugin.setIntValue(target, args[0], Integer.valueOf(args[1]));
 							} else {
 								Main.msg(p, "&cInvalid Vartype, valid types are double, string, int.");
 								return false;
@@ -53,11 +53,11 @@ public class HashmapCommand implements CommandExecutor {
 					if (Bukkit.getPlayer(args[3]) instanceof Player) {
 						Player target = Bukkit.getPlayer(args[3]);
 						if (args[2].toLowerCase().equals("double")) {
-							Main.setDoubleValue(target, args[0], Double.valueOf(args[1]));
+							plugin.setDoubleValue(target, args[0], Double.valueOf(args[1]));
 						} else if (args[2].toLowerCase().equals("string")) {
-							Main.setStringValue(target, args[0], args[1]);
+							plugin.setStringValue(target, args[0], args[1]);
 						} else if (args[2].toLowerCase().equals("int")) {
-							Main.setIntValue(target, args[0], Integer.valueOf(args[1]));
+							plugin.setIntValue(target, args[0], Integer.valueOf(args[1]));
 						} else {
 							Main.so("&cInvalid Vartype, valid types are double, string, int.");
 							return false;
