@@ -46,10 +46,20 @@ commands:
     aliases: [exp, experience, levelup, lvl]
   setlevel:
     description: Sets a player's level
+    permission: core.admin
   addlevel:
     description: Add levels to a player
+    permission: core.admin
   setexp:
     description: Set a player's exp
+    permission: core.admin
   addexp:
     description: Add exp to a player
+    permission: core.admin
+  stats:
+    description: Check stats of a player
+    aliases: [kdr, kd, kda]
+  info:
+    description: Check info of a player
+    aliases: [whois]
 depend: [ArmorEquipEvent]

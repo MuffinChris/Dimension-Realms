@@ -28,6 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.core.java.rpgbase.player.Armor;
 import com.core.java.rpgbase.skills.ArmorSkills;
 import com.core.java.rpgbase.player.EXP;
+import com.core.java.rpgbase.player.Weapons;
 import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
 import com.core.java.rpgbase.bossbars.BossBarManager;
@@ -41,13 +42,32 @@ import com.core.java.essentials.commands.GUIListener;
 import com.core.java.essentials.commands.GamemodeCommand;
 import com.core.java.essentials.commands.HashmapCommand;
 import com.core.java.essentials.commands.HelpCommand;
+import com.core.java.essentials.commands.InfoCommand;
 import com.core.java.essentials.commands.LagCommand;
 import com.core.java.essentials.commands.SpawnCommand;
+import com.core.java.essentials.commands.StatsCommand;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class Main extends JavaPlugin {
+	
+	
+	//TODO LIST:
+	/* 
+	 * Info Command
+	 * Stats Command (KDR, KillTop, KDTop)
+	 * 
+	 */
+	
+	//TODO FUTURE:
+	/* 
+	 * Bank
+	 * Baltop
+	 * Youtuber and Twitch Ranks with Perks
+	 * Find a way to make ranks less buggy, like a permission clump or something.
+	 */
+	
 	
 	public static final double basehp = 100;
 	public static final double leatherA = 0;
@@ -58,6 +78,28 @@ public class Main extends JavaPlugin {
 	
 	public final String version = "0.0.1";
 	public final String noperm = "&cNo permission!";
+	
+	public int uniquejoins = 0;
+	public int getJoins() {
+		File jFile = new File("plugins/Core/config.yml");
+        FileConfiguration jData = YamlConfiguration.loadConfiguration(jFile);
+        return jData.getInt("joins");
+	}
+	
+	public void addJoins() {
+		File jFile = new File("plugins/Core/config.yml");
+        FileConfiguration jData = YamlConfiguration.loadConfiguration(jFile);
+        try {
+        	if (jData.contains("joins")) {
+        		jData.set("joins", 0);
+        	} else {
+        		jData.set("joins", jData.getInt("joins") + 1);
+        	}
+        	jData.save(jFile);
+        } catch (IOException exception) {
+           exception.printStackTrace();
+        }
+	}
 
 	public static Main getInstance() {
 		return JavaPlugin.getPlugin(Main.class);
@@ -149,6 +191,8 @@ public class Main extends JavaPlugin {
 		getCommand("addlevel").setExecutor(new ExpCommand());
 		getCommand("setexp").setExecutor(new ExpCommand());
 		getCommand("addexp").setExecutor(new ExpCommand());
+		getCommand("info").setExecutor(new InfoCommand());
+		getCommand("stats").setExecutor(new StatsCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -160,6 +204,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new Codex(), this);
 		Bukkit.getPluginManager().registerEvents(new EntityIncreases(), this);
 		Bukkit.getPluginManager().registerEvents(new ArmorSkills(), this);
+		Bukkit.getPluginManager().registerEvents(new Weapons(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();

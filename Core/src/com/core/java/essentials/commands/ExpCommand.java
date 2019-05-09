@@ -34,83 +34,87 @@ public class ExpCommand implements CommandExecutor {
 					Main.msg(p, "Usage: /level <player>");
 				}
 			}
-			if (cmd.getLabel().equalsIgnoreCase("setlevel")) {
-				if (args.length == 2) {
-					if (Bukkit.getPlayer(args[0]) instanceof Player) {
-						Player target = (Player) Bukkit.getPlayer(args[0]);
-						if (Integer.valueOf(args[1]) instanceof Integer) {
-							main.getLevelMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
-							main.setIntValue(target, "Level", Integer.valueOf(args[1]));
-							Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + Integer.valueOf(args[1]));
-							main.levelup(target);
+			if (p.hasPermission("core.admin")) {
+				if (cmd.getLabel().equalsIgnoreCase("setlevel")) {
+					if (args.length == 2) {
+						if (Bukkit.getPlayer(args[0]) instanceof Player) {
+							Player target = (Player) Bukkit.getPlayer(args[0]);
+							if (Integer.valueOf(args[1]) instanceof Integer) {
+								main.getLevelMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
+								main.setIntValue(target, "Level", Integer.valueOf(args[1]));
+								Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + Integer.valueOf(args[1]));
+								main.levelup(target);
+							} else {
+								Main.msg(p, "&cInvalid Value");
+							}
 						} else {
-							Main.msg(p, "&cInvalid Value");
+							Main.msg(p, "&cInvalid Player");
 						}
 					} else {
-						Main.msg(p, "&cInvalid Player");
+						Main.msg(p, "Usage: /setlevel <player> <level>");
 					}
-				} else {
-					Main.msg(p, "Usage: /setlevel <player> <level>");
 				}
-			}
-			if (cmd.getLabel().equalsIgnoreCase("addlevel")) {
-				if (args.length == 2) {
-					if (Bukkit.getPlayer(args[0]) instanceof Player) {
-						Player target = (Player) Bukkit.getPlayer(args[0]);
-						if (Integer.valueOf(args[1]) instanceof Integer) {
-							int newlevel = Integer.valueOf(args[1]) + main.getLevel(target);
-							main.getLevelMap().replace(target.getUniqueId(), newlevel);
-							main.setIntValue(target, "Level", newlevel);
-							Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + newlevel);
-							main.levelup(target);
+				if (cmd.getLabel().equalsIgnoreCase("addlevel")) {
+					if (args.length == 2) {
+						if (Bukkit.getPlayer(args[0]) instanceof Player) {
+							Player target = (Player) Bukkit.getPlayer(args[0]);
+							if (Integer.valueOf(args[1]) instanceof Integer) {
+								int newlevel = Integer.valueOf(args[1]) + main.getLevel(target);
+								main.getLevelMap().replace(target.getUniqueId(), newlevel);
+								main.setIntValue(target, "Level", newlevel);
+								Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + newlevel);
+								main.levelup(target);
+							} else {
+								Main.msg(p, "&cInvalid Value");
+							}
 						} else {
-							Main.msg(p, "&cInvalid Value");
+							Main.msg(p, "&cInvalid Player");
 						}
 					} else {
-						Main.msg(p, "&cInvalid Player");
+						Main.msg(p, "Usage: /addlevel <player> <level>");
 					}
-				} else {
-					Main.msg(p, "Usage: /addlevel <player> <level>");
 				}
-			}
-			if (cmd.getLabel().equalsIgnoreCase("setexp")) {
-				if (args.length == 2) {
-					if (Bukkit.getPlayer(args[0]) instanceof Player) {
-						Player target = (Player) Bukkit.getPlayer(args[0]);
-						if (Integer.valueOf(args[1]) instanceof Integer) {
-							main.getExpMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
-							main.setIntValue(target, "Exp", Integer.valueOf(args[1]));
-							Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + Integer.valueOf(args[1]));
-							main.levelup(target);
+				if (cmd.getLabel().equalsIgnoreCase("setexp")) {
+					if (args.length == 2) {
+						if (Bukkit.getPlayer(args[0]) instanceof Player) {
+							Player target = (Player) Bukkit.getPlayer(args[0]);
+							if (Integer.valueOf(args[1]) instanceof Integer) {
+								main.getExpMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
+								main.setIntValue(target, "Exp", Integer.valueOf(args[1]));
+								Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + Integer.valueOf(args[1]));
+								main.levelup(target);
+							} else {
+								Main.msg(p, "&cInvalid Value");
+							}
 						} else {
-							Main.msg(p, "&cInvalid Value");
+							Main.msg(p, "&cInvalid Player");
 						}
 					} else {
-						Main.msg(p, "&cInvalid Player");
+						Main.msg(p, "Usage: /setexp <player> <exp>");
 					}
-				} else {
-					Main.msg(p, "Usage: /setexp <player> <exp>");
 				}
-			}
-			if (cmd.getLabel().equalsIgnoreCase("addexp")) {
-				if (args.length == 2) {
-					if (Bukkit.getPlayer(args[0]) instanceof Player) {
-						Player target = (Player) Bukkit.getPlayer(args[0]);
-						if (Integer.valueOf(args[1]) instanceof Integer) {
-							int newexp = Integer.valueOf(args[1]) + main.getExp(target);
-							main.setIntValue(target, "Exp", newexp);
-							main.getLevelMap().replace(target.getUniqueId(), newexp);
-							Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + newexp);
-							main.levelup(target);
+				if (cmd.getLabel().equalsIgnoreCase("addexp")) {
+					if (args.length == 2) {
+						if (Bukkit.getPlayer(args[0]) instanceof Player) {
+							Player target = (Player) Bukkit.getPlayer(args[0]);
+							if (Integer.valueOf(args[1]) instanceof Integer) {
+								int newexp = Integer.valueOf(args[1]) + main.getExp(target);
+								main.setIntValue(target, "Exp", newexp);
+								main.getLevelMap().replace(target.getUniqueId(), newexp);
+								Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + newexp);
+								main.levelup(target);
+							} else {
+								Main.msg(p, "&cInvalid Value");
+							}
 						} else {
-							Main.msg(p, "&cInvalid Value");
+							Main.msg(p, "&cInvalid Player");
 						}
 					} else {
-						Main.msg(p, "&cInvalid Player");
+						Main.msg(p, "Usage: /addexp <player> <exp>");
 					}
-				} else {
-					Main.msg(p, "Usage: /addexp <player> <exp>");
 				}
+			} else {
+				Main.msg(p, "&cNo permission.");
 			}
 		} else {
 			if (cmd.getLabel().equalsIgnoreCase("level") || cmd.getLabel().equalsIgnoreCase("lvl") || cmd.getLabel().equalsIgnoreCase("exp") || cmd.getLabel().equalsIgnoreCase("experience") || cmd.getLabel().equalsIgnoreCase("levelup")) {	

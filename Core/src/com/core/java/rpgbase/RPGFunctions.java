@@ -127,9 +127,9 @@ public class RPGFunctions implements Listener {
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				new BukkitRunnable() {
 					public void run() {
-						ent.setNoDamageTicks(15);
+						ent.setNoDamageTicks(0);
 					}
-				}.runTaskLater(plugin, 1L);
+				}.runTaskLater(plugin, 5L);
 			}
 		}
 	}
@@ -163,7 +163,7 @@ public class RPGFunctions implements Listener {
 					        	public void run() {
 					        		plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
 					        	}
-					        }.runTaskLater(plugin, 10L);
+					        }.runTaskLater(plugin, 20L);
 					       }
 					}
 				}.runTaskLater(plugin, 1L);
@@ -191,7 +191,7 @@ public class RPGFunctions implements Listener {
 				        		public void run() {
 				        			plugin.getBarManager().getBS(p).setInfo("", BarColor.RED, BarStyle.SOLID, 0.0, false);
 				        		}
-				        	}.runTaskLater(plugin, 10L);
+				        	}.runTaskLater(plugin, 20L);
 				        }
 					}
 				}.runTaskLater(plugin, 1L);
@@ -235,6 +235,12 @@ public class RPGFunctions implements Listener {
             if (!pData.isSet("AbilityFour")) {
             	pData.set("AbilityFour", "None");
             }
+            if (!pData.isSet("Kills")) {
+            	pData.set("Kills", 0);
+            }
+            if (!pData.isSet("Deaths")) {
+            	pData.set("Deaths", 0);
+            }
             pData.save(pFile);
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -273,7 +279,8 @@ public class RPGFunctions implements Listener {
 	}
 
 	public void welcomePlayer (Player p) {
-		Bukkit.getServer().broadcastMessage(Main.color("&8&l>>> &ePlease welcome &6" + p.getName() + " &eto the server!"));
+		plugin.addJoins();
+		Bukkit.getServer().broadcastMessage(Main.color("&8&l>>> &eWelcome &6" + p.getName() + " &8(#" + plugin.getJoins() + "&8)" + "&eto the server!"));
 	}
 	
 	@EventHandler

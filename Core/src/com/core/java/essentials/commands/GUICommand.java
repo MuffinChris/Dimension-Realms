@@ -32,7 +32,7 @@ public class GUICommand implements CommandExecutor {
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add(Main.color(""));
 		lore.add(Main.color("&fThe Value &4AD &frepresents Attack Damage."));
-		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
+		lore.add(Main.color("&fIt can be upgraded and altered."));
 		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
 		swordMeta.setLore(lore);
 		sword.setItemMeta(swordMeta);

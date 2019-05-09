@@ -82,25 +82,25 @@ public class EXP implements Listener {
 	
 	@EventHandler
 	public void expDeath (EntityDeathEvent e) {
+		int level = 1;
+		if (Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+			level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
+		}
 		if (e.getEntity() instanceof Player) {
 			e.setDroppedExp(Math.round(((Player) e.getEntity()).getLevel() * 3000));
 		} else {
-			if (ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","") != "") {
-				e.setDroppedExp(e.getDroppedExp() * 100000 * Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")));
-			}
+			e.setDroppedExp(e.getDroppedExp() * 100000 * level);
 		}
 		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
-			if (ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","") != "") {
-				Player p = (Player) e.getEntity().getKiller();
-			    int entlevel = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
-				int exp = ((int) (7 * Math.pow(entlevel, 1.5))) + 50;
-				int random = (int) (Math.random() * (0.20 * exp));
-				exp+=random;
-				Main.msg(p, "&7[+" + exp + "&7 XP]");
-				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-				plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
-				plugin.levelup(p);
-			}
+			Player p = (Player) e.getEntity().getKiller();
+			int entlevel = level;
+			int exp = ((int) (7 * Math.pow(entlevel, 1.5))) + 50;
+			int random = (int) (Math.random() * (0.20 * exp));
+			exp+=random;
+			Main.msg(p, "&7[+" + exp + "&7 XP]");
+			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+			plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
+			plugin.levelup(p);
 		}
 	}
 	

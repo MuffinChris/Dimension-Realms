@@ -49,7 +49,7 @@ public class EntityIncreases implements Listener {
 				e.setDamage(hp * 0.04);
 			}
 			if (e.getCause() == DamageCause.LAVA) {
-				e.setDamage(hp * 0.2);
+				e.setDamage(hp * 0.15);
 			}
 			if (e.getCause() == DamageCause.ENTITY_EXPLOSION) {
 				e.setDamage(e.getDamage() * 2);
@@ -143,7 +143,7 @@ public class EntityIncreases implements Listener {
 					e.setAmount(e.getAmount() * 5);
 				} else {
 					if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
-						e.setAmount(e.getAmount() * 6.0);
+						e.setAmount(e.getAmount() * 5.0);
 					} else if (e.getRegainReason() == RegainReason.MAGIC) {
 						e.setAmount(e.getAmount() * 4.0);
 					} else if (e.getRegainReason() == RegainReason.EATING) {
