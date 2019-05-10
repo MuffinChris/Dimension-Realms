@@ -20,7 +20,7 @@ public class InfoCommand implements CommandExecutor {
 				Main.msg(p, "");
 				Main.msg(p, "&8» &e&lLEVEL: &f" + main.getLevel(p) + " &8/&f 100");
 				Main.msg(p, "&8» &e&lEXP: &f" + main.getExp(p) + " &8/&f " + main.getExpMax(p));
-				Main.msg(p, "&8» &b&lMANA: &f" + main.getManaMap().get(p.getUniqueId()) + " &8(&b" + main.getManaRegenMap().get(p.getUniqueId()) + "/s&8)");
+				Main.msg(p, "&8» &b&lMANA: &f" + main.getManaMap().get(p.getUniqueId()) + " &8(&b" + (main.getManaRegenMap().get(p.getUniqueId()) * 20) + "/s&8)");
 				Main.msg(p, "&8» &4&lAD: &f" + main.getAdMap().get(p.getUniqueId()) + "  &a&lSP: &f" + main.getSPMap().get(p.getUniqueId()));
 				Main.msg(p, "");
 			} else if (args.length == 1) {
@@ -29,7 +29,7 @@ public class InfoCommand implements CommandExecutor {
 					Main.msg(p, "");
 					Main.msg(p, "&8» &e&lLEVEL: &f" + main.getLevel(t) + " &8/&f 100");
 					Main.msg(p, "&8» &e&lEXP: &f" + main.getExp(t) + " &8/&f " + main.getExpMax(t));
-					Main.msg(p, "&8» &b&lMANA: &f" + main.getManaMap().get(t.getUniqueId()) + " &8(&b" + main.getManaRegenMap().get(t.getUniqueId()) + "/s&8)");
+					Main.msg(p, "&8» &b&lMANA: &f" + main.getManaMap().get(t.getUniqueId()) + " &8(&b" + (main.getManaRegenMap().get(t.getUniqueId()) * 20) + "/s&8)");
 					Main.msg(p, "&8» &4&lAD: &f" + main.getAdMap().get(t.getUniqueId()) + "  &a&lSP: &f" + main.getSPMap().get(t.getUniqueId()));
 					Main.msg(p, "");
 				} else {
@@ -45,7 +45,7 @@ public class InfoCommand implements CommandExecutor {
 					Main.so("");
 					Main.so("&8» &e&lLEVEL: &f" + main.getLevel(t) + " &8/&f 100");
 					Main.so("&8» &e&lEXP: &f" + main.getExp(t) + " &8/&f " + main.getExpMax(t));
-					Main.so("&8» &b&lMANA: &f" + main.getManaMap().get(t.getUniqueId()) + " &8(&b" + main.getManaRegenMap().get(t.getUniqueId()) + "/s&8)");
+					Main.so("&8» &b&lMANA: &f" + main.getManaMap().get(t.getUniqueId()) + " &8(&b" + (main.getManaRegenMap().get(t.getUniqueId()) * 20) + "/s&8)");
 					Main.so("&8» &4&lAD: &f" + main.getAdMap().get(t.getUniqueId()) + "  &a&lSP: &f" + main.getSPMap().get(t.getUniqueId()));
 					Main.so("");
 				} else {

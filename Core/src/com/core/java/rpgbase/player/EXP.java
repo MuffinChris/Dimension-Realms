@@ -17,6 +17,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
@@ -26,7 +27,7 @@ import com.core.java.essentials.Main;
 public class EXP implements Listener {
 
 	private Main plugin = Main.getInstance();
-	
+	/*
 	public Map<UUID, ArrayList<Enchantment>> enchants = new HashMap<UUID, ArrayList<Enchantment>>();
 	public Map<UUID, ArrayList<Integer>> enchantsC = new HashMap<UUID, ArrayList<Integer>>();
 	
@@ -35,7 +36,13 @@ public class EXP implements Listener {
 		enchants.put(e.getPlayer().getUniqueId(), null);
 		enchantsC.put(e.getPlayer().getUniqueId(), null);
 	}
+	*/
+	/*@EventHandler
+	public void anvil (PrepareAnvilEvent e) {
+		e.
+	}*/
 	
+	/*
 	@EventHandler
 	public void enchTable (PrepareItemEnchantEvent e) {
 		Player p = e.getEnchanter();
@@ -56,8 +63,9 @@ public class EXP implements Listener {
 		}
 		enchants.put(p.getUniqueId(), enchs);
 		enchantsC.put(p.getUniqueId(), enchsCost);
-	}
+	}*/
 	
+	/*
 	@EventHandler
 	public void enchTableAdd (EnchantItemEvent e) {
 		Player p = e.getEnchanter();
@@ -72,24 +80,20 @@ public class EXP implements Listener {
 		if (e.getExpLevelCost() == 10000) {
 			e.getEnchantsToAdd().put(Enchantment.getByKey(ench.get(0).getKey()), enchC.get(0));
 		}
-	}
+	}*/
 	
+	/*
 	@EventHandler
 	public void expToss (ExpBottleEvent e) {
 		e.setExperience(1000000);
 		e.setShowEffect(false);
-	}
+	}*/
 	
 	@EventHandler
 	public void expDeath (EntityDeathEvent e) {
 		int level = 1;
-		if (Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+		if (e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 			level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
-		}
-		if (e.getEntity() instanceof Player) {
-			e.setDroppedExp(Math.round(((Player) e.getEntity()).getLevel() * 3000));
-		} else {
-			e.setDroppedExp(e.getDroppedExp() * 100000 * level);
 		}
 		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
 			Player p = (Player) e.getEntity().getKiller();
@@ -106,8 +110,9 @@ public class EXP implements Listener {
 	
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void expBar (PlayerExpChangeEvent e) {
-		e.setAmount(0);
-		plugin.levelup(e.getPlayer());
+		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
+		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
+		e.getPlayer().setExp(Math.max((1.0F * cmana) / (1.0F * maxmana), 1.0F));
 	}
 	
 }

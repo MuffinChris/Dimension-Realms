@@ -13,9 +13,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.core.java.essentials.Main;
+import com.core.java.rpgbase.player.Armor;
 
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagDouble;
+import net.minecraft.server.v1_14_R1.NBTTagInt;
 import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.NBTTagString;
 
@@ -31,7 +33,7 @@ public class GUICommand implements CommandExecutor {
 		swordMeta.setDisplayName(Main.color("&aCUSTOM DAMAGE"));
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add(Main.color(""));
-		lore.add(Main.color("&fThe Value &4AD &frepresents Attack Damage."));
+		lore.add(Main.color("&fThe Value &4AD &frepresents bonus Attack Damage."));
 		lore.add(Main.color("&fIt can be upgraded and altered."));
 		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
 		swordMeta.setLore(lore);
@@ -45,7 +47,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&fThe Value &cHP &frepresents your Health."));
 		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
-		lore.add(Main.color("&cHealth &fis modified by armor (full sets)."));
+		lore.add(Main.color("&cHealth &fis modified by armor (full sets) &8[&f/armor&8]&f."));
 		lore.add(Main.color(""));
 		shieldMeta.setLore(lore);
 		shield.setItemMeta(shieldMeta);
@@ -80,6 +82,9 @@ public class GUICommand implements CommandExecutor {
 		itemC.set("Name", new NBTTagString("generic.armor"));
 		itemC.set("Amount", new NBTTagDouble(0));
 		itemC.set("Slot", new NBTTagString("chest"));
+		itemC.set("Operation", new NBTTagInt(0));
+        itemC.set("UUIDLeast", new NBTTagInt(894654));
+        itemC.set("UUIDMost", new NBTTagInt(2872));
 		modifiers.add(itemC);
 		itemTagC.set("AttributeModifiers", modifiers);
 		nmsStack.setTag(itemTagC);
@@ -89,11 +94,11 @@ public class GUICommand implements CommandExecutor {
 		ArrayList<String> lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.leatherA) + "HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Armor.leatherA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (30%)"));
 		//lore.add(Main.color("&7»&a + Attack Speed (33%)"));
-		lore.add(Main.color("&7»&a + Physical Resistance (25%)"));
+		lore.add(Main.color("&7»&a + Physical Resistance (10%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-10%)"));
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
@@ -109,6 +114,9 @@ public class GUICommand implements CommandExecutor {
 		itemC.set("Name", new NBTTagString("generic.armor"));
 		itemC.set("Amount", new NBTTagDouble(0));
 		itemC.set("Slot", new NBTTagString("chest"));
+		itemC.set("Operation", new NBTTagInt(0));
+        itemC.set("UUIDLeast", new NBTTagInt(894654));
+        itemC.set("UUIDMost", new NBTTagInt(2872));
 		modifiers.add(itemC);
 		itemTagC.set("AttributeModifiers", modifiers);
 		nmsStack.setTag(itemTagC);
@@ -118,7 +126,7 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.goldenA) + "HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Armor.goldenA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (10%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-5%)"));
 		//lore.add(Main.color("&7»&c - Attack Speed (-16%)"));
@@ -138,6 +146,9 @@ public class GUICommand implements CommandExecutor {
 		itemC.set("Name", new NBTTagString("generic.armor"));
 		itemC.set("Amount", new NBTTagDouble(0));
 		itemC.set("Slot", new NBTTagString("chest"));
+		itemC.set("Operation", new NBTTagInt(0));
+        itemC.set("UUIDLeast", new NBTTagInt(894654));
+        itemC.set("UUIDMost", new NBTTagInt(2872));
 		modifiers.add(itemC);
 		itemTagC.set("AttributeModifiers", modifiers);
 		nmsStack.setTag(itemTagC);
@@ -147,11 +158,11 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.chainmailA) + "HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Armor.chainmailA) + "HP)"));
 		lore.add(Main.color("&7»&8 = Knockback Resistance (0%)"));
 		lore.add(Main.color("&7»&a + Movement Speed (10%)"));
 		//lore.add(Main.color("&7»&a + Attack Speed (16%)"));
-		lore.add(Main.color("&7»&a + Physical Resistance (40%)"));
+		lore.add(Main.color("&7»&a + Physical Resistance (20%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-45%)"));
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
@@ -167,6 +178,9 @@ public class GUICommand implements CommandExecutor {
 		itemC.set("Name", new NBTTagString("generic.armor"));
 		itemC.set("Amount", new NBTTagDouble(0));
 		itemC.set("Slot", new NBTTagString("chest"));
+		itemC.set("Operation", new NBTTagInt(0));
+        itemC.set("UUIDLeast", new NBTTagInt(894654));
+        itemC.set("UUIDMost", new NBTTagInt(2872));
 		modifiers.add(itemC);
 		itemTagC.set("AttributeModifiers", modifiers);
 		nmsStack.setTag(itemTagC);
@@ -176,11 +190,11 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.ironA) + "HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Armor.ironA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (30%)"));
 		lore.add(Main.color("&7»&c - Movement Speed (-10%)"));
 		//lore.add(Main.color("&7»&8 = Attack Speed (0%)"));
-		lore.add(Main.color("&7»&a + Physical Resistance (55%)"));
+		lore.add(Main.color("&7»&a + Physical Resistance (40%)"));
 		lore.add(Main.color("&7»&c - Magic Resistance (-20%)"));
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
@@ -196,6 +210,9 @@ public class GUICommand implements CommandExecutor {
 		itemC.set("Name", new NBTTagString("generic.armor"));
 		itemC.set("Amount", new NBTTagDouble(0));
 		itemC.set("Slot", new NBTTagString("chest"));
+		itemC.set("Operation", new NBTTagInt(0));
+        itemC.set("UUIDLeast", new NBTTagInt(894654));
+        itemC.set("UUIDMost", new NBTTagInt(2872));
 		modifiers.add(itemC);
 		itemTagC.set("AttributeModifiers", modifiers);
 		nmsStack.setTag(itemTagC);
@@ -205,11 +222,11 @@ public class GUICommand implements CommandExecutor {
 		lore = new ArrayList<>();
 		lore.add(Main.color("&7&m--------------------"));
 		lore.add(Main.color(""));
-		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Main.diamondA) + "HP)"));
+		lore.add(Main.color("&7»&a + Hitpoints (" + String.valueOf(Armor.diamondA) + "HP)"));
 		lore.add(Main.color("&7»&a + Knockback Resistance (60%)"));
-		lore.add(Main.color("&7»&c - Movement Speed (-25%)"));
+		lore.add(Main.color("&7»&c - Movement Speed (-20%)"));
 		//lore.add(Main.color("&7»&c - Attack Damage (-33%)"));
-		lore.add(Main.color("&7»&a + Physical Resistance (65%)"));
+		lore.add(Main.color("&7»&a + Physical Resistance (30%)"));
 		lore.add(Main.color("&7»&a + Magic Resistance (20%)"));
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));

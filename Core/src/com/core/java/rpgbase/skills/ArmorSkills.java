@@ -10,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -41,8 +42,8 @@ public class ArmorSkills implements Listener {
 		return false;
 	}
 	
-	public void removeLevels(Player p, int i) {
-		p.setLevel(p.getLevel() - i);
+	public void removeMana(Player p, int m) {
+		main.setMana(p, main.getMana(p) - m);
 	}
 	
 	@EventHandler
@@ -52,8 +53,8 @@ public class ArmorSkills implements Listener {
 				if (containsString(e.getItem(), "SWORD")) {
 					if (Armor.getSet(e.getPlayer()).contains("leather") || Armor.getSet(e.getPlayer()).contains("chain")) {
 						if (main.getAbilities().get(e.getPlayer().getUniqueId()).get(0).equals("Eviscerate")) {
-							if (e.getPlayer().getLevel() > 1500) {
-								removeLevels(e.getPlayer(), 1500);
+							if (main.getMana(e.getPlayer()) > 1500) {
+								removeMana(e.getPlayer(), 1500);
 								e.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 								e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20, 1));
 								Vector v = new Vector(e.getPlayer().getLocation().getDirection().getX() * 1.2, 0.2, e.getPlayer().getLocation().getDirection().getZ() * 1.2);
@@ -76,11 +77,17 @@ public class ArmorSkills implements Listener {
 										e.getPlayer().setFallDistance(0);
 										for (LivingEntity ent : getNearbyEnts(e.getPlayer(), 3, 2, 3)) {
 											if (!entities.contains(ent)) {
-												ent.damage(main.getAdMap().get(e.getPlayer().getUniqueId()) * 3.0, e.getPlayer());
+												net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getItem());
+												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25;
+												if (nmsStack.getTag() != null) {
+													handdmg += nmsStack.getTag().getDouble("generic.attackDamage");
+												}
+												ent.damage(handdmg, e.getPlayer());
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
 												ent.getWorld().spawnParticle(Particle.BLOCK_CRACK, ent.getLocation(), 100, 1, 1, 1, blood);
 												e.getPlayer().getWorld().playSound(ent.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, 1.0F);
+											
 											}
 										}
 										if (amount <= 0) {
@@ -98,10 +105,10 @@ public class ArmorSkills implements Listener {
 				if (containsString(e.getItem(), "AXE")) {
 					if (Armor.getSet(e.getPlayer()).contains("leather"))  {
 						if (main.getAbilities().get(e.getPlayer().getUniqueId()).get(1).equals("Leap")) {
-							if (e.getPlayer().getLevel() > 500) {
-								removeLevels(e.getPlayer(), 500);
-								e.getPlayer().removePotionEffect(PotionEffectType.SPEED);
-								e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1));
+							if (main.getMana(e.getPlayer()) > 500) {
+								removeMana(e.getPlayer(), 500);
+								/*e.getPlayer().removePotionEffect(PotionEffectType.SPEED);
+								e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1));*/
 								Vector v = new Vector(e.getPlayer().getLocation().getDirection().getX() * 1.4, 0.8, e.getPlayer().getLocation().getDirection().getZ() * 1.4);
 								e.getPlayer().setVelocity(v);
 								e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 1.0F, 1.0F);

@@ -62,4 +62,10 @@ commands:
   info:
     description: Check info of a player
     aliases: [whois]
+  sp:
+    description: Base Skill Menu
+    aliases: [skillpoint, skillpoints, attributes, attribute, skilltree, rpg, ability, abilities, class, classes, paths, path]
+  heal:
+    description: Heal a player
+    permission: core.mod
 depend: [ArmorEquipEvent]

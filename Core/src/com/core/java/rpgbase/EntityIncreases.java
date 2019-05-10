@@ -43,7 +43,7 @@ public class EntityIncreases implements Listener {
 				e.setDamage(e.getDamage() * (hp / 40.0));
 			}
 			if (e.getCause() == DamageCause.PROJECTILE) {
-				e.setDamage(e.getDamage() * 6.0);
+				e.setDamage(e.getDamage() * 4.0);
 			}
 			if (e.getCause() == DamageCause.FIRE_TICK) {
 				e.setDamage(hp * 0.04);
@@ -57,6 +57,9 @@ public class EntityIncreases implements Listener {
 			if (e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				e.setDamage(e.getDamage() * 1.2);
 			}
+			if (e.getCause() == DamageCause.LIGHTNING) {
+				e.setDamage(50);
+			}
 		}
 	}
 	
@@ -68,7 +71,7 @@ public class EntityIncreases implements Listener {
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				int level = 0;
 				int terms = 0;
-				for (Entity en : ent.getNearbyEntities(64, 64, 64)) {
+				for (Entity en : ent.getNearbyEntities(128, 64, 128)) {
 					if (en instanceof Player) {
 						Player p = (Player) en;
 						terms++;
@@ -82,7 +85,7 @@ public class EntityIncreases implements Listener {
 					level = 1;
 				}
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-				double hpmod = (10 * (hp/20.0)) * level;
+				double hpmod = (20 * (hp/20.0)) * level;
 				double admod = 0.5 * level;
 				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
 				ent.setHealth(hp * 4 + hpmod);

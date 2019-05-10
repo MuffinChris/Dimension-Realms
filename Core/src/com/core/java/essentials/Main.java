@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,6 +28,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.core.java.rpgbase.player.Armor;
 import com.core.java.rpgbase.skills.ArmorSkills;
+import com.core.java.rpgbase.skills.SkilltreeCommand;
+import com.core.java.rpgbase.skills.SkilltreeListener;
 import com.core.java.rpgbase.player.EXP;
 import com.core.java.rpgbase.player.Weapons;
 import com.core.java.rpgbase.EntityIncreases;
@@ -41,6 +44,7 @@ import com.core.java.essentials.commands.GUICommand;
 import com.core.java.essentials.commands.GUIListener;
 import com.core.java.essentials.commands.GamemodeCommand;
 import com.core.java.essentials.commands.HashmapCommand;
+import com.core.java.essentials.commands.HealCommand;
 import com.core.java.essentials.commands.HelpCommand;
 import com.core.java.essentials.commands.InfoCommand;
 import com.core.java.essentials.commands.LagCommand;
@@ -55,26 +59,19 @@ public class Main extends JavaPlugin {
 	
 	//TODO LIST:
 	/* 
-	 * Info Command
-	 * Stats Command (KDR, KillTop, KDTop)
+	 * CONVERT MANA TO EXP PERCENT, ON CHANGE EXP SET PERCENT
+	 * Anvils custom repair system
 	 * 
 	 */
 	
 	//TODO FUTURE:
 	/* 
+	 * Some sort of repair feature
 	 * Bank
 	 * Baltop
 	 * Youtuber and Twitch Ranks with Perks
 	 * Find a way to make ranks less buggy, like a permission clump or something.
 	 */
-	
-	
-	public static final double basehp = 100;
-	public static final double leatherA = 0;
-	public static final double goldenA = 25;
-	public static final double chainmailA = 50;
-	public static final double ironA = 75;
-	public static final double diamondA = 100;
 	
 	public final String version = "0.0.1";
 	public final String noperm = "&cNo permission!";
@@ -117,6 +114,19 @@ public class Main extends JavaPlugin {
 		maps.add(manaRegen);
 		maps.add(ad);
 		maps.add(abilities);
+	}
+
+	public Map<UUID, Integer> cmana = new HashMap<UUID, Integer>();
+	public Map<UUID, Integer> getCManaMap() {
+		return cmana;
+	}
+	
+	public int getMana(Player p) {
+		return cmana.get(p.getUniqueId());
+	}
+	
+	public void setMana(Player p, int mana) {
+		cmana.replace(p.getUniqueId(), mana);
 	}
 	
 	public Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
@@ -193,6 +203,8 @@ public class Main extends JavaPlugin {
 		getCommand("addexp").setExecutor(new ExpCommand());
 		getCommand("info").setExecutor(new InfoCommand());
 		getCommand("stats").setExecutor(new StatsCommand());
+		getCommand("sp").setExecutor(new SkilltreeCommand());
+		getCommand("heal").setExecutor(new HealCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -205,11 +217,14 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new EntityIncreases(), this);
 		Bukkit.getPluginManager().registerEvents(new ArmorSkills(), this);
 		Bukkit.getPluginManager().registerEvents(new Weapons(), this);
+		Bukkit.getPluginManager().registerEvents(new KDRListener(), this);
+		Bukkit.getPluginManager().registerEvents(new SkilltreeListener(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 		
 		GUICommand.createArmorInv();
 		HelpCommand.createHelpGui();
 		GUICommand.createCombatInv();
+		SkilltreeListener.createSpInv();
 		so("&cCORE&7: &fGUIs Enabled!");
 		
 		manaRegen();
@@ -288,15 +303,15 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (mana.get(p.getUniqueId()) != null) {
-						if (p.getLevel() < mana.get(p.getUniqueId())) {
+						if (getMana(p) < mana.get(p.getUniqueId())) {
 							if (!p.isDead()) {
 								if (p.isSleeping()) {
-									p.setLevel(p.getLevel() + 20 + manaRegen.get(p.getUniqueId()) * 10);
+									setMana(p, Integer.valueOf(Math.max(getMana(p) + 20 + manaRegen.get(p.getUniqueId()) * 10, mana.get(p.getUniqueId()))));
 								} else {
-									p.setLevel(p.getLevel() + manaRegen.get(p.getUniqueId()));
+									setMana(p, Integer.valueOf(Math.max(getMana(p) + manaRegen.get(p.getUniqueId()), mana.get(p.getUniqueId()))));
 								}
 							} else {
-								p.setLevel(0);
+								setMana(p, 0);
 							}
 						}
 					}
@@ -311,11 +326,12 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (p.hasPotionEffect(PotionEffectType.ABSORPTION)) {
-						double heal = 1;
+						double heal = 4;
 						int amp = p.getPotionEffect(PotionEffectType.ABSORPTION).getAmplifier();
 						int duration = p.getPotionEffect(PotionEffectType.ABSORPTION).getDuration();
 						p.removePotionEffect(PotionEffectType.ABSORPTION);
 						if (!p.isDead()) {
+							p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation(), 50, 1, 1, 1);
 							p.setHealth(Math.min(heal + p.getHealth(), p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
 						}
 						if (amp >= 1) {
@@ -344,6 +360,7 @@ public class Main extends JavaPlugin {
         abs.add(getValue(p, "AbilityFour"));
         abilities.replace(uuid, abs);
         p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
+        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(getValue(p, "AttackSpeed")));
 	}
 	
 	public void levelup (Player p) {

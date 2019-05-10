@@ -24,16 +24,24 @@ import com.core.java.essentials.Main;
 
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagDouble;
+import net.minecraft.server.v1_14_R1.NBTTagInt;
 import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class Armor implements Listener {
 	
-	public static double leatherADDefense = 0.75;
+	public static final double basehp = 100;
+	public static final double leatherA = 75;
+	public static final double goldenA = 100;
+	public static final double chainmailA = 125;
+	public static final double ironA = 150;
+	public static final double diamondA = 200;
+	
+	public static double leatherADDefense = 0.9;
 	public static double goldADDefense = 1.0;
-	public static double chainADDefense = 0.6;
-	public static double ironADDefense = 0.45;
-	public static double diamondADDefense = 0.35;
+	public static double chainADDefense = 0.8;
+	public static double ironADDefense = 0.6;
+	public static double diamondADDefense = 0.7;
 	
 	public static double leatherMagDefense = 1.1;
 	public static double goldMagDefense = 0.5;
@@ -48,7 +56,7 @@ public class Armor implements Listener {
 	public static double leatherAS = 0;//2.0;
 	
 	private Main plugin = Main.getInstance();
-	private static double hp = Main.basehp;
+	private static double hp = basehp;
 	
 	public static String getSet (Player p) {
 		String helmet = "nothing";
@@ -154,6 +162,9 @@ public class Armor implements Listener {
 				itemC.set("AttributeName", new NBTTagString("generic.armor"));
 				itemC.set("Name", new NBTTagString("generic.armor"));
 				itemC.set("Amount", new NBTTagDouble(0));
+				itemC.set("Operation", new NBTTagInt(0));
+		        itemC.set("UUIDLeast", new NBTTagInt(894654));
+		        itemC.set("UUIDMost", new NBTTagInt(2872));
 				
 				String item = e.getNewArmorPiece().toString().toLowerCase();
 				
@@ -187,7 +198,6 @@ public class Armor implements Listener {
 				if (item.contains("boots")) {
 					e.getPlayer().getInventory().setBoots(nItem);
 				}
-				
 				e.getNewArmorPiece().setAmount(0);
 			}
 		}
@@ -206,15 +216,15 @@ public class Armor implements Listener {
 	
 	public static void updateSet(Player p, String set) {
 		if (p.getHealth() > 0.0) {
-			double pAS = Double.valueOf(Main.getValue(p, "Attack Speed"));
+			double pAS = Double.valueOf(Main.getValue(p, "AttackSpeed"));
 			double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (set.equals("diamond")) {
-				p.setWalkSpeed(0.15F);
+				p.setWalkSpeed(0.16F);
 				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + diamondAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
-				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.diamondA);
-				if (p.getHealth() >= hp + Main.diamondA) {
-					p.setHealth(hp + Main.diamondA);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + diamondA);
+				if (p.getHealth() >= hp + diamondA) {
+					p.setHealth(hp + diamondA);
 				} else {
 					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
@@ -222,9 +232,9 @@ public class Armor implements Listener {
 				p.setWalkSpeed(0.18F);
 				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + ironAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
-				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.ironA);
-				if (p.getHealth() >= hp + Main.ironA) {
-					p.setHealth(hp + Main.ironA);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + ironA);
+				if (p.getHealth() >= hp + ironA) {
+					p.setHealth(hp + ironA);
 				} else {
 					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
@@ -232,9 +242,9 @@ public class Armor implements Listener {
 				p.setWalkSpeed(0.19F);
 				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + goldenAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
-				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.goldenA);
-				if (p.getHealth() >= hp + Main.goldenA) {
-					p.setHealth(hp + Main.goldenA);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + goldenA);
+				if (p.getHealth() >= hp + goldenA) {
+					p.setHealth(hp + goldenA);
 				} else {
 					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
@@ -242,9 +252,9 @@ public class Armor implements Listener {
 				p.setWalkSpeed(0.22F);
 				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + chainmailAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.chainmailA);
-				if (p.getHealth() >= hp + Main.chainmailA) {
-					p.setHealth(hp + Main.chainmailA);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + chainmailA);
+				if (p.getHealth() >= hp + chainmailA) {
+					p.setHealth(hp + chainmailA);
 				} else {
 					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
@@ -252,9 +262,9 @@ public class Armor implements Listener {
 				p.setWalkSpeed(0.26F);
 				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + leatherAS);
 				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
-				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + Main.leatherA);
-				if (p.getHealth() >= hp + Main.leatherA) {
-					p.setHealth(hp + Main.leatherA);
+				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + leatherA);
+				if (p.getHealth() >= hp + leatherA) {
+					p.setHealth(hp + leatherA);
 				} else {
 					p.setHealth(hpPercent * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 				}
@@ -280,7 +290,7 @@ public class Armor implements Listener {
 		if (e.getSlotType() == SlotType.ARMOR) {
 			if (!e.getClick().isShiftClick()) {
 				e.setCancelled(true);
-				Main.msg((Player) e.getWhoClicked(), "&cERROR: Please use Shift-Click to change Armor!");
+				Main.msg((Player) e.getWhoClicked(), "&cERROR: &fPlease use Shift-Click to change Armor!");
 			}
 		}
 	}

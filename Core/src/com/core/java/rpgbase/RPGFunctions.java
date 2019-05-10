@@ -42,7 +42,7 @@ import com.core.java.essentials.Main;
 public class RPGFunctions implements Listener {
 	
 	private Main plugin = Main.getInstance();
-	private double hp = Main.basehp;
+	private double hp = Armor.basehp;
 	
 	@EventHandler
 	public void onLeaveRPG (PlayerQuitEvent e) {
@@ -70,6 +70,19 @@ public class RPGFunctions implements Listener {
         }
         if (plugin.getSPMap().containsKey(uuid)) {
         	plugin.getSPMap().remove(uuid);
+        }
+        
+        File pFile = new File("plugins/Core/data/" + e.getPlayer().getUniqueId() + ".yml");
+        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+        try {
+            pData.set("Cmana", plugin.getCManaMap().get(uuid));
+            pData.save(pFile);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        
+        if (plugin.getCManaMap().containsKey(uuid)) {
+        	plugin.getCManaMap().remove(uuid);
         }
 	}
 	
@@ -205,8 +218,8 @@ public class RPGFunctions implements Listener {
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
             pData.set("Username", e.getPlayer().getName());
-            if (!pData.isSet("Attack Speed")) {
-            	pData.set("Attack Speed", 16.0);
+            if (!pData.isSet("AttackSpeed")) {
+            	pData.set("AttackSpeed", 4.0);
             }
             if (!pData.isSet("Level")) {
             	pData.set("Level", 1);
@@ -221,7 +234,7 @@ public class RPGFunctions implements Listener {
             	pData.set("Mana", 5000);
             }
             if (!pData.isSet("AD")) {
-            	pData.set("AD", 10.0);
+            	pData.set("AD", 1.0);
             }
             if (!pData.isSet("AbilityOne")) {
             	pData.set("AbilityOne", "None");
@@ -234,6 +247,9 @@ public class RPGFunctions implements Listener {
             }
             if (!pData.isSet("AbilityFour")) {
             	pData.set("AbilityFour", "None");
+            }
+            if (!pData.isSet("Cmana")) {
+            	pData.set("Cmana", 0);
             }
             if (!pData.isSet("Kills")) {
             	pData.set("Kills", 0);
@@ -252,6 +268,7 @@ public class RPGFunctions implements Listener {
         plugin.getLevelMap().put(uuid, pData.getInt("Level"));
         plugin.getExpMap().put(uuid, pData.getInt("Exp"));
         plugin.getSPMap().put(uuid, pData.getInt("SP"));
+        plugin.getCManaMap().put(uuid, pData.getInt("Cmana"));
         List<String> abs = new ArrayList<String>();
         abs.add(pData.getString("AbilityOne"));
         abs.add(pData.getString("AbilityTwo"));
@@ -259,7 +276,7 @@ public class RPGFunctions implements Listener {
         abs.add(pData.getString("AbilityFour"));
         plugin.getAbilities().put(uuid, abs);
         
-		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("Attack Speed"));
+		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("AttackSpeed"));
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pData.getDouble("AD"));
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
 			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
