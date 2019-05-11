@@ -59,13 +59,16 @@ public class Main extends JavaPlugin {
 	
 	//TODO LIST:
 	/* 
-	 * CONVERT MANA TO EXP PERCENT, ON CHANGE EXP SET PERCENT
+	 * Allow crafting of experience level bottles by using some xp during the craft.
+	 * Slimes and Magma cubes levels broken, and name keeps doubling up
 	 * Anvils custom repair system
 	 * 
 	 */
 	
 	//TODO FUTURE:
 	/* 
+	 * Base Menu Cmd (contains all useful cmd guis)
+	 * Parties, EXP Boosts (compounding)
 	 * Some sort of repair feature
 	 * Bank
 	 * Baltop
@@ -106,15 +109,6 @@ public class Main extends JavaPlugin {
 	public BossBarManager getBarManager() {
 		return barManager;
 	}
-	
-	public ArrayList<Map> maps = new ArrayList<>();
-	
-	public void addToMaps() {
-		maps.add(mana);
-		maps.add(manaRegen);
-		maps.add(ad);
-		maps.add(abilities);
-	}
 
 	public Map<UUID, Integer> cmana = new HashMap<UUID, Integer>();
 	public Map<UUID, Integer> getCManaMap() {
@@ -127,6 +121,12 @@ public class Main extends JavaPlugin {
 	
 	public void setMana(Player p, int mana) {
 		cmana.replace(p.getUniqueId(), mana);
+	}
+	
+	public void updateExpBar(Player p) {
+		int maxmana = getManaMap().get(p.getUniqueId());
+		int cmana = getCManaMap().get(p.getUniqueId());
+		p.setExp(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
 	}
 	
 	public Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
@@ -164,9 +164,9 @@ public class Main extends JavaPlugin {
 		return sp;
 	}
 	
-	public int getManaRegen (Player p) {
+	/*public int getManaRegen (Player p) {
 		return Integer.valueOf(String.valueOf(Math.round((Math.sqrt((mana.get(p.getUniqueId()) * 0.0005D))))));
-	}
+	}*/
 	
 	public int getExp(Player p) {
 		return Integer.valueOf(getValue(p, "Exp"));
@@ -260,7 +260,9 @@ public class Main extends JavaPlugin {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				updateFunc();
+				if (Bukkit.getServer().getOnlinePlayers().size() >= 1) {
+					updateFunc();
+				}
 			}
 		}.runTaskTimer(this, 12000L, 12000L);
 	}
@@ -303,13 +305,14 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (mana.get(p.getUniqueId()) != null) {
-						if (getMana(p) < mana.get(p.getUniqueId())) {
+						if (getMana(p) <= mana.get(p.getUniqueId())) {
 							if (!p.isDead()) {
 								if (p.isSleeping()) {
-									setMana(p, Integer.valueOf(Math.max(getMana(p) + 20 + manaRegen.get(p.getUniqueId()) * 10, mana.get(p.getUniqueId()))));
+									setMana(p, Integer.valueOf(Math.min(getMana(p) + 20 + getManaRegenMap().get(p.getUniqueId()) * 10, mana.get(p.getUniqueId()))));
 								} else {
-									setMana(p, Integer.valueOf(Math.max(getMana(p) + manaRegen.get(p.getUniqueId()), mana.get(p.getUniqueId()))));
+									setMana(p, Integer.valueOf(Math.min(getMana(p) + getManaRegenMap().get(p.getUniqueId()), mana.get(p.getUniqueId()))));
 								}
+								updateExpBar(p);
 							} else {
 								setMana(p, 0);
 							}
@@ -348,7 +351,7 @@ public class Main extends JavaPlugin {
 	public void hashmapUpdate(Player p) {
 		UUID uuid = p.getUniqueId();
         mana.replace(uuid, Integer.valueOf(getValue(p, "Mana")));
-        manaRegen.replace(uuid, getManaRegen(p));
+        manaRegen.replace(uuid, Integer.valueOf(getValue(p, "ManaRegen")));
         ad.replace(uuid, Double.valueOf(getValue(p, "AD")));
         level.replace(uuid, Integer.valueOf(getValue(p, "Level")));
         exp.replace(uuid, Integer.valueOf(getValue(p, "Exp")));

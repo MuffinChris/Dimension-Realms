@@ -40,7 +40,7 @@ public class EntityIncreases implements Listener {
 				e.setDamage(hp * 0.01);
 			}
 			if (e.getCause() == DamageCause.WITHER) {
-				e.setDamage(e.getDamage() * (hp / 40.0));
+				e.setDamage(hp / 30.0);
 			}
 			if (e.getCause() == DamageCause.PROJECTILE) {
 				e.setDamage(e.getDamage() * 4.0);
@@ -59,6 +59,9 @@ public class EntityIncreases implements Listener {
 			}
 			if (e.getCause() == DamageCause.LIGHTNING) {
 				e.setDamage(50);
+			}
+			if (e.getCause() == DamageCause.CONTACT) {
+				e.setDamage(10);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
@@ -155,63 +156,130 @@ public class Armor implements Listener {
 		if (e.getMethod() == EquipMethod.SHIFT_CLICK || e.getMethod() == EquipMethod.HOTBAR || e.getMethod() == EquipMethod.HOTBAR_SWAP) {
 			if (e.getNewArmorPiece() != null) {
 				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getNewArmorPiece());
-				NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-				NBTTagList modifiers = new NBTTagList();
-				NBTTagCompound itemC = new NBTTagCompound();
-				
-				itemC.set("AttributeName", new NBTTagString("generic.armor"));
-				itemC.set("Name", new NBTTagString("generic.armor"));
-				itemC.set("Amount", new NBTTagDouble(0));
-				itemC.set("Operation", new NBTTagInt(0));
-		        itemC.set("UUIDLeast", new NBTTagInt(894654));
-		        itemC.set("UUIDMost", new NBTTagInt(2872));
-				
-				String item = e.getNewArmorPiece().toString().toLowerCase();
-				
-				if (item.contains("helmet") || item.contains("cap")) {
-					itemC.set("Slot", new NBTTagString("head"));
+				if (nmsStack.getTag() == null) {
+					NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+					NBTTagList modifiers = new NBTTagList();
+					NBTTagCompound itemC = new NBTTagCompound();
+					
+					itemC.set("AttributeName", new NBTTagString("generic.armor"));
+					itemC.set("Name", new NBTTagString("generic.armor"));
+					itemC.set("Amount", new NBTTagDouble(0));
+					itemC.set("Operation", new NBTTagInt(0));
+			        itemC.set("UUIDLeast", new NBTTagInt(894654));
+			        itemC.set("UUIDMost", new NBTTagInt(2872));
+					
+					String item = e.getNewArmorPiece().toString().toLowerCase();
+					
+					if (item.contains("helmet") || item.contains("cap")) {
+						itemC.set("Slot", new NBTTagString("head"));
+					}
+					if (item.contains("chestplate") || item.contains("tunic")) {
+						itemC.set("Slot", new NBTTagString("chest"));
+					}
+					if (item.contains("leggings") || item.contains("pants")) {
+						itemC.set("Slot", new NBTTagString("legs"));
+					}
+					if (item.contains("boots")) {
+						itemC.set("Slot", new NBTTagString("feet"));
+					}
+					e.getNewArmorPiece().setAmount(0);
+					modifiers.add(itemC);
+					itemTagC.set("AttributeModifiers", modifiers);
+					nmsStack.setTag(itemTagC);
+					ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
+					
+					if (item.contains("helmet") || item.contains("cap")) {
+						e.getPlayer().getInventory().setHelmet(nItem);
+					}
+					if (item.contains("chestplate") || item.contains("tunic")) {
+						e.getPlayer().getInventory().setChestplate(nItem);
+					}
+					if (item.contains("leggings") || item.contains("pants")) {
+						e.getPlayer().getInventory().setLeggings(nItem);
+					}
+					if (item.contains("boots")) {
+						e.getPlayer().getInventory().setBoots(nItem);
+					}
 				}
-				if (item.contains("chestplate") || item.contains("tunic")) {
-					itemC.set("Slot", new NBTTagString("chest"));
-				}
-				if (item.contains("leggings") || item.contains("pants")) {
-					itemC.set("Slot", new NBTTagString("legs"));
-				}
-				if (item.contains("boots")) {
-					itemC.set("Slot", new NBTTagString("feet"));
-				}
-				
-				modifiers.add(itemC);
-				itemTagC.set("AttributeModifiers", modifiers);
-				nmsStack.setTag(itemTagC);
-				ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
-				
-				if (item.contains("helmet") || item.contains("cap")) {
-					e.getPlayer().getInventory().setHelmet(nItem);
-				}
-				if (item.contains("chestplate") || item.contains("tunic")) {
-					e.getPlayer().getInventory().setChestplate(nItem);
-				}
-				if (item.contains("leggings") || item.contains("pants")) {
-					e.getPlayer().getInventory().setLeggings(nItem);
-				}
-				if (item.contains("boots")) {
-					e.getPlayer().getInventory().setBoots(nItem);
-				}
-				e.getNewArmorPiece().setAmount(0);
 			}
+		} else {
+			new BukkitRunnable() {
+				public void run() {
+					fixArmor(e.getPlayer());
+				}
+			}.runTaskLater(plugin, 1L);
 		}
 		Player p = (Player) e.getPlayer();
-		String set = getSet(p);
+		/*String set = getSet(p);
 		if (e.getOldArmorPiece() != null) {
 			if (e.getOldArmorPiece().getType() != Material.AIR) {
 				if (e.getNewArmorPiece() == null || e.getNewArmorPiece().getType() == Material.AIR) {
 					set = "nothing";
 				}
 			}
-		}
-		updateSet(p, set);
+		}*/
 		
+		new BukkitRunnable() {
+			public void run() {
+				updateSet(p, getSet(p));
+			}
+		}.runTaskLater(plugin, 1L);
+		
+	}
+	
+	public void fixArmor(Player p) {
+		for (ItemStack i : p.getInventory().getArmorContents()) {
+			if (i != null) {
+				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+				if (nmsStack.getTag() == null) {
+					NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+					NBTTagList modifiers = new NBTTagList();
+					NBTTagCompound itemC = new NBTTagCompound();
+					
+					itemC.set("AttributeName", new NBTTagString("generic.armor"));
+					itemC.set("Name", new NBTTagString("generic.armor"));
+					itemC.set("Amount", new NBTTagDouble(0));
+					itemC.set("Operation", new NBTTagInt(0));
+			        itemC.set("UUIDLeast", new NBTTagInt(894654));
+			        itemC.set("UUIDMost", new NBTTagInt(2872));
+					
+					String item = i.toString().toLowerCase();
+					
+					if (item.contains("helmet") || item.contains("cap")) {
+						itemC.set("Slot", new NBTTagString("head"));
+					}
+					if (item.contains("chestplate") || item.contains("tunic")) {
+						itemC.set("Slot", new NBTTagString("chest"));
+					}
+					if (item.contains("leggings") || item.contains("pants")) {
+						itemC.set("Slot", new NBTTagString("legs"));
+					}
+					if (item.contains("boots")) {
+						itemC.set("Slot", new NBTTagString("feet"));
+					}
+					
+					modifiers.add(itemC);
+					itemTagC.set("AttributeModifiers", modifiers);
+					nmsStack.setTag(itemTagC);
+					ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
+					i.setAmount(0);
+					if (item.contains("helmet") || item.contains("cap")) {
+						p.getInventory().setHelmet(nItem);
+					}
+					if (item.contains("chestplate") || item.contains("tunic")) {
+						p.getInventory().setChestplate(nItem);
+					}
+					if (item.contains("leggings") || item.contains("pants")) {
+						p.getInventory().setLeggings(nItem);
+					}
+					if (item.contains("boots")) {
+						p.getInventory().setBoots(nItem);
+					}
+				}
+			}
+		}
+		String set = getSet(p);
+		updateSet(p, set);
 	}
 	
 	public static void updateSet(Player p, String set) {
@@ -285,7 +353,7 @@ public class Armor implements Listener {
 		}
 	}
 	
-	@EventHandler
+	/*@EventHandler
 	public void armorClick (InventoryClickEvent e) {
 		if (e.getSlotType() == SlotType.ARMOR) {
 			if (!e.getClick().isShiftClick()) {
@@ -293,6 +361,6 @@ public class Armor implements Listener {
 				Main.msg((Player) e.getWhoClicked(), "&cERROR: &fPlease use Shift-Click to change Armor!");
 			}
 		}
-	}
+	}*/
 	
 }

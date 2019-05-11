@@ -233,6 +233,9 @@ public class RPGFunctions implements Listener {
             if (!pData.isSet("Mana")) {
             	pData.set("Mana", 5000);
             }
+            if (!pData.isSet("ManaRegen")) {
+            	pData.set("ManaRegen", 2);
+            }
             if (!pData.isSet("AD")) {
             	pData.set("AD", 1.0);
             }
@@ -263,7 +266,7 @@ public class RPGFunctions implements Listener {
         }
         UUID uuid = e.getPlayer().getUniqueId();
         plugin.getManaMap().put(uuid, pData.getInt("Mana"));
-        plugin.getManaRegenMap().put(uuid, plugin.getManaRegen(e.getPlayer()));
+        plugin.getManaRegenMap().put(uuid, pData.getInt("ManaRegen"));
         plugin.getAdMap().put(uuid, pData.getDouble("AD"));
         plugin.getLevelMap().put(uuid, pData.getInt("Level"));
         plugin.getExpMap().put(uuid, pData.getInt("Exp"));
@@ -287,7 +290,7 @@ public class RPGFunctions implements Listener {
 		
 		if (!e.getPlayer().hasPlayedBefore()) {
 			e.getPlayer().setHealth(hp);
-			giveSpawnItems(e.getPlayer());
+			giveSpawnItems(e.getPlayer(), true);
 			welcomePlayer(e.getPlayer());
 		}
 		
@@ -302,25 +305,31 @@ public class RPGFunctions implements Listener {
 	
 	@EventHandler
 	public void respawnItems (PlayerRespawnEvent e) {
-		giveSpawnItems(e.getPlayer());
+		giveSpawnItems(e.getPlayer(), false);
 	}
 	
-	public void giveSpawnItems(Player p) {
-		ItemStack codex = new ItemStack(Material.ENCHANTED_BOOK);
-		ItemMeta meta = codex.getItemMeta();
-		meta.setDisplayName(Main.color("&8» &bGuide Codex &8«"));
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add("");
-		lore.add(Main.color("&7Right-Click for Help!"));
-		lore.add("");
-		meta.setLore(lore);
-		codex.setItemMeta(meta);
-		p.getInventory().setItem(8, codex);
-		
+	public void giveSpawnItems(Player p, boolean newplayer) {
+
 		p.getInventory().setItem(0, new ItemStack(Material.WOODEN_SWORD));
 		
 		ItemStack bread = new ItemStack(Material.BREAD);
 		bread.setAmount(8);
+		
+		if (newplayer) {
+			ItemStack codex = new ItemStack(Material.ENCHANTED_BOOK);
+			ItemMeta meta = codex.getItemMeta();
+			meta.setDisplayName(Main.color("&8» &bGuide Codex &8«"));
+			ArrayList<String> lore = new ArrayList<String>();
+			lore.add("");
+			lore.add(Main.color("&7Right-Click for Help!"));
+			lore.add("");
+			meta.setLore(lore);
+			codex.setItemMeta(meta);
+			p.getInventory().setItem(8, codex);
+			
+			bread.setAmount(12);
+		}
+		
 		p.getInventory().setItem(4, bread);
 	}
 	

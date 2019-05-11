@@ -44,6 +44,7 @@ public class ArmorSkills implements Listener {
 	
 	public void removeMana(Player p, int m) {
 		main.setMana(p, main.getMana(p) - m);
+		main.updateExpBar(p);
 	}
 	
 	@EventHandler
@@ -77,11 +78,7 @@ public class ArmorSkills implements Listener {
 										e.getPlayer().setFallDistance(0);
 										for (LivingEntity ent : getNearbyEnts(e.getPlayer(), 3, 2, 3)) {
 											if (!entities.contains(ent)) {
-												net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getItem());
-												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25;
-												if (nmsStack.getTag() != null) {
-													handdmg += nmsStack.getTag().getDouble("generic.attackDamage");
-												}
+												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25 + 20;
 												ent.damage(handdmg, e.getPlayer());
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();

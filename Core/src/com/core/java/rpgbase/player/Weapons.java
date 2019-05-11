@@ -213,7 +213,7 @@ public class Weapons  implements Listener {
 			        
 			        itemAS.set("AttributeName", new NBTTagString("generic.attackSpeed"));
 					itemAS.set("Name", new NBTTagString("generic.attackSpeed"));
-					itemAS.set("Amount", new NBTTagDouble(12.0));
+					itemAS.set("Amount", new NBTTagDouble(16.0));
 					itemAS.set("Slot", new NBTTagString("mainhand"));
 					itemAS.set("Operation", new NBTTagInt(0));
 			        itemAS.set("UUIDLeast", new NBTTagInt(894654));
