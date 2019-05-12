@@ -16,6 +16,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,6 +38,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.core.java.rpgbase.bossbars.BS;
 import com.core.java.rpgbase.player.Armor;
+import com.core.java.rpgbase.player.Weapons;
+
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagDouble;
+import net.minecraft.server.v1_14_R1.NBTTagInt;
+import net.minecraft.server.v1_14_R1.NBTTagList;
+import net.minecraft.server.v1_14_R1.NBTTagString;
+
 import com.core.java.essentials.Main;
 
 public class RPGFunctions implements Listener {
@@ -165,7 +174,7 @@ public class RPGFunctions implements Listener {
 					}
 				}
 				BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
-				ent.getWorld().spawnParticle(Particle.BLOCK_DUST, ent.getLocation(), 100, 0, 1, 0, blood);
+				ent.getWorld().spawnParticle(Particle.BLOCK_DUST, ent.getLocation(), 100, 0.5, 1, 0.5, blood);
 				new BukkitRunnable() {
 					@Override
 					public void run() {
@@ -218,9 +227,6 @@ public class RPGFunctions implements Listener {
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
             pData.set("Username", e.getPlayer().getName());
-            if (!pData.isSet("AttackSpeed")) {
-            	pData.set("AttackSpeed", 4.0);
-            }
             if (!pData.isSet("Level")) {
             	pData.set("Level", 1);
             }
@@ -236,8 +242,14 @@ public class RPGFunctions implements Listener {
             if (!pData.isSet("ManaRegen")) {
             	pData.set("ManaRegen", 2);
             }
+            if (!pData.isSet("Cmana")) {
+            	pData.set("Cmana", 0);
+            }
             if (!pData.isSet("AD")) {
             	pData.set("AD", 1.0);
+            }
+            if (!pData.isSet("AttackSpeed")) {
+            	pData.set("AttackSpeed", 6.0);
             }
             if (!pData.isSet("AbilityOne")) {
             	pData.set("AbilityOne", "None");
@@ -250,9 +262,6 @@ public class RPGFunctions implements Listener {
             }
             if (!pData.isSet("AbilityFour")) {
             	pData.set("AbilityFour", "None");
-            }
-            if (!pData.isSet("Cmana")) {
-            	pData.set("Cmana", 0);
             }
             if (!pData.isSet("Kills")) {
             	pData.set("Kills", 0);
@@ -279,8 +288,9 @@ public class RPGFunctions implements Listener {
         abs.add(pData.getString("AbilityFour"));
         plugin.getAbilities().put(uuid, abs);
         
-		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("AttackSpeed"));
+		plugin.updateAttackSpeed(e.getPlayer());
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pData.getDouble("AD"));
+		e.getPlayer().getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
 			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 			e.getPlayer().setHealth(hp);
@@ -309,7 +319,7 @@ public class RPGFunctions implements Listener {
 	}
 	
 	public void giveSpawnItems(Player p, boolean newplayer) {
-
+		
 		p.getInventory().setItem(0, new ItemStack(Material.WOODEN_SWORD));
 		
 		ItemStack bread = new ItemStack(Material.BREAD);

@@ -50,11 +50,11 @@ public class Armor implements Listener {
 	public static double ironMagDefense = 1.2;
 	public static double diamondMagDefense = 0.8;
 	
-	public static double diamondAS = 0;//-2.0;
+	/*public static double diamondAS = 0;//-2.0;
 	public static double ironAS = 0;
 	public static double goldenAS = 0;//-1.0;
 	public static double chainmailAS = 0;//1.0;
-	public static double leatherAS = 0;//2.0;
+	public static double leatherAS = 0;//2.0;*/
 	
 	private Main plugin = Main.getInstance();
 	private static double hp = basehp;
@@ -284,12 +284,9 @@ public class Armor implements Listener {
 	
 	public static void updateSet(Player p, String set) {
 		if (p.getHealth() > 0.0) {
-			double pAS = Double.valueOf(Main.getValue(p, "AttackSpeed"));
 			double hpPercent = p.getHealth() / p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (set.equals("diamond")) {
 				p.setWalkSpeed(0.16F);
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + diamondAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.6);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + diamondA);
 				if (p.getHealth() >= hp + diamondA) {
 					p.setHealth(hp + diamondA);
@@ -298,8 +295,6 @@ public class Armor implements Listener {
 				}
 			} else if (set.equals("iron")) {
 				p.setWalkSpeed(0.18F);
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + ironAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + ironA);
 				if (p.getHealth() >= hp + ironA) {
 					p.setHealth(hp + ironA);
@@ -308,8 +303,6 @@ public class Armor implements Listener {
 				}
 			} else if (set.equals("golden")) {
 				p.setWalkSpeed(0.19F);
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + goldenAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.1);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + goldenA);
 				if (p.getHealth() >= hp + goldenA) {
 					p.setHealth(hp + goldenA);
@@ -318,8 +311,6 @@ public class Armor implements Listener {
 				}
 			} else if (set.equals("chainmail")) {
 				p.setWalkSpeed(0.22F);
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + chainmailAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + chainmailA);
 				if (p.getHealth() >= hp + chainmailA) {
 					p.setHealth(hp + chainmailA);
@@ -328,8 +319,6 @@ public class Armor implements Listener {
 				}
 			} else if (set.equals("leather")) {
 				p.setWalkSpeed(0.26F);
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS + leatherAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + leatherA);
 				if (p.getHealth() >= hp + leatherA) {
 					p.setHealth(hp + leatherA);
@@ -340,8 +329,6 @@ public class Armor implements Listener {
 				if (p.getWalkSpeed() != 0.2F) {
 					p.setWalkSpeed(0.2F);
 				}
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pAS);
-				p.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 				if (p.getHealth() >= hp) {
 					p.setHealth(hp);

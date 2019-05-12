@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 
 import com.core.java.essentials.Main;
 import com.core.java.rpgbase.player.Armor;
+import com.core.java.rpgbase.player.Weapons;
 
 public class ArmorSkills implements Listener {
 
@@ -79,6 +80,7 @@ public class ArmorSkills implements Listener {
 										for (LivingEntity ent : getNearbyEnts(e.getPlayer(), 3, 2, 3)) {
 											if (!entities.contains(ent)) {
 												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25 + 20;
+												handdmg += Weapons.getWeaponAttackDamage(e.getPlayer()) * 1.25;
 												ent.damage(handdmg, e.getPlayer());
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();

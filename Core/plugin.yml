@@ -68,4 +68,6 @@ commands:
   heal:
     description: Heal a player
     permission: core.mod
+  mana:
+    description: View your mana
 depend: [ArmorEquipEvent]

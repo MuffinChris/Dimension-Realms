@@ -48,6 +48,7 @@ import com.core.java.essentials.commands.HealCommand;
 import com.core.java.essentials.commands.HelpCommand;
 import com.core.java.essentials.commands.InfoCommand;
 import com.core.java.essentials.commands.LagCommand;
+import com.core.java.essentials.commands.ManaCommand;
 import com.core.java.essentials.commands.SpawnCommand;
 import com.core.java.essentials.commands.StatsCommand;
 
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
 	
 	//TODO LIST:
 	/* 
-	 * Allow crafting of experience level bottles by using some xp during the craft.
+	 * Make a way of making EXP bottles (using rpg xp?)
 	 * Slimes and Magma cubes levels broken, and name keeps doubling up
 	 * Anvils custom repair system
 	 * 
@@ -108,6 +109,30 @@ public class Main extends JavaPlugin {
 	public BossBarManager barManager = new BossBarManager();
 	public BossBarManager getBarManager() {
 		return barManager;
+	}
+	
+	public void updateAttackSpeed(Player p) {
+		if (p.getInventory().getItemInMainHand() != null) {
+			ItemStack i = p.getInventory().getItemInMainHand();
+			if (i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().contains("Attack Speed")) {
+				int index = 0;
+				for (String s : i.getItemMeta().getLore()) {
+					if (s.contains("Attack Speed")) {
+						break;
+					} else {
+						index++;
+					}
+				}
+				String as = i.getItemMeta().getLore().get(index);
+				as = ChatColor.stripColor(as);
+				as = as.replace("Attack Speed: ", "");
+				if (Double.valueOf(as) instanceof Double) {
+					p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(as));
+					return;
+				}
+			}
+		}
+		p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(getValue(p, "AttackSpeed")));
 	}
 
 	public Map<UUID, Integer> cmana = new HashMap<UUID, Integer>();
@@ -205,6 +230,7 @@ public class Main extends JavaPlugin {
 		getCommand("stats").setExecutor(new StatsCommand());
 		getCommand("sp").setExecutor(new SkilltreeCommand());
 		getCommand("heal").setExecutor(new HealCommand());
+		getCommand("mana").setExecutor(new ManaCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
@@ -363,7 +389,7 @@ public class Main extends JavaPlugin {
         abs.add(getValue(p, "AbilityFour"));
         abilities.replace(uuid, abs);
         p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
-        p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(getValue(p, "AttackSpeed")));
+        updateAttackSpeed(p);
 	}
 	
 	public void levelup (Player p) {
@@ -394,7 +420,8 @@ public class Main extends JavaPlugin {
 		int max = getInstance().getExpMax(p);
 		int exp = getInstance().getExp(p);
 		double exppercent = ((1.0 * exp) / (1.0 * max)) * 100;
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
+		int mana = getInstance().getMana(p);
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
 	}
 	
 	public void setStringValue(Player p, String text, String value) {

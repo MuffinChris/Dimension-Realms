@@ -89,7 +89,7 @@ public class EntityIncreases implements Listener {
 				}
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 				double hpmod = (20 * (hp/20.0)) * level;
-				double admod = 0.5 * level;
+				double admod = 0.4 * level;
 				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
 				ent.setHealth(hp * 4 + hpmod);
 				if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {

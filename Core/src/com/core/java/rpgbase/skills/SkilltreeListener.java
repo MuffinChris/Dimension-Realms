@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,6 +21,9 @@ public class SkilltreeListener implements Listener {
 
 	private Main main = Main.getInstance();
 	
+	// Mana Gain linear. Fix check for mana regen (20* for the max check)
+	// Add multiple at a time with rightclick, and make the inventory not reset (resets mouse pos, instead update item)
+	
 	public Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&a&lPLAYER UPGRADES"));
 	
 	public double getAdUpgrade(Player p) {
@@ -27,8 +31,7 @@ public class SkilltreeListener implements Listener {
 	}
 	
 	public int getManaUpgrade(Player p) {
-		int mana = main.getManaMap().get(p.getUniqueId());
-		return (int) (mana * 1.05);
+		return 500;
 	}
 	
 	public int getManaRegenUpgrade(Player p) {
@@ -48,6 +51,7 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color("&fAttack Damage Maxed Out!"));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
+			swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			sword.setItemMeta(swordMeta);
 			playerInv.setItem(11, sword);
 		} else {
@@ -60,12 +64,13 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &4" + getAdUpgrade(p)));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
+			swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			sword.setItemMeta(swordMeta);
 			playerInv.setItem(11, sword);
 		}
 		
 		int maxmana = main.getManaMap().get(p.getUniqueId());
-		if (maxmana >= 500000) {
+		if (maxmana >= 100000) {
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
@@ -92,7 +97,7 @@ public class SkilltreeListener implements Listener {
 		}
 		
 		int manaregen = main.getManaRegenMap().get(p.getUniqueId());
-		if (manaregen >= 500) {
+		if (manaregen * 20 >= 500) {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
@@ -143,6 +148,7 @@ public class SkilltreeListener implements Listener {
 		lore.add(Main.color("&fUnlock the skills of an elusive rogue."));
 		lore.add(Main.color(""));
 		asMeta.setLore(lore);
+		asMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		as.setItemMeta(asMeta);
 		spInv.setItem(12, as);
 	}
@@ -172,7 +178,6 @@ public class SkilltreeListener implements Listener {
 											
 										    Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) + " AD");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
-										    e.getWhoClicked().closeInventory();
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
@@ -202,7 +207,6 @@ public class SkilltreeListener implements Listener {
 											
 										    Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) + " Max Mana");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
-										    e.getWhoClicked().closeInventory();
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
@@ -220,7 +224,7 @@ public class SkilltreeListener implements Listener {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
 										int manar = main.getManaRegenMap().get(p.getUniqueId());
-										if (manar < 500) {
+										if (manar * 20 < 500) {
 											int newmanar = main.getManaRegenMap().get(p.getUniqueId()) + getManaRegenUpgrade(p);
 											main.setIntValue(p, "ManaRegen", newmanar);
 											
@@ -232,7 +236,6 @@ public class SkilltreeListener implements Listener {
 											
 										    Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p) * 20) + " Mana Regen");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
-										    e.getWhoClicked().closeInventory();
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
