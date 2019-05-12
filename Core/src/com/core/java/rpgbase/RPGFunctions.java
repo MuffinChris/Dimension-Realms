@@ -142,20 +142,6 @@ public class RPGFunctions implements Listener {
 		}
 	}*/
 	
-	@EventHandler (priority = EventPriority.LOWEST)
-	public void hitDelay (EntityDamageByEntityEvent e) {
-		if (e.getDamager() instanceof Player) {
-			if (e.getEntity() instanceof LivingEntity) {
-				LivingEntity ent = (LivingEntity) e.getEntity();
-				new BukkitRunnable() {
-					public void run() {
-						ent.setNoDamageTicks(0);
-					}
-				}.runTaskLater(plugin, 5L);
-			}
-		}
-	}
-	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void bossbarHP (EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player || e.getDamager() instanceof Arrow) {
@@ -179,7 +165,11 @@ public class RPGFunctions implements Listener {
 					@Override
 					public void run() {
 						double progress = Math.max((ent.getHealth()) / ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue(), 0.0);
-						plugin.getBarManager().getBS(p).setInfo(Main.color("&c" + ent.getCustomName() + "&8: &f" + dF.format(ent.getHealth())), BarColor.RED, BarStyle.SOLID, progress, true);
+						String name = ent.getName();
+						if (ent.getCustomName() instanceof String) {
+							name = ent.getCustomName();
+						}
+						plugin.getBarManager().getBS(p).setInfo(Main.color("&c" + name + "&8: &f" + dF.format(ent.getHealth())), BarColor.RED, BarStyle.SOLID, progress, true);
 					    if (ent.getHealth() <= 0) {
 					        new BukkitRunnable() {
 					        	public void run() {
@@ -249,7 +239,7 @@ public class RPGFunctions implements Listener {
             	pData.set("AD", 1.0);
             }
             if (!pData.isSet("AttackSpeed")) {
-            	pData.set("AttackSpeed", 6.0);
+            	pData.set("AttackSpeed", 4.0);
             }
             if (!pData.isSet("AbilityOne")) {
             	pData.set("AbilityOne", "None");
@@ -290,7 +280,8 @@ public class RPGFunctions implements Listener {
         
 		plugin.updateAttackSpeed(e.getPlayer());
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pData.getDouble("AD"));
-		e.getPlayer().getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
+		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("AttackSpeed"));
+		e.getPlayer().getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.8);
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
 			e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 			e.getPlayer().setHealth(hp);
@@ -310,7 +301,7 @@ public class RPGFunctions implements Listener {
 
 	public void welcomePlayer (Player p) {
 		plugin.addJoins();
-		Bukkit.getServer().broadcastMessage(Main.color("&8&l>>> &eWelcome &6" + p.getName() + " &8(#" + plugin.getJoins() + "&8)" + "&eto the server!"));
+		Bukkit.getServer().broadcastMessage(Main.color("&8&l>>> &eWelcome &6" + p.getName() + " &8(#" + plugin.getJoins() + "&8) " + "&eto the server!"));
 	}
 	
 	@EventHandler

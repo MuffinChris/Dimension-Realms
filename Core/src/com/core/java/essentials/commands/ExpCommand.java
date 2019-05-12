@@ -25,8 +25,10 @@ public class ExpCommand implements CommandExecutor {
 				} else if (args.length == 1) {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
 						Player target = (Player) Bukkit.getPlayer(args[0]);
+						Main.msg(p, "");
 						Main.msg(p, "&8» &e&lLEVEL: &f" + main.getLevel(target) + " &8/&f 100");
 						Main.msg(p, "&8» &e&lEXP: &f" + main.getExp(target) + " &8/&f " + main.getExpMax(target));
+						Main.msg(p, "");
 					} else {
 						Main.msg(p, "&cInvalid Player");
 					}

@@ -23,6 +23,7 @@ import com.codingforcookies.armorequip.ArmorEquipEvent;
 import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
 import com.core.java.essentials.Main;
 
+import net.minecraft.server.v1_14_R1.NBTBase;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagDouble;
 import net.minecraft.server.v1_14_R1.NBTTagInt;
@@ -231,7 +232,7 @@ public class Armor implements Listener {
 		for (ItemStack i : p.getInventory().getArmorContents()) {
 			if (i != null) {
 				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
-				if (nmsStack.getTag() == null) {
+				if (nmsStack.getTag() == null || nmsStack.getTag().getList("AttributeModifiers", 0) instanceof NBTTagList) {
 					NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 					NBTTagList modifiers = new NBTTagList();
 					NBTTagCompound itemC = new NBTTagCompound();

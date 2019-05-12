@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -36,7 +37,12 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&fThe Value &4AD &frepresents bonus Attack Damage."));
 		lore.add(Main.color("&fIt can be upgraded and altered."));
 		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
+		lore.add(Main.color(""));
+		lore.add(Main.color("&bEnchantments &falso deal more damage: "));
+		lore.add(Main.color("&bSharpness: &f5 Damage per Level"));
+		lore.add(Main.color("&bSmite/Bane: &f10 Damage per Level"));
 		swordMeta.setLore(lore);
+		swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		sword.setItemMeta(swordMeta);
 		combatInv.setItem(11, sword);
 		
@@ -103,6 +109,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
 		data.setLore(lore);
+		data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		leather.setItemMeta(data);
 		
 		ItemStack golden = new ItemStack(Material.GOLDEN_CHESTPLATE);
@@ -135,6 +142,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
 		data.setLore(lore);
+		data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		golden.setItemMeta(data);
 		
 		ItemStack chainmail = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
@@ -167,6 +175,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
 		data.setLore(lore);
+		data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		chainmail.setItemMeta(data);
 		
 		ItemStack iron = new ItemStack(Material.IRON_CHESTPLATE);
@@ -199,6 +208,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
 		data.setLore(lore);
+		data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		iron.setItemMeta(data);
 		
 		ItemStack diamond = new ItemStack(Material.DIAMOND_CHESTPLATE);
@@ -231,6 +241,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&7&m--------------------"));
 		data.setLore(lore);
+		data.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		diamond.setItemMeta(data);
 		
 		armorInv.setItem(11, leather);

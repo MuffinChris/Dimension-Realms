@@ -24,8 +24,6 @@ public class SkilltreeListener implements Listener {
 	// Mana Gain linear. Fix check for mana regen (20* for the max check)
 	// Add multiple at a time with rightclick, and make the inventory not reset (resets mouse pos, instead update item)
 	
-	public Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&a&lPLAYER UPGRADES"));
-	
 	public double getAdUpgrade(Player p) {
 		return 0.25;
 	}
@@ -39,7 +37,16 @@ public class SkilltreeListener implements Listener {
 	}
 	
 	public void sendPlayerInv(Player p) {
+		Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&a&lPLAYER UPGRADES"));
 		ArrayList<String> lore = new ArrayList<>();
+		
+		ItemStack sp = new ItemStack(Material.NETHER_STAR);
+		ItemMeta spMeta = sp.getItemMeta();
+		spMeta.setDisplayName(Main.color("&aRemaining SP: &f" + main.getSPMap().get(p.getUniqueId())));
+		sp.setItemMeta(spMeta);
+		
+		playerInv.setItem(13, sp);
+		
 		double ad = main.getAdMap().get(p.getUniqueId());
 		if (ad >= 50) {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
@@ -81,19 +88,19 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
-			playerInv.setItem(12, hs);
+			playerInv.setItem(14, hs);
 		} else {
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &b" + maxmana));
+			lore.add(Main.color("&fCurrent: &9" + maxmana));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p)));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
-			playerInv.setItem(12, hs);
+			playerInv.setItem(14, hs);
 		}
 		
 		int manaregen = main.getManaRegenMap().get(p.getUniqueId());
@@ -108,7 +115,7 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
-			playerInv.setItem(13, hs);
+			playerInv.setItem(15, hs);
 		} else {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
@@ -116,13 +123,12 @@ public class SkilltreeListener implements Listener {
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
 			lore.add(Main.color("&fCurrent: &b" + (manaregen * 20)) + "/s");
-			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaRegenUpgrade(p) * 20));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p) * 20));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
-			playerInv.setItem(13, hs);
+			playerInv.setItem(15, hs);
 		}
-		
 		p.openInventory(playerInv);
 	}
 	

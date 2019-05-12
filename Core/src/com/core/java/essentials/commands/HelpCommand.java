@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -27,6 +28,7 @@ public class HelpCommand implements CommandExecutor {
 		lore.add(Main.color("&7Click for information"));
 		lore.add(Main.color("&7on the different armor sets!"));
 		armorMeta.setLore(lore);
+		armorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		armor.setItemMeta(armorMeta);
 		helpInv.setItem(12, armor);
 		
@@ -38,6 +40,7 @@ public class HelpCommand implements CommandExecutor {
 		lore.add(Main.color("&7Click for information"));
 		lore.add(Main.color("&7on the combat system!"));
 		combatMeta.setLore(lore);
+		combatMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		combat.setItemMeta(combatMeta);
 		helpInv.setItem(11, combat);
 	}

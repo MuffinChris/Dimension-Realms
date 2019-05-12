@@ -125,10 +125,10 @@ public class EXP implements Listener {
 					diffi = 1.7;
 				}
 				if (ent.getType() == EntityType.SLIME) {
-					diffi = 0.75;
+					diffi = 0.1;
 				}
 				if (ent.getType() == EntityType.MAGMA_CUBE) {
-					diffi = 0.9;
+					diffi = 0.1;
 				}
 				if (ent.getType() == EntityType.ENDER_DRAGON) {
 					diffi = 100;

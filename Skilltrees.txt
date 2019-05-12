@@ -1,0 +1,23 @@
+Rogue:
+
+- Assassin Path (High DPS and Armor Shred)
+- Ninja Path (Full Stealth and Ranged)
+- Shadowblade Path (Dark Magic and Teleportation)
+
+Warrior:
+
+- Knight Path (Damage and Group Rally)
+- Paladin Path (Heals and Tanky)
+- Brute Path (Tanky and CC)
+
+Mage:
+
+- Wizard Path (Damage through the element: Fire, Water, Earth, Air)
+- Priest Path (PvE God and Heavy Heals)
+- Bloodmage Path (Battlemage Tank)
+
+Marksman:
+
+- Hunter Path (Tracking and DPS)
+- Sniper Path (Long Range and Arrow Tracking)
+- ???

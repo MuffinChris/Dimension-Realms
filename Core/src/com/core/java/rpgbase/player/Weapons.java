@@ -1,12 +1,19 @@
 package com.core.java.rpgbase.player;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,6 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.core.java.essentials.Main;
 
+import net.minecraft.server.v1_14_R1.EntityPlayer;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagDouble;
 import net.minecraft.server.v1_14_R1.NBTTagInt;
@@ -45,7 +53,7 @@ public class Weapons  implements Listener {
 		if (p.getInventory().getItemInMainHand() != null) {
 			ItemStack i = p.getInventory().getItemInMainHand();
 			if (i.getType() != Material.AIR) {
-				if (!i.getItemMeta().hasLore() || !i.getItemMeta().getLore().contains("Damage")) {
+				if (!i.getItemMeta().hasLore() || !i.getItemMeta().getLore().toString().contains("Damage")) {
 					if (i.getType() != null) {
 						String s = i.getType().toString().toLowerCase();
 						if (s.contains("sword")) {
@@ -81,7 +89,7 @@ public class Weapons  implements Listener {
 							
 							ItemMeta meta = nItem.getItemMeta();
 							List<String> lore = new ArrayList<String>();
-							lore.add(Main.color("&7Common Tier Weapon"));
+							lore.add(Main.color("&8« &8Common &7Tier Weapon &8»"));
 							lore.add(Main.color(""));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
 							lore.add(Main.color("&6Attack Speed: &73.0"));
@@ -124,7 +132,7 @@ public class Weapons  implements Listener {
 								
 							ItemMeta meta = nItem.getItemMeta();
 							List<String> lore = new ArrayList<String>();
-							lore.add(Main.color("&7Common Tier Weapon"));
+							lore.add(Main.color("&8« &8Common &7Tier Weapon &8»"));
 							lore.add(Main.color(""));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
 							lore.add(Main.color("&6Attack Speed: &72.0"));
@@ -151,7 +159,7 @@ public class Weapons  implements Listener {
 								
 							ItemMeta meta = nItem.getItemMeta();
 							List<String> lore = new ArrayList<String>();
-							lore.add(Main.color("&eUnique &7Tier Weapon"));
+							lore.add(Main.color("&e« &eUnique &7Tier Weapon &e»"));
 							lore.add(Main.color(""));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
 							lore.add(Main.color("&6Attack Speed: &71.0"));
@@ -195,6 +203,68 @@ public class Weapons  implements Listener {
 	public void bonusDmg (EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player) {
 			e.setDamage(e.getDamage() + getWeaponAttackDamage((Player) e.getDamager()));
+			Player p = (Player) e.getDamager();
+			if (Double.valueOf(getWeaponAttackDamage(p)) instanceof Double) {
+				ItemStack i = p.getInventory().getItemInMainHand();
+				if (i.containsEnchantment(Enchantment.DAMAGE_ALL)) {
+					int level = i.getEnchantmentLevel(Enchantment.DAMAGE_ALL);
+					if (level == 1) {
+						e.setDamage(e.getDamage() - 1);
+						e.setDamage(e.getDamage() + 5 * i.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
+					} else {
+						e.setDamage(e.getDamage() - 1 - 0.5 * (level - 1));
+						e.setDamage(e.getDamage() + 5 * i.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
+					}
+				}
+				if (i.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
+					if (e.getEntity().getType() == EntityType.ZOMBIE || e.getEntity().getType() == EntityType.SKELETON || e.getEntity().getType() == EntityType.PHANTOM || e.getEntity().getType() == EntityType.SKELETON_HORSE || e.getEntity().getType() == EntityType.STRAY || e.getEntity().getType() == EntityType.HUSK || e.getEntity().getType() == EntityType.DROWNED || e.getEntity().getType() == EntityType.PIG_ZOMBIE || e.getEntity().getType() == EntityType.WITHER_SKELETON || e.getEntity().getType() == EntityType.WITHER) {
+						e.setDamage(e.getDamage() - (2.5 * i.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD)));
+						e.setDamage(e.getDamage() + 10 * i.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD));
+					}
+				}
+				if (i.containsEnchantment(Enchantment.DAMAGE_ARTHROPODS)) {
+					if (e.getEntity().getType() == EntityType.SPIDER || e.getEntity().getType() == EntityType.CAVE_SPIDER || e.getEntity().getType() == EntityType.SILVERFISH || e.getEntity().getType() == EntityType.ENDERMITE) {
+						e.setDamage(e.getDamage() - (2.5 * i.getEnchantmentLevel(Enchantment.DAMAGE_ALL)));
+						e.setDamage(e.getDamage() + 10 * i.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
+					}
+				}
+				if (i.containsEnchantment(Enchantment.IMPALING)) {
+					if (e.getEntity().getType() == EntityType.PLAYER || e.getEntity().getType() == EntityType.GUARDIAN || e.getEntity().getType() == EntityType.ELDER_GUARDIAN || e.getEntity().getType() == EntityType.DOLPHIN || e.getEntity().getType() == EntityType.COD || e.getEntity().getType() == EntityType.PUFFERFISH || e.getEntity().getType() == EntityType.TROPICAL_FISH || e.getEntity().getType() == EntityType.SALMON || e.getEntity().getType() == EntityType.SQUID || e.getEntity().getType() == EntityType.TURTLE) {
+						e.setDamage(e.getDamage() - (2.5 * i.getEnchantmentLevel(Enchantment.IMPALING)));
+						e.setDamage(e.getDamage() + 5 * i.getEnchantmentLevel(Enchantment.IMPALING));
+					}
+				}
+			}
+			/*CraftPlayer p = (CraftPlayer) e.getDamager();
+			try{
+	            Method getHandle = p.getClass().getMethod("getHandle");
+	            Object entityPlayer = getHandle.invoke(p);
+	            Method m = entityPlayer.getClass().getDeclaredMethod("o");
+	            m.setAccessible(true);
+	            for (Method me : entityPlayer.getClass().getMethods()) {
+	            	if (me.getName().contains("o") && me.getName().length() <= 3) {
+	            		System.out.print(me.getName() + "   ");
+	            		System.out.print(me.getReturnType());
+	            	}
+	            }
+	            //System.out.println(p.getClass().getMethod("o", Float.class).invoke(p, 0.0F));
+	        }catch(Exception ex){
+	        	ex.printStackTrace();
+	        }*/
+		}
+	}
+	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void hitDelay (EntityDamageByEntityEvent e) {
+		if (e.getDamager() instanceof Player) {
+			if (e.getEntity() instanceof LivingEntity) {
+				LivingEntity ent = (LivingEntity) e.getEntity();
+				new BukkitRunnable() {
+					public void run() {
+						ent.setNoDamageTicks(0);
+					}
+				}.runTaskLater(main, 1L);
+			}
 		}
 	}
 	

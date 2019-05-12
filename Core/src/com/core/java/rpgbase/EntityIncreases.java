@@ -1,5 +1,6 @@
 package com.core.java.rpgbase;
 
+import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -73,16 +74,17 @@ public class EntityIncreases implements Listener {
 		if (!(e.getEntity() instanceof Player)) {
 			e.getEntity().setCustomName(e.getEntity().getName());
 			if (e.getEntity() instanceof LivingEntity) {
+				boolean slime = false;
 				if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
 					if (((LivingEntity) e.getEntity()).getCustomName().contains("[")) {
 						e.getEntity().setCustomNameVisible(true);
-						return;
+						slime = true;
 					}
 				}
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				int level = 0;
 				int terms = 0;
-				for (Entity en : ent.getNearbyEntities(128, 64, 128)) {
+				for (Entity en : ent.getNearbyEntities(64, 32, 64)) {
 					if (en instanceof Player) {
 						Player p = (Player) en;
 						terms++;
@@ -98,14 +100,26 @@ public class EntityIncreases implements Listener {
 				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 				double hpmod = (20 * (hp/20.0)) * level;
 				double admod = 0.4 * level;
-				ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
-				ent.setHealth(hp * 4 + hpmod);
-				if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
-					double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
-					ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad * 3 + admod);
+				if (ent.getType() == EntityType.SLIME || ent.getType() == EntityType.MAGMA_CUBE) {
+					hpmod = (100 * (hp/20.0)) * level;
+					ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
+					ent.setHealth(hp * 4 + hpmod);
 				}
-				ent.setCustomName(Main.color("&8[&6" + level + "&8] &f" + ent.getName()));
-				ent.setCustomNameVisible(true);
+				if (!slime) {
+					ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
+					ent.setHealth(hp * 4 + hpmod);
+					if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+						double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
+						ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad * 3 + admod);
+					}
+					ent.setCustomName(Main.color("&8[&6" + level + "&8] &f" + ent.getName()));
+					ent.setCustomNameVisible(true);
+				} else {
+					int slimelevel = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
+					hpmod = (100 * (hp/20.0)) * slimelevel;
+					ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
+					ent.setHealth(hp * 4 + hpmod);
+				}
 				/*
 				if (ent.getType() != null) {
 					if (ent.getType() == EntityType.ZOMBIE) {

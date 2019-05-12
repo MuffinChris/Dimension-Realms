@@ -70,4 +70,10 @@ commands:
     permission: core.mod
   mana:
     description: View your mana
+  speed:
+    description: Set your fly and walk speed
+    permission: core.mod
+  bottle:
+    description: Bottle your Experience for XP Bottles!
+    aliases: [xpbottle]
 depend: [ArmorEquipEvent]

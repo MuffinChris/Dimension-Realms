@@ -17,6 +17,7 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,7 @@ import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
 import com.core.java.rpgbase.bossbars.BossBarManager;
 import com.core.java.economy.EconCommands;
+import com.core.java.essentials.commands.BottleCommand;
 import com.core.java.essentials.commands.Codex;
 import com.core.java.essentials.commands.DataReloadCommand;
 import com.core.java.essentials.commands.ExpCommand;
@@ -50,28 +52,34 @@ import com.core.java.essentials.commands.InfoCommand;
 import com.core.java.essentials.commands.LagCommand;
 import com.core.java.essentials.commands.ManaCommand;
 import com.core.java.essentials.commands.SpawnCommand;
+import com.core.java.essentials.commands.SpeedCommand;
 import com.core.java.essentials.commands.StatsCommand;
+import com.core.java.reflection.rutils;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.EntityHuman;
+import net.minecraft.server.v1_14_R1.EntityPlayer;
 
 public class Main extends JavaPlugin {
 	
 	
 	//TODO LIST:
 	/* 
-	 * Make a way of making EXP bottles (using rpg xp?)
-	 * Slimes and Magma cubes levels broken, and name keeps doubling up
-	 * Anvils custom repair system
-	 * Make a way of wearing Elytra
-	 * 
+	 * Enchantments need to do more dmg
+	 * Make bows and crossbows interesting to use
+	 * Projectile scaling with level and enchantment
+	 * Custom Enchanting GUI or Way to make axes and stuff get ench
+	 * Make Skilltrees
 	 */
 	
 	//TODO FUTURE:
 	/* 
 	 * Base Menu Cmd (contains all useful cmd guis)
 	 * Parties, EXP Boosts (compounding)
-	 * Some sort of repair feature
+	 * Anvils custom repair system
+	 * Make a way of wearing Elytra
+	 * Sethome on bed
 	 * Bank
 	 * Baltop
 	 * Youtuber and Twitch Ranks with Perks
@@ -92,7 +100,7 @@ public class Main extends JavaPlugin {
 		File jFile = new File("plugins/Core/config.yml");
         FileConfiguration jData = YamlConfiguration.loadConfiguration(jFile);
         try {
-        	if (jData.contains("joins")) {
+        	if (!jData.contains("joins")) {
         		jData.set("joins", 0);
         	} else {
         		jData.set("joins", jData.getInt("joins") + 1);
@@ -107,12 +115,18 @@ public class Main extends JavaPlugin {
 		return JavaPlugin.getPlugin(Main.class);
 	}
 	
+	public rutils rlib = new rutils();
+	
+	public rutils getRlib() {
+		return rlib;
+	}
+	
 	public BossBarManager barManager = new BossBarManager();
 	public BossBarManager getBarManager() {
 		return barManager;
 	}
 	
-	public void updateAttackSpeed(Player p) {
+	public double getAttackSpeed(Player p) {
 		if (p.getInventory().getItemInMainHand() != null) {
 			ItemStack i = p.getInventory().getItemInMainHand();
 			if (i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().contains("Attack Speed")) {
@@ -128,12 +142,16 @@ public class Main extends JavaPlugin {
 				as = ChatColor.stripColor(as);
 				as = as.replace("Attack Speed: ", "");
 				if (Double.valueOf(as) instanceof Double) {
-					p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(as));
-					return;
+					return Double.valueOf(as);
 				}
 			}
 		}
-		p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(Double.valueOf(getValue(p, "AttackSpeed")));
+		return Double.valueOf(getValue(p, "AttackSpeed"));
+	}
+	
+	public void updateAttackSpeed(Player p) {
+		double as = getAttackSpeed(p);
+		p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(as);
 	}
 
 	public Map<UUID, Integer> cmana = new HashMap<UUID, Integer>();
@@ -195,15 +213,15 @@ public class Main extends JavaPlugin {
 	}*/
 	
 	public int getExp(Player p) {
-		return Integer.valueOf(getValue(p, "Exp"));
+		return getExpMap().get(p.getUniqueId());
 	}
 	
 	public int getLevel(Player p) {
-		return Integer.valueOf(getValue(p, "Level"));
+		return getLevelMap().get(p.getUniqueId());
 	}
 	
 	public int getExpMax(Player p) {
-		return (int) (Math.pow(getLevel(p), 2.2) * 77) + 500;
+		return (int) ((Math.pow(getLevel(p), 2.2) * 77) + 500);
 	}
 	
 	@Override
@@ -232,6 +250,8 @@ public class Main extends JavaPlugin {
 		getCommand("sp").setExecutor(new SkilltreeCommand());
 		getCommand("heal").setExecutor(new HealCommand());
 		getCommand("mana").setExecutor(new ManaCommand());
+		getCommand("speed").setExecutor(new SpeedCommand());
+		getCommand("bottle").setExecutor(new BottleCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
