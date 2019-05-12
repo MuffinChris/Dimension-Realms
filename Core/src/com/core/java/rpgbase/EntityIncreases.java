@@ -2,6 +2,7 @@ package com.core.java.rpgbase;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.SlimeSplitEvent;
 
 import com.core.java.essentials.Main;
 
@@ -71,6 +73,12 @@ public class EntityIncreases implements Listener {
 		if (!(e.getEntity() instanceof Player)) {
 			e.getEntity().setCustomName(e.getEntity().getName());
 			if (e.getEntity() instanceof LivingEntity) {
+				if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
+					if (((LivingEntity) e.getEntity()).getCustomName().contains("[")) {
+						e.getEntity().setCustomNameVisible(true);
+						return;
+					}
+				}
 				LivingEntity ent = (LivingEntity) e.getEntity();
 				int level = 0;
 				int terms = 0;

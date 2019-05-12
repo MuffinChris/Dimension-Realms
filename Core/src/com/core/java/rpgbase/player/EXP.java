@@ -101,7 +101,11 @@ public class EXP implements Listener {
 		if (e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 			level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
 		}
-		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+		boolean slime = false;
+		if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
+			slime = true;
+		}
+		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
 			Player p = (Player) e.getEntity().getKiller();
 			int entlevel = level;
 			int exp = ((int) (7 * Math.pow(entlevel, 1.5))) + 50;

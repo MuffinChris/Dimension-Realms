@@ -63,6 +63,7 @@ public class Main extends JavaPlugin {
 	 * Make a way of making EXP bottles (using rpg xp?)
 	 * Slimes and Magma cubes levels broken, and name keeps doubling up
 	 * Anvils custom repair system
+	 * Make a way of wearing Elytra
 	 * 
 	 */
 	

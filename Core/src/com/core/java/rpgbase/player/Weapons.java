@@ -84,7 +84,7 @@ public class Weapons  implements Listener {
 							lore.add(Main.color("&7Common Tier Weapon"));
 							lore.add(Main.color(""));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
-							lore.add(Main.color("&6Attack Speed: &74.0"));
+							lore.add(Main.color("&6Attack Speed: &73.0"));
 							lore.add(Main.color(""));
 							meta.setLore(lore);
 							nItem.setItemMeta(meta);
@@ -171,7 +171,7 @@ public class Weapons  implements Listener {
 	public static double getWeaponAttackDamage(Player p) {
 		if (p.getInventory().getItemInMainHand() != null) {
 			ItemStack i = p.getInventory().getItemInMainHand();
-			if (i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().contains("Attack Damage")) {
+			if (i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().contains("Damage")) {
 				int index = 0;
 				for (String s : i.getItemMeta().getLore()) {
 					if (s.contains("Damage")) {

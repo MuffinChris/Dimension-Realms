@@ -15,7 +15,7 @@ public class ManaCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
-			Main.msg(p, "&9Mana: &f" + main.getMana(p) + " &8/&f " + main.getManaMap().get(p.getUniqueId()));
+			Main.msg(p, "&bMana: &f" + main.getMana(p) + " &8/&f " + main.getManaMap().get(p.getUniqueId()));
 		} else {
 			Main.so("Console doesn't have mana.");
 		}
