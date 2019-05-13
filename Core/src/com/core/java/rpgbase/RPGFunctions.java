@@ -80,6 +80,12 @@ public class RPGFunctions implements Listener {
         if (plugin.getSPMap().containsKey(uuid)) {
         	plugin.getSPMap().remove(uuid);
         }
+        if (plugin.getMRMap().containsKey(uuid)) {
+        	plugin.getMRMap().remove(uuid);
+        }
+        if (plugin.getArmorMap().containsKey(uuid)) {
+        	plugin.getArmorMap().remove(uuid);
+        }
         
         File pFile = new File("plugins/Core/data/" + e.getPlayer().getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
@@ -106,7 +112,7 @@ public class RPGFunctions implements Listener {
 	public void onRespawn(PlayerRespawnEvent e) {
 		new BukkitRunnable() {
 			public void run() {
-				Armor.updateSet(e.getPlayer(), Armor.getSet(e.getPlayer()));
+				Armor.updateSet(e.getPlayer());
 			}
 		}.runTaskLater(plugin, 5L);
 	}
@@ -296,7 +302,7 @@ public class RPGFunctions implements Listener {
 		}
 		
 		plugin.getBarManager().setBossBars(e.getPlayer(), new BS(e.getPlayer()));
-		
+		Armor.updateSet(e.getPlayer());
 	}
 
 	public void welcomePlayer (Player p) {

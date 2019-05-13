@@ -55,7 +55,7 @@ public class ArmorSkills implements Listener {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (e.getItem() != null) {
 				if (containsString(e.getItem(), "SWORD")) {
-					if (Armor.getSet(e.getPlayer()).contains("leather") || Armor.getSet(e.getPlayer()).contains("chain")) {
+					//if (Armor.getSet(e.getPlayer()).contains("leather") || Armor.getSet(e.getPlayer()).contains("chain")) {
 						if (main.getAbilities().get(e.getPlayer().getUniqueId()).get(0).equals("Eviscerate")) {
 							if (main.getMana(e.getPlayer()) > 1500) {
 								removeMana(e.getPlayer(), 1500);
@@ -103,10 +103,10 @@ public class ArmorSkills implements Listener {
 								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.5F, 1.0F);
 							}
 						}
-					}
+					//}
 				}
 				if (containsString(e.getItem(), "AXE")) {
-					if (Armor.getSet(e.getPlayer()).contains("leather"))  {
+					//if (Armor.getSet(e.getPlayer()).contains("leather"))  {
 						if (main.getAbilities().get(e.getPlayer().getUniqueId()).get(1).equals("Leap")) {
 							if (main.getMana(e.getPlayer()) > 500) {
 								removeMana(e.getPlayer(), 500);
@@ -128,7 +128,7 @@ public class ArmorSkills implements Listener {
 								e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_PLACE, 0.5F, 1.0F);
 							}
 						}
-					}
+					//}
 				}
 			}
 		}

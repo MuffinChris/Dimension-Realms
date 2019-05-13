@@ -71,9 +71,12 @@ public class Main extends JavaPlugin {
 	
 	//TODO LIST:
 	/* 
-	 * Enchantments need to do more dmg
-	 * Make bows and crossbows interesting to use
-	 * Projectile scaling with level and enchantment
+	 * Level Req on Items
+	 * Lev Req Weapons does not work.
+	 * Crossbow Better?
+	 * Bossbar does not update while being left open
+	 * ^^^ this fix can be incorporated with this:
+	 * XP is awarded based on percent of dmg done. Parties simply add a larger bonus that is global share.
 	 * Custom Enchanting GUI or Way to make axes and stuff get ench
 	 * Make Skilltrees
 	 */
@@ -173,6 +176,16 @@ public class Main extends JavaPlugin {
 		cmana.replace(p.getUniqueId(), mana);
 	}
 	
+	public Map<UUID, Double> armor = new HashMap<UUID, Double>();
+	public Map<UUID, Double> getArmorMap() {
+		return armor;
+	}
+	
+	public Map<UUID, Double> mr = new HashMap<UUID, Double>();
+	public Map<UUID, Double> getMRMap() {
+		return mr;
+	}
+	
 	public void updateExpBar(Player p) {
 		int maxmana = getManaMap().get(p.getUniqueId());
 		int cmana = getCManaMap().get(p.getUniqueId());
@@ -240,7 +253,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	public int getExpMax(Player p) {
-		return (int) ((Math.pow(getLevel(p), 2.2) * 77) + 500);
+		return (int) ((Math.pow(getLevel(p), 3) * 77) + 500);
 	}
 	
 	@Override
@@ -373,8 +386,8 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (!p.isDead()) {
-						String set = Armor.getSet(p);
-						Armor.updateSet(p, set);
+						//String set = Armor.getSet(p);
+						Armor.updateSet(p);
 					}
 				}
 			}

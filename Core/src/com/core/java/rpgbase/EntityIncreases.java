@@ -45,17 +45,14 @@ public class EntityIncreases implements Listener {
 			if (e.getCause() == DamageCause.WITHER) {
 				e.setDamage(hp / 30.0);
 			}
-			if (e.getCause() == DamageCause.PROJECTILE) {
-				e.setDamage(e.getDamage() * 4.0);
-			}
 			if (e.getCause() == DamageCause.FIRE_TICK) {
-				e.setDamage(hp * 0.04);
+				e.setDamage(5);
 			}
 			if (e.getCause() == DamageCause.LAVA) {
 				e.setDamage(hp * 0.15);
 			}
 			if (e.getCause() == DamageCause.ENTITY_EXPLOSION) {
-				e.setDamage(e.getDamage() * 2);
+				e.setDamage(e.getDamage() * 5);
 			}
 			if (e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				e.setDamage(e.getDamage() * 1.2);
@@ -73,6 +70,10 @@ public class EntityIncreases implements Listener {
 	public void entityDamageSpawn (EntitySpawnEvent e) {
 		if (!(e.getEntity() instanceof Player)) {
 			e.getEntity().setCustomName(e.getEntity().getName());
+			if (e.getEntity().getType() == EntityType.PHANTOM) {
+				e.setCancelled(true);
+				return;
+			}
 			if (e.getEntity() instanceof LivingEntity) {
 				boolean slime = false;
 				if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {

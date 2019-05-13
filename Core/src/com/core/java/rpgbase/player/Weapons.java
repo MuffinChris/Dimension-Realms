@@ -12,6 +12,8 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -21,6 +23,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -62,19 +66,19 @@ public class Weapons  implements Listener {
 						if (s.contains("sword")) {
 							double ogdmg = 5;
 							if (s.contains("diamond")) {
-								ogdmg = 15;
+								ogdmg = 30;
 							}
 							if (s.contains("iron")) {
-								ogdmg = 12;
+								ogdmg = 25;
 							}
 							if (s.contains("stone")) {
-								ogdmg = 9;
+								ogdmg = 21;
 							}
 							if (s.contains("wood")) {
-								ogdmg = 6;
+								ogdmg = 15;
 							}
 							if (s.contains("gold")) {
-								ogdmg = 14;
+								ogdmg = 35;
 							}
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
 							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -94,8 +98,9 @@ public class Weapons  implements Listener {
 							List<String> lore = new ArrayList<String>();
 							lore.add(Main.color("&8« &8Common &7Tier Weapon &8»"));
 							lore.add(Main.color(""));
+							lore.add(Main.color("&6Level:&7 1"));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
-							lore.add(Main.color("&6Attack Speed: &73.0"));
+							lore.add(Main.color("&6Attack Speed: &72.4"));
 							lore.add(Main.color(""));
 							meta.setLore(lore);
 							nItem.setItemMeta(meta);
@@ -105,19 +110,19 @@ public class Weapons  implements Listener {
 						} else if (s.contains("axe")) {
 							double ogdmg = 8;
 							if (s.contains("diamond")) {
-								ogdmg = 24;
+								ogdmg = 40;
 							}
 							if (s.contains("iron")) {
-								ogdmg = 19;
+								ogdmg = 35;
 							}
 							if (s.contains("stone")) {
-								ogdmg = 14;
+								ogdmg = 28;
 							}
 							if (s.contains("wood")) {
-								ogdmg = 9;
+								ogdmg = 21;
 							}
 							if (s.contains("gold")) {
-								ogdmg = 23;
+								ogdmg = 45;
 							}
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
 							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -137,15 +142,30 @@ public class Weapons  implements Listener {
 							List<String> lore = new ArrayList<String>();
 							lore.add(Main.color("&8« &8Common &7Tier Weapon &8»"));
 							lore.add(Main.color(""));
+							lore.add(Main.color("&6Level:&7 1"));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
-							lore.add(Main.color("&6Attack Speed: &72.0"));
+							lore.add(Main.color("&6Attack Speed: &71.2"));
 							lore.add(Main.color(""));
 							meta.setLore(lore);
 							nItem.setItemMeta(meta);
 							p.getInventory().getItemInMainHand().setAmount(0);
 							p.getInventory().setItemInMainHand(nItem);
+						} else if (s.contains("bow")) {
+							double ogdmg = 20;
+							ItemStack it = new ItemStack(Material.BOW);
+							ItemMeta meta = it.getItemMeta();
+							List<String> lore = new ArrayList<String>();
+							lore.add(Main.color("&8« Common &7Tier Weapon &8»"));
+							lore.add(Main.color(""));
+							lore.add(Main.color("&6Level:&7 1"));
+							lore.add(Main.color("&6Damage: &7" + ogdmg));
+							lore.add(Main.color(""));
+							meta.setLore(lore);
+							it.setItemMeta(meta);
+							p.getInventory().getItemInMainHand().setAmount(0);
+							p.getInventory().setItemInMainHand(it);
 						} else if (s.contains("trident")) {
-							double ogdmg = 35;
+							double ogdmg = 50;
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
 							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 							NBTTagList modifiers = new NBTTagList();
@@ -164,8 +184,9 @@ public class Weapons  implements Listener {
 							List<String> lore = new ArrayList<String>();
 							lore.add(Main.color("&e« &eUnique &7Tier Weapon &e»"));
 							lore.add(Main.color(""));
+							lore.add(Main.color("&6Level:&7 1"));
 							lore.add(Main.color("&6Damage: &7" + ogdmg));
-							lore.add(Main.color("&6Attack Speed: &71.0"));
+							lore.add(Main.color("&6Attack Speed: &70.8"));
 							lore.add(Main.color(""));
 							meta.setLore(lore);
 							nItem.setItemMeta(meta);
@@ -212,6 +233,83 @@ public class Weapons  implements Listener {
 		if (main.getACMap().containsKey(e.getPlayer().getUniqueId())) {
 			main.getACMap().remove(e.getPlayer().getUniqueId());
 		}
+	}
+	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void bowDmg (EntityDamageByEntityEvent e) {
+		if (e.getDamage() <= 0.0) {
+			return;
+		}
+		if (e.getDamager() instanceof Arrow) {
+			Arrow a = (Arrow) e.getDamager();
+			if (a.getShooter() instanceof Player) {
+				double dmg = Double.valueOf(a.getCustomName());
+				e.setDamage(dmg);
+			} else if (a.getShooter() instanceof Entity) {
+				Entity ent = (Entity) a.getShooter();
+				int level = 1;
+				if (ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+					level = Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+",""));
+				}
+				e.setDamage(15 + 0.35 * level);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void bowDmgSetup (EntityShootBowEvent e) {
+		if (e.getEntity() instanceof Player) {
+			Player p = (Player) e.getEntity();
+			double dmg = getWeaponAttackDamage(p);
+			if (e.getBow().containsEnchantment(Enchantment.ARROW_DAMAGE)) {
+				int level = e.getBow().getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+				dmg+=(level * 5);
+			}
+			dmg = dmg * (2 * e.getForce());
+			e.getProjectile().setCustomName(String.valueOf(dmg));
+		}
+	}
+	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void onUse (EntityInteractEvent e) {
+		System.out.println(e.getEntity());
+		if (e.getEntity() instanceof Player) {
+			Player p = (Player) e.getEntity();
+			System.out.println(canUseWeapon(p));
+			if (!canUseWeapon(p)) {
+				e.setCancelled(true);
+				Main.msg(p, "&cYou do not meet this item's level requirements.");
+			}
+			
+		}
+	}
+	
+	public boolean canUseWeapon(Player p) {
+		if (p.getInventory().getItemInMainHand() != null) {
+			ItemStack i = p.getInventory().getItemInMainHand();
+			if (i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().contains("Level")) {
+				int index = 0;
+				for (String s : i.getItemMeta().getLore()) {
+					if (s.contains("Level")) {
+						break;
+					} else {
+						index++;
+					}
+				}
+				String ad = i.getItemMeta().getLore().get(index);
+				ad = ChatColor.stripColor(ad);
+				ad = ad.replace("Level: ", "");
+				int level = main.getLevel(p);
+				if (Integer.valueOf(ad) instanceof Integer) {
+					if (Integer.valueOf(ad) <= level) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 	
 	@EventHandler (priority = EventPriority.LOWEST)

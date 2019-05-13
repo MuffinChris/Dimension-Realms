@@ -1,5 +1,6 @@
 package com.core.java.essentials;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -11,18 +12,22 @@ public class ChatFunctions implements Listener {
 	@EventHandler
 	public void joinMessage (PlayerJoinEvent e) {
 		e.setJoinMessage(Main.color("   &a▶ &f" + e.getPlayer().getName()));
-		e.getPlayer().setDisplayName(Main.color("&7" + e.getPlayer().getName() + " &8[&e" + Main.getInstance().getLevel(e.getPlayer()) + "&8]"));
-		if (e.getPlayer().hasPermission("core.helper")) {
-			e.getPlayer().setDisplayName(Main.color("&8[&aHelper&8] &f" + e.getPlayer().getName() + " &8[&e" + Main.getInstance().getLevel(e.getPlayer()) + "&8]"));
+		updateName(e.getPlayer());
+	}
+	
+	public void updateName(Player p) {
+		p.setDisplayName(Main.color("&7" + p.getName() + " &8[&e" + Main.getInstance().getLevel(p) + "&8]"));
+		if (p.hasPermission("core.helper")) {
+			p.setDisplayName(Main.color("&8[&aHelper&8] &f" + p.getName() + " &8[&e" + Main.getInstance().getLevel(p) + "&8]"));
 		}
-		if (e.getPlayer().hasPermission("core.mod")) {
-			e.getPlayer().setDisplayName(Main.color("&8[&bMod&8] &f" + e.getPlayer().getName() + " &8[&e" + Main.getInstance().getLevel(e.getPlayer()) + "&8]"));
+		if (p.hasPermission("core.mod")) {
+			p.setDisplayName(Main.color("&8[&bMod&8] &f" + p.getName() + " &8[&e" + Main.getInstance().getLevel(p) + "&8]"));
 		}
-		if (e.getPlayer().hasPermission("core.admin")) {
-			e.getPlayer().setDisplayName(Main.color("&8[&cAdmin&8] &f" + e.getPlayer().getName() + " &8[&e" + Main.getInstance().getLevel(e.getPlayer()) + "&8]"));
+		if (p.hasPermission("core.admin")) {
+			p.setDisplayName(Main.color("&8[&cAdmin&8] &f" + p.getName() + " &8[&e" + Main.getInstance().getLevel(p) + "&8]"));
 		}
-		if (e.getPlayer().hasPermission("core.owner")) {
-			e.getPlayer().setDisplayName(Main.color("&8[&6Owner&8] &e" + e.getPlayer().getName() + " &8[&e" + Main.getInstance().getLevel(e.getPlayer()) + "&8]"));
+		if (p.hasPermission("core.owner")) {
+			p.setDisplayName(Main.color("&8[&6Owner&8] &e" + p.getName() + " &8[&e" + Main.getInstance().getLevel(p) + "&8]"));
 		}
 	}
 	
@@ -36,6 +41,7 @@ public class ChatFunctions implements Listener {
 		if (e.getPlayer().hasPermission("core.chatcolor")) {
 			e.setMessage(Main.color(e.getMessage()));
 		}
+		updateName(e.getPlayer());
 		e.setFormat(Main.color("&7%s" + " &8»" + "&f %s"));
 	}
 	

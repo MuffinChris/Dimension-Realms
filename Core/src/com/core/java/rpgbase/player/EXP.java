@@ -115,7 +115,7 @@ public class EXP implements Listener {
 		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
 			Player p = (Player) e.getEntity().getKiller();
 			int entlevel = level;
-			int exp = ((int) (7 * Math.pow(entlevel, 1.5))) + 50;
+			int exp = ((int) (7 * Math.pow(entlevel, 2.4))) + 50;
 			int random = (int) (Math.random() * (0.20 * exp));
 			
 			exp+=random;
@@ -218,7 +218,8 @@ public class EXP implements Listener {
 		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
 		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
-		giveExp(e.getPlayer(), e.getAmount());
+		int level = plugin.getLevel(e.getPlayer());
+		giveExp(e.getPlayer(), (int) (Math.pow((level*1.0)/2.0, 1.8) * Math.pow(e.getAmount(), 1.8)));
 	}
 	
 }

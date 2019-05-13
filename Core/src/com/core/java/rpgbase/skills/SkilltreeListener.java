@@ -25,7 +25,7 @@ public class SkilltreeListener implements Listener {
 	// Add multiple at a time with rightclick, and make the inventory not reset (resets mouse pos, instead update item)
 	
 	public double getAdUpgrade(Player p) {
-		return 0.25;
+		return 0.5;
 	}
 	
 	public int getManaUpgrade(Player p) {
@@ -48,7 +48,7 @@ public class SkilltreeListener implements Listener {
 		playerInv.setItem(13, sp);
 		
 		double ad = main.getAdMap().get(p.getUniqueId());
-		if (ad >= 50) {
+		if (ad >= 100) {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
 			ItemMeta swordMeta = sword.getItemMeta();
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
@@ -104,7 +104,7 @@ public class SkilltreeListener implements Listener {
 		}
 		
 		int manaregen = main.getManaRegenMap().get(p.getUniqueId());
-		if (manaregen * 20 >= 500) {
+		if (manaregen * 20 >= 2000) {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
@@ -172,7 +172,7 @@ public class SkilltreeListener implements Listener {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
 										double ad = main.getAdMap().get(p.getUniqueId());
-										if (ad < 50) {
+										if (ad < 100) {
 											double newad = main.getAdMap().get(p.getUniqueId()) + getAdUpgrade(p);
 											main.setDoubleValue(p, "AD", newad);
 											
@@ -230,7 +230,7 @@ public class SkilltreeListener implements Listener {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
 										int manar = main.getManaRegenMap().get(p.getUniqueId());
-										if (manar * 20 < 500) {
+										if (manar * 20 < 2000) {
 											int newmanar = main.getManaRegenMap().get(p.getUniqueId()) + getManaRegenUpgrade(p);
 											main.setIntValue(p, "ManaRegen", newmanar);
 											
