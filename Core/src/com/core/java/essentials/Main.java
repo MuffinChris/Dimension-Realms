@@ -17,9 +17,12 @@ import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +40,7 @@ import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
 import com.core.java.rpgbase.bossbars.BossBarManager;
 import com.core.java.economy.EconCommands;
+import com.core.java.enchantments.Serration;
 import com.core.java.essentials.commands.BottleCommand;
 import com.core.java.essentials.commands.Codex;
 import com.core.java.essentials.commands.DataReloadCommand;
@@ -58,6 +62,7 @@ import com.core.java.reflection.rutils;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_14_R1.Entity;
 import net.minecraft.server.v1_14_R1.EntityHuman;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
 
@@ -75,6 +80,7 @@ public class Main extends JavaPlugin {
 	
 	//TODO FUTURE:
 	/* 
+	 * Making custom mobs, bosses, spawners, etc
 	 * Base Menu Cmd (contains all useful cmd guis)
 	 * Parties, EXP Boosts (compounding)
 	 * Anvils custom repair system
@@ -171,6 +177,19 @@ public class Main extends JavaPlugin {
 		int maxmana = getManaMap().get(p.getUniqueId());
 		int cmana = getCManaMap().get(p.getUniqueId());
 		p.setExp(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+	}
+	
+	public Map<UUID, Float> attackCooldown = new HashMap<UUID, Float>();
+	public Map<UUID, Float> getACMap() {
+		return attackCooldown;
+	}
+	
+	public float getAC(Player p) {
+		return attackCooldown.get(p.getUniqueId());
+	}
+	
+	public void setAC(Player p, float f) {
+		attackCooldown.replace(p.getUniqueId(), f);
 	}
 	
 	public Map<UUID, Integer> mana = new HashMap<UUID, Integer>();
@@ -279,7 +298,11 @@ public class Main extends JavaPlugin {
 		updatePeriodic();
 		armorPeriodic();
 		absorption();
+		acPeriodic();
 		so("&cCORE&7: &fPeriodics Enabled!");
+		
+		Serration.register();
+		so("&cCORE&7: &fEnchantments Registered!");
 	}
 	
 	@Override
@@ -331,6 +354,18 @@ public class Main extends JavaPlugin {
 				}
 			}
 		}.runTaskTimer(this, 20L, 5L);
+	}
+	
+	public void acPeriodic() {
+		new BukkitRunnable() {
+			public void run() {
+				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					CraftPlayer cp = (CraftPlayer) p;
+					float f = cp.getHandle().s(0.0F);
+					setAC(p, f);
+				}
+			}
+		}.runTaskTimer(this, 1L, 1L);
 	}
 	
 	public void armorPeriodic() {

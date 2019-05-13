@@ -95,6 +95,13 @@ public class EXP implements Listener {
 		e.setShowEffect(false);
 	}*/
 
+	public void giveExp (Player p, int exp) {
+		Main.msg(p, "&7[+" + exp + "&7 XP]");
+		plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+		plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
+		plugin.levelup(p);
+	}
+	
 	@EventHandler
 	public void expDeath (EntityDeathEvent e) {
 		int level = 1;
@@ -184,10 +191,7 @@ public class EXP implements Listener {
 			}
 			int newexp = (int) (exp * diffi);
 			exp = newexp;
-			Main.msg(p, "&7[+" + exp + "&7 XP]");
-			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-			plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
-			plugin.levelup(p);
+			giveExp(p, exp);
 		}
 		e.setDroppedExp(0);
 	}
@@ -214,6 +218,7 @@ public class EXP implements Listener {
 		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
 		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+		giveExp(e.getPlayer(), e.getAmount());
 	}
 	
 }

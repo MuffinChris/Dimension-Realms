@@ -23,10 +23,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.core.java.enchantments.Serration;
 import com.core.java.essentials.Main;
 
 import net.minecraft.server.v1_14_R1.EntityPlayer;
@@ -199,11 +202,31 @@ public class Weapons  implements Listener {
 		return 0;
 	}
 	
+	@EventHandler
+	public void asUpdater (PlayerJoinEvent e) {
+		main.getACMap().put(e.getPlayer().getUniqueId(), 1.0F);
+	}
+	
+	@EventHandler
+	public void asUpdaterCleanup (PlayerQuitEvent e) {
+		if (main.getACMap().containsKey(e.getPlayer().getUniqueId())) {
+			main.getACMap().remove(e.getPlayer().getUniqueId());
+		}
+	}
+	
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void bonusDmg (EntityDamageByEntityEvent e) {
+		if (e.getDamage() <= 0.0) {
+			return;
+		}
 		if (e.getDamager() instanceof Player) {
-			e.setDamage(e.getDamage() + getWeaponAttackDamage((Player) e.getDamager()));
 			Player p = (Player) e.getDamager();
+			double crit = 1.0;
+			if (e.getDamage() >= 1.5 * p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue()) {
+				crit = 1.5;
+				e.setDamage(e.getDamage() - (0.5 * p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue()));
+			}
+			e.setDamage(e.getDamage() + getWeaponAttackDamage((Player) e.getDamager()));
 			if (Double.valueOf(getWeaponAttackDamage(p)) instanceof Double) {
 				ItemStack i = p.getInventory().getItemInMainHand();
 				if (i.containsEnchantment(Enchantment.DAMAGE_ALL)) {
@@ -215,6 +238,10 @@ public class Weapons  implements Listener {
 						e.setDamage(e.getDamage() - 1 - 0.5 * (level - 1));
 						e.setDamage(e.getDamage() + 5 * i.getEnchantmentLevel(Enchantment.DAMAGE_ALL));
 					}
+				}
+				if (i.containsEnchantment(Serration.enchantment)) {
+					int level = i.getEnchantmentLevel(Serration.enchantment);
+					e.setDamage(e.getDamage() + 7 * level);
 				}
 				if (i.containsEnchantment(Enchantment.DAMAGE_UNDEAD)) {
 					if (e.getEntity().getType() == EntityType.ZOMBIE || e.getEntity().getType() == EntityType.SKELETON || e.getEntity().getType() == EntityType.PHANTOM || e.getEntity().getType() == EntityType.SKELETON_HORSE || e.getEntity().getType() == EntityType.STRAY || e.getEntity().getType() == EntityType.HUSK || e.getEntity().getType() == EntityType.DROWNED || e.getEntity().getType() == EntityType.PIG_ZOMBIE || e.getEntity().getType() == EntityType.WITHER_SKELETON || e.getEntity().getType() == EntityType.WITHER) {
@@ -235,22 +262,21 @@ public class Weapons  implements Listener {
 					}
 				}
 			}
-			/*CraftPlayer p = (CraftPlayer) e.getDamager();
-			try{
-	            Method getHandle = p.getClass().getMethod("getHandle");
-	            Object entityPlayer = getHandle.invoke(p);
-	            Method m = entityPlayer.getClass().getDeclaredMethod("o");
-	            m.setAccessible(true);
-	            for (Method me : entityPlayer.getClass().getMethods()) {
-	            	if (me.getName().contains("o") && me.getName().length() <= 3) {
-	            		System.out.print(me.getName() + "   ");
-	            		System.out.print(me.getReturnType());
-	            	}
-	            }
-	            //System.out.println(p.getClass().getMethod("o", Float.class).invoke(p, 0.0F));
-	        }catch(Exception ex){
-	        	ex.printStackTrace();
-	        }*/
+			try {
+		        float asp = main.getAC(p);
+		        if (asp >= 0.95) {
+		        	
+		        } else if (asp >= 0.7) { 
+		        	e.setDamage(e.getDamage() * Math.pow(asp, 1.5));
+		        } else if ( asp >= 0.4) {
+		        	e.setDamage(e.getDamage() * Math.pow(asp, 2));
+		        } else {
+		        	e.setDamage(e.getDamage() * Math.pow(asp, 3));
+		        }
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			e.setDamage(e.getDamage() * crit);
 		}
 	}
 	

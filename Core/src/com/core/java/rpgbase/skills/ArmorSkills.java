@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -81,7 +83,9 @@ public class ArmorSkills implements Listener {
 											if (!entities.contains(ent)) {
 												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25 + 20;
 												handdmg += Weapons.getWeaponAttackDamage(e.getPlayer()) * 1.25;
-												ent.damage(handdmg, e.getPlayer());
+												ent.damage(0, e.getPlayer());
+												ent.damage(handdmg);
+												//ent.setLastDamageCause(new EntityDamageEvent(e.getPlayer(), DamageCause.ENTITY_ATTACK, handdmg));
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
 												ent.getWorld().spawnParticle(Particle.BLOCK_CRACK, ent.getLocation(), 100, 1, 1, 1, blood);
