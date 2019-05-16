@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,6 +19,8 @@ public class BS {
 	private BossBar bossbar;
 	private int timer = 0;
 	private Main main = Main.getInstance();
+	private boolean playerinf;
+	private Entity target;
 	
 	
 	public BS(Player p) {
@@ -26,13 +29,30 @@ public class BS {
 	}
 	
 	public void createBossBar(Player p, String s) {
+		playerinf = true;
 		bossbar = Bukkit.getServer().createBossBar(s, BarColor.RED, BarStyle.SOLID);
 		uuid = p.getUniqueId();
 	}
 	
-	public void setInfo(String s, BarColor bc, BarStyle bs, double progress, boolean b) {
-		timer++;
-		if (timer > 64) {
+	public String getTitle() {
+		return bossbar.getTitle();
+	}
+	
+	public boolean getPlayerInf() {
+		return playerinf;
+	}
+	
+	public Entity getTarget() {
+		return target;
+	}
+	
+	public void setInfo(Entity e, String s, BarColor bc, BarStyle bs, double progress, boolean b, boolean pinf) {
+		playerinf = pinf;
+		target = e;
+		if (playerinf) {
+			timer++;
+		}
+		if (timer > 128) {
 			timer = 0;
 		}
 		bossbar.setTitle(s);
@@ -46,16 +66,19 @@ public class BS {
 			bossbar.removePlayer(p);
 		}
 		
-		int savedtimer = timer;
-		
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (bossbar.getPlayers().contains(p) && timer == savedtimer) {
-					bossbar.removePlayer(p);
+		if (playerinf) {
+			int savedtimer = timer;
+			
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					if (bossbar.getPlayers().contains(p) && timer == savedtimer) {
+						bossbar.setTitle("");
+						bossbar.removePlayer(p);
+					}
 				}
-			}
-		}.runTaskLater(main, 100L);
+			}.runTaskLater(main, 100L);
+		}
 		
 	}
 	

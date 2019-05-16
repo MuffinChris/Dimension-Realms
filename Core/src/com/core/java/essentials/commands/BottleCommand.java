@@ -1,5 +1,7 @@
 package com.core.java.essentials.commands;
 
+import java.text.DecimalFormat;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -20,7 +22,7 @@ public class BottleCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (args.length == 0) {
-				Main.msg(p, "Usage: /bottle <levels> || This command will consume some of your RPG Experience and give you xp bottles. &8(&a10% RPG EXP &8: &a1 Level&8)");
+				Main.msg(p, "Usage: /bottle <levels> || This command will consume some of your RPG Experience and give you xp bottles. &8(&a25% RPG EXP &8: &a1 Level&8)");
 			}
 			if (args.length >= 1) {
 				if (Integer.valueOf(args[0]) instanceof Integer) {
@@ -28,15 +30,16 @@ public class BottleCommand implements CommandExecutor {
 					if (lvl > 0 && lvl <= 64) {
 						int exp = main.getExp(p);
 						int maxexp = main.getExpMax(p);
-						double expperlevel = maxexp * 0.1;
+						double expperlevel = maxexp * 0.25;
 						if (lvl * expperlevel > exp) {
-							Main.msg(p, "&cYou don't have enough RPG EXP!");
+							Main.msg(p, "&cYou don't have enough RPG EXP! &8(&a" + lvl * expperlevel + "&8)");
 							return false;
 						}
 						int newexp = exp - (int) (expperlevel * lvl);
 						main.setIntValue(p, "Exp", newexp);
 						main.getExpMap().replace(p.getUniqueId(), newexp);
-						Main.msg(p, "&aYou consumed &f" + expperlevel * lvl + " &aEXP for &f" + lvl + " &alevels.");
+						DecimalFormat df = new DecimalFormat("#.##");
+						Main.msg(p, "&aYou consumed &f" + df.format(expperlevel * lvl) + " &aEXP for &f" + lvl + " &alevels.");
 						p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
 						ItemStack bottles = new ItemStack(Material.EXPERIENCE_BOTTLE);
 						bottles.setAmount(lvl);

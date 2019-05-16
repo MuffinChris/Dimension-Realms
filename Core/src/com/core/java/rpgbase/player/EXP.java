@@ -1,7 +1,9 @@
 package com.core.java.rpgbase.player;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,10 +27,13 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import com.core.java.essentials.Main;
+import com.core.java.rpgbase.entities.PlayerList;
+import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 
 public class EXP implements Listener {
 
@@ -96,7 +101,23 @@ public class EXP implements Listener {
 	}*/
 
 	public void giveExp (Player p, int exp) {
-		Main.msg(p, "&7[+" + exp + "&7 XP]");
+		if (exp >= 0) {
+			Main.msg(p, "&7[+" + exp + "&7 XP]");
+			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+			plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
+			plugin.levelup(p);
+		} else {
+			Main.msg(p, "&7[-" + Math.abs(exp) + "&7 XP]");
+			int newexp = Math.max(plugin.getExp(p) + exp, 0);
+			plugin.getExpMap().replace(p.getUniqueId(), newexp);
+			plugin.setIntValue(p, "Exp", newexp);
+			plugin.levelup(p);
+		}
+	}
+	
+	public void giveExp (Player p, int exp, double percent) {
+		DecimalFormat df = new DecimalFormat("#.##");
+		Main.msg(p, "&7[+" + exp + " &7(" + df.format(percent * 100) + "%) XP]");
 		plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
 		plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
 		plugin.levelup(p);
@@ -113,7 +134,6 @@ public class EXP implements Listener {
 			slime = true;
 		}
 		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
-			Player p = (Player) e.getEntity().getKiller();
 			int entlevel = level;
 			int exp = ((int) (7 * Math.pow(entlevel, 2.4))) + 50;
 			int random = (int) (Math.random() * (0.20 * exp));
@@ -136,9 +156,6 @@ public class EXP implements Listener {
 				}
 				if (ent.getType() == EntityType.MAGMA_CUBE) {
 					diffi = 0.1;
-				}
-				if (ent.getType() == EntityType.ENDER_DRAGON) {
-					diffi = 100;
 				}
 				if (ent.getType() == EntityType.WOLF) {
 					diffi = 1;
@@ -188,12 +205,53 @@ public class EXP implements Listener {
 				if (ent.getType() == EntityType.STRAY) {
 					diffi = 1.2;
 				}
+				if (ent.getType() == EntityType.WITHER) {
+					diffi = 250;
+				}
+				if (ent.getType() == EntityType.ENDER_DRAGON) {
+					diffi = 1000;
+				}
 			}
 			int newexp = (int) (exp * diffi);
 			exp = newexp;
-			giveExp(p, exp);
+			PlayerList plist = plugin.getPManager().getPList(e.getEntity());
+			double fulldmg = 0;
+			if (plist.getPlayers() != null) {
+				for (Player pl : plist.getPlayers()) {
+					fulldmg+=plist.getDamage(pl);
+				}
+				for (Player pl : plist.getPlayers()) {
+					double dmg = plist.getDamage(pl);
+					if ((dmg / fulldmg) >= 1.0) {
+						giveExp(pl, (int) (exp * (dmg / fulldmg)));
+					} else {
+						giveExp(pl, (int) (exp * (dmg / fulldmg)), (dmg / fulldmg));
+					}
+				}
+			}
+		}
+		if (e.getEntity() instanceof Player) {
+			Player pl = (Player) e.getEntity();
+			if (pl.getKiller() instanceof Player) {
+				Player p = (Player) e.getEntity().getKiller();
+				int exp = ((int) (27 * Math.pow(plugin.getLevel(pl), 3))) + 50;
+				int random = (int) (Math.random() * (0.15 * exp));
+				exp+=random;
+				giveExp(p, exp);
+			}
+			int exp = ((int) (27 * Math.pow(plugin.getLevel(pl), 3))) + 50;
+			int random = (int) (Math.random() * (0.15 * exp));
+			exp+=random;
+			giveExp(pl, -exp);
 		}
 		e.setDroppedExp(0);
+		if (!(e.getEntity() instanceof Player)) {
+			if (plugin.getPManager().getPList().containsKey(e.getEntity())) {
+				plugin.getPManager().getPList().remove(e.getEntity());
+			}
+		} else {
+			plugin.getPManager().getPList(e.getEntity()).getList().clear();
+		}
 	}
 	
 	@EventHandler
@@ -207,6 +265,7 @@ public class EXP implements Listener {
 					p.setLevel(p.getLevel() + levels);
 					e.getItem().setAmount(0);
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
+					expallowed.add(p);
 					e.setCancelled(true);
 				}
 			}
@@ -218,8 +277,20 @@ public class EXP implements Listener {
 		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
 		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+	}
+	
+	public List<Player> expallowed = new ArrayList<Player>();
+	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void expPickup (PlayerPickupExperienceEvent e) {
+		e.setCancelled(true);
+		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
+		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
+		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
 		int level = plugin.getLevel(e.getPlayer());
-		giveExp(e.getPlayer(), (int) (Math.pow((level*1.0)/2.0, 1.8) * Math.pow(e.getAmount(), 1.8)));
+		int amount = e.getExperienceOrb().getExperience();
+		giveExp(e.getPlayer(), (int) (5 + Math.pow((level*1.0)/2.0, 1.8) * Math.pow(amount, 1.8)));
+		e.getExperienceOrb().remove();
 	}
 	
 }

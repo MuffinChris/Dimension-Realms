@@ -16,13 +16,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.core.java.essentials.Main;
 import com.core.java.essentials.commands.GUICommand;
+import com.core.java.rpgbase.player.Armor;
 
 public class SkilltreeListener implements Listener {
 
 	private Main main = Main.getInstance();
-	
-	// Mana Gain linear. Fix check for mana regen (20* for the max check)
-	// Add multiple at a time with rightclick, and make the inventory not reset (resets mouse pos, instead update item)
 	
 	public double getAdUpgrade(Player p) {
 		return 0.5;
@@ -36,6 +34,10 @@ public class SkilltreeListener implements Listener {
 		return 1;
 	}
 	
+	public double getHPUpgrade(Player p) {
+		return 5;
+	}
+	
 	public void sendPlayerInv(Player p) {
 		Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&a&lPLAYER UPGRADES"));
 		ArrayList<String> lore = new ArrayList<>();
@@ -47,14 +49,19 @@ public class SkilltreeListener implements Listener {
 		
 		playerInv.setItem(13, sp);
 		
-		double ad = main.getAdMap().get(p.getUniqueId());
+		int SPAD = Integer.valueOf(Main.getValue(p, "SPAD"));
+		int SPHP = Integer.valueOf(Main.getValue(p, "SPHP"));
+		int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
+		int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
+		
+		double ad = SPAD * getAdUpgrade(p);
 		if (ad >= 100) {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
 			ItemMeta swordMeta = sword.getItemMeta();
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &4" + ad));
+			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad));
 			lore.add(Main.color("&fAttack Damage Maxed Out!"));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
@@ -67,7 +74,7 @@ public class SkilltreeListener implements Listener {
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &4" + ad) );
+			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &4" + getAdUpgrade(p)));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
@@ -76,15 +83,44 @@ public class SkilltreeListener implements Listener {
 			playerInv.setItem(11, sword);
 		}
 		
-		int maxmana = main.getManaMap().get(p.getUniqueId());
+		double hp = SPHP * getHPUpgrade(p);
+		if (hp >= 500) {
+			ItemStack chest = new ItemStack(Material.DIAMOND_CHESTPLATE);
+			ItemMeta chestMeta = chest.getItemMeta();
+			chestMeta.setDisplayName(Main.color("&cHealth Bonus Upgrade"));
+			lore = new ArrayList<>();
+			lore.add(Main.color(""));
+			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp));
+			lore.add(Main.color("&fHP Bonus Maxed Out!"));
+			lore.add(Main.color(""));
+			chestMeta.setLore(lore);
+			chestMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			chest.setItemMeta(chestMeta);
+			playerInv.setItem(12, chest);
+		} else {
+			ItemStack chest = new ItemStack(Material.DIAMOND_CHESTPLATE);
+			ItemMeta chestMeta = chest.getItemMeta();
+			chestMeta.setDisplayName(Main.color("&cHealth Bonus Upgrade"));
+			lore = new ArrayList<>();
+			lore.add(Main.color(""));
+			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &c" + getHPUpgrade(p)));
+			lore.add(Main.color(""));
+			chestMeta.setLore(lore);
+			chestMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			chest.setItemMeta(chestMeta);
+			playerInv.setItem(12, chest);
+		}
+		
+		int maxmana = SPM * getManaUpgrade(p);
 		if (maxmana >= 100000) {
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &9" + maxmana));
-			lore.add(Main.color("&fMax Mana Maxed Out!"));
+			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana));
+			lore.add(Main.color("&fMana Maxed Out!"));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
@@ -95,7 +131,7 @@ public class SkilltreeListener implements Listener {
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &9" + maxmana));
+			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p)));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
@@ -103,14 +139,14 @@ public class SkilltreeListener implements Listener {
 			playerInv.setItem(14, hs);
 		}
 		
-		int manaregen = main.getManaRegenMap().get(p.getUniqueId());
+		int manaregen = SPMR * getManaRegenUpgrade(p);
 		if (manaregen * 20 >= 2000) {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &b" + (manaregen * 20)) + "/s");
+			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen * 20 + "/s"));
 			lore.add(Main.color("&fMana Regen Maxed Out!"));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
@@ -122,7 +158,7 @@ public class SkilltreeListener implements Listener {
 			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent: &b" + (manaregen * 20)) + "/s");
+			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen * 20 + "/s"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p) * 20));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
@@ -166,14 +202,20 @@ public class SkilltreeListener implements Listener {
 				if (e.getView().getTitle().contains("PLAYER UPGRADES")) {
 					if (e.getCurrentItem() != null) {
 						if (e.getCurrentItem().getType() != null) {
-							if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
-								if (e.getWhoClicked() instanceof Player) {
-									Player p = (Player) e.getWhoClicked();
+							if (e.getWhoClicked() instanceof Player) {
+								Player p = (Player) e.getWhoClicked();
+								int SPAD = Integer.valueOf(Main.getValue(p, "SPAD"));
+								int SPHP = Integer.valueOf(Main.getValue(p, "SPHP"));
+								int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
+								int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
+								if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										double ad = main.getAdMap().get(p.getUniqueId());
-										if (ad < 100) {
-											double newad = main.getAdMap().get(p.getUniqueId()) + getAdUpgrade(p);
+										if (getAdUpgrade(p) * SPAD < 100) {
+											SPAD++;
+											main.setIntValue(p, "SPAD", SPAD);
+											
+											double newad = SPAD * getAdUpgrade(p) + 1;
 											main.setDoubleValue(p, "AD", newad);
 											
 											int newsp = sp - 1;
@@ -181,6 +223,8 @@ public class SkilltreeListener implements Listener {
 											
 										    main.getAdMap().replace(p.getUniqueId(), newad);
 										    main.getSPMap().replace(p.getUniqueId(), newsp);
+										    
+										    p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
 											
 										    Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) + " AD");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
@@ -194,15 +238,40 @@ public class SkilltreeListener implements Listener {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
 								}
-							}
-							if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
-								if (e.getWhoClicked() instanceof Player) {
-									Player p = (Player) e.getWhoClicked();
+								if (e.getCurrentItem().getType() == Material.DIAMOND_CHESTPLATE) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										int mana = main.getManaMap().get(p.getUniqueId());
-										if (mana < 500000) {
-											int newmana = main.getManaMap().get(p.getUniqueId()) + getManaUpgrade(p);
+										if (getHPUpgrade(p) * SPHP < 500) {
+											SPHP++;
+											main.setIntValue(p, "SPHP", SPHP);
+											
+											double newhp = SPHP * getHPUpgrade(p);
+											main.setDoubleValue(p, "HP", newhp);
+											
+											int newsp = sp - 1;
+											main.setIntValue(p, "SP", newsp);
+										    main.getSPMap().replace(p.getUniqueId(), newsp);
+											
+										    Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) + " HP");
+										    Main.msg(p, "&aRemaining SP: &f" + newsp);
+											if (e.getWhoClicked() instanceof Player) {
+												sendPlayerInv((Player) e.getWhoClicked());
+											}
+											Armor.updateSet(p);
+										} else {
+											Main.msg(p, "&cThis upgrade is maxed out!");
+										}
+									} else {
+										Main.msg(p, "&cNot enough Skillpoints!");
+									}
+							}
+							if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
+									int sp = main.getSPMap().get(p.getUniqueId());
+									if (sp >= 1) {
+										if (getManaUpgrade(p) * SPM < 500000) {
+											SPM++;
+											main.setIntValue(p, "SPM", SPM);
+											int newmana = SPM * getManaUpgrade(p) + 5000;
 											main.setIntValue(p, "Mana", newmana);
 											
 											int newsp = sp - 1;
@@ -222,16 +291,14 @@ public class SkilltreeListener implements Listener {
 									} else {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
-								}
 							}
 							if (e.getCurrentItem().getType() == Material.LIGHT_BLUE_DYE) {
-								if (e.getWhoClicked() instanceof Player) {
-									Player p = (Player) e.getWhoClicked();
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										int manar = main.getManaRegenMap().get(p.getUniqueId());
-										if (manar * 20 < 2000) {
-											int newmanar = main.getManaRegenMap().get(p.getUniqueId()) + getManaRegenUpgrade(p);
+										if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
+											SPMR++;
+											main.setIntValue(p, "SPMR", SPMR);
+											int newmanar = SPMR * getManaRegenUpgrade(p) + 1;
 											main.setIntValue(p, "ManaRegen", newmanar);
 											
 											int newsp = sp - 1;

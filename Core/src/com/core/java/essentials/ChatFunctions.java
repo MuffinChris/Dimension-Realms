@@ -11,7 +11,7 @@ public class ChatFunctions implements Listener {
 	
 	@EventHandler
 	public void joinMessage (PlayerJoinEvent e) {
-		e.setJoinMessage(Main.color("   &a▶ &f" + e.getPlayer().getName()));
+		e.setJoinMessage(Main.color("   &a\u25B6 &f" + e.getPlayer().getName()));
 		updateName(e.getPlayer());
 	}
 	
@@ -33,7 +33,7 @@ public class ChatFunctions implements Listener {
 	
 	@EventHandler
 	public void leaveMessage (PlayerQuitEvent e) {
-		e.setQuitMessage(Main.color("   &c◀ &f" + e.getPlayer().getName()));
+		e.setQuitMessage(Main.color("   &c\u25C0&f" + e.getPlayer().getName()));
 	}
 	
 	@EventHandler
@@ -42,7 +42,7 @@ public class ChatFunctions implements Listener {
 			e.setMessage(Main.color(e.getMessage()));
 		}
 		updateName(e.getPlayer());
-		e.setFormat(Main.color("&7%s" + " &8»" + "&f %s"));
+		e.setFormat(Main.color("&7%s" + " &8\u00BB" + "&f %s"));
 	}
 	
 }

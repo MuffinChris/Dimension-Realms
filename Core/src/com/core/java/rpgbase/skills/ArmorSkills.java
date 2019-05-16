@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -50,17 +51,39 @@ public class ArmorSkills implements Listener {
 		main.updateExpBar(p);
 	}
 	
+	public void spellDamage(Entity e, Player p, double damage) {
+		if (e instanceof LivingEntity) {
+			System.out.println(damage);
+			EntityDamageByEntityEvent en = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, damage);
+			Bukkit.getServer().getPluginManager().callEvent(en);
+			System.out.println(en.isCancelled());
+			if (e instanceof LivingEntity) {
+				((LivingEntity)e).damage(damage);
+			}
+			System.out.println(en.isCancelled());
+			//LivingEntity ent = (LivingEntity) e;
+			//ent.damage(0.01, p);
+			//ent.damage(damage);
+			/*if (main.getPManager().getPList(e) != null) {
+				main.getPManager().getPList(e).addDamage(p, damage);
+			}*/
+		}
+	}
+	
 	@EventHandler
 	public void rightClick(PlayerInteractEvent e) {
 		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (e.getItem() != null) {
+				if (!Weapons.canUseWeapon(e.getPlayer())) {
+					e.setCancelled(true);
+					Main.msg(e.getPlayer(), "&cYou do not meet this item's level requirements.");
+					return;
+				}
 				if (containsString(e.getItem(), "SWORD")) {
 					//if (Armor.getSet(e.getPlayer()).contains("leather") || Armor.getSet(e.getPlayer()).contains("chain")) {
 						if (main.getAbilities().get(e.getPlayer().getUniqueId()).get(0).equals("Eviscerate")) {
 							if (main.getMana(e.getPlayer()) > 1500) {
 								removeMana(e.getPlayer(), 1500);
-								e.getPlayer().removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-								e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20, 1));
 								Vector v = new Vector(e.getPlayer().getLocation().getDirection().getX() * 1.2, 0.2, e.getPlayer().getLocation().getDirection().getZ() * 1.2);
 								e.getPlayer().setVelocity(v);
 								e.getPlayer().getWorld().playSound(e.getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0F, 2.0F);
@@ -83,8 +106,7 @@ public class ArmorSkills implements Listener {
 											if (!entities.contains(ent)) {
 												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25 + 20;
 												handdmg += Weapons.getWeaponAttackDamage(e.getPlayer()) * 1.25;
-												ent.damage(0, e.getPlayer());
-												ent.damage(handdmg);
+												spellDamage(ent, e.getPlayer(), handdmg);
 												//ent.setLastDamageCause(new EntityDamageEvent(e.getPlayer(), DamageCause.ENTITY_ATTACK, handdmg));
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();

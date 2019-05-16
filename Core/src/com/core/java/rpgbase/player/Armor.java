@@ -1,11 +1,13 @@
 package com.core.java.rpgbase.player;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,14 +22,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.codingforcookies.armorequip.ArmorEquipEvent;
-import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
+//import com.codingforcookies.armorequip.ArmorEquipEvent;
+//import com.codingforcookies.armorequip.ArmorEquipEvent.EquipMethod;
 import com.core.java.essentials.Main;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 
+import net.minecraft.server.v1_14_R1.Item;
 import net.minecraft.server.v1_14_R1.NBTBase;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagDouble;
@@ -106,7 +111,7 @@ public class Armor implements Listener {
 				s.contains("chestplate") || s.contains("leggings") ||
 				s.contains("boots") || s.contains("cap") || 
 				s.contains("tunic") || s.contains("pants"))) {
-			e.setCancelled(true);
+			e.setDamage(1);
 		}
 	}
 	
@@ -162,7 +167,13 @@ public class Armor implements Listener {
 	}*/
 	
 	@EventHandler
-	public void noArmor (ArmorEquipEvent e) {
+	public void noArmor (PlayerArmorChangeEvent e) {
+		Player p = (Player) e.getPlayer();
+		new BukkitRunnable() {
+			public void run() {
+				updateSet(p);
+			}
+		}.runTaskLater(plugin, 1L);
 		/*if (e.getMethod() == EquipMethod.SHIFT_CLICK || e.getMethod() == EquipMethod.HOTBAR || e.getMethod() == EquipMethod.HOTBAR_SWAP) {
 			if (e.getNewArmorPiece() != null) {
 				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(e.getNewArmorPiece());
@@ -219,7 +230,6 @@ public class Armor implements Listener {
 				}
 			}.runTaskLater(plugin, 1L);
 		}*/
-		Player p = (Player) e.getPlayer();
 		/*String set = getSet(p);
 		if (e.getOldArmorPiece() != null) {
 			if (e.getOldArmorPiece().getType() != Material.AIR) {
@@ -228,12 +238,6 @@ public class Armor implements Listener {
 				}
 			}
 		}*/
-		
-		new BukkitRunnable() {
-			public void run() {
-				updateSet(p);
-			}
-		}.runTaskLater(plugin, 1L);
 		
 	}
 	
@@ -367,17 +371,17 @@ public class Armor implements Listener {
 						}
 					}
 					if (type.contains("leather")) {
-						if (type.contains("cap")) {
+						if (type.contains("helmet")) {
 							lore.add(Main.color("&4Health:&7 15"));
 							lore.add(Main.color("&cArmor:&7 3%"));
 							lore.add(Main.color("&bMagic Resist:&7 3%"));
 						}
-						if (type.contains("tunic")) {
+						if (type.contains("chestplate")) {
 							lore.add(Main.color("&4Health:&7 35"));
 							lore.add(Main.color("&cArmor:&7 3%"));
 							lore.add(Main.color("&bMagic Resist:&7 3%"));
 						}
-						if (type.contains("pants")) {
+						if (type.contains("leggings")) {
 							lore.add(Main.color("&4Health:&7 20"));
 							lore.add(Main.color("&cArmor:&7 3%"));
 							lore.add(Main.color("&bMagic Resist:&7 3%"));
@@ -391,6 +395,7 @@ public class Armor implements Listener {
 					
 					ItemMeta meta = nItem.getItemMeta();
 					meta.setLore(lore);
+					
 					nItem.setItemMeta(meta);
 					
 					i.setAmount(0);
@@ -425,22 +430,24 @@ public class Armor implements Listener {
 								index++;
 							}
 						}
-						String hpb = i.getItemMeta().getLore().get(index);
-						hpb = ChatColor.stripColor(hpb);
-						hpb = hpb.replace("Level: ", "");
-						int level = Main.getInstance().getLevel(p);
-						if (Integer.valueOf(hpb) instanceof Integer) {
-							if (Integer.valueOf(hpb) <= level) {
-							} else {
-								ItemStack newitem = new ItemStack(Material.STONE);
-								newitem = i;
-								Main.msg(p, "&cYou do not meet this item's level requirements.");
-								if (p.getInventory().firstEmpty() == -1) {
-									p.getWorld().dropItem(p.getLocation(), newitem);
+						if (index < i.getItemMeta().getLore().size()) {
+							String hpb = i.getItemMeta().getLore().get(index);
+							hpb = ChatColor.stripColor(hpb);
+							hpb = hpb.replace("Level: ", "");
+							int level = Main.getInstance().getLevel(p);
+							if (Integer.valueOf(hpb) instanceof Integer) {
+								if (Integer.valueOf(hpb) <= level) {
 								} else {
-									p.getInventory().addItem(newitem);
+									ItemStack newitem = new ItemStack(Material.STONE);
+									newitem = i;
+									Main.msg(p, "&cYou do not meet this item's level requirements.");
+									if (p.getInventory().firstEmpty() == -1) {
+										p.getWorld().dropItem(p.getLocation(), newitem);
+									} else {
+										p.getInventory().addItem(newitem);
+									}
+									i.setAmount(0);
 								}
-								i.setAmount(0);
 							}
 						}
 					}
@@ -463,21 +470,22 @@ public class Armor implements Listener {
 									index++;
 								}
 							}
-							String hpb = i.getItemMeta().getLore().get(index);
-							hpb = ChatColor.stripColor(hpb);
-							hpb = hpb.replace("Health: ", "");
-							if (Double.valueOf(hpb) instanceof Double) {
-								hp+=Double.valueOf(hpb);
+							if (index < i.getItemMeta().getLore().size()) {
+								String hpb = i.getItemMeta().getLore().get(index);
+								hpb = ChatColor.stripColor(hpb);
+								hpb = hpb.replace("Health: ", "");
+								if (Double.valueOf(hpb) instanceof Double) {
+									hp+=Double.valueOf(hpb);
+								}
 							}
 						}
 					}
 				}
 			}
+			hp+=Double.valueOf(Main.getValue(p, "HP"));
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
 			if (p.getHealth() >= hp) {
 				p.setHealth(hp);
-			} else {
-				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 			}
 			
 			double am = 0.0;
@@ -497,12 +505,14 @@ public class Armor implements Listener {
 									index++;
 								}
 							}
-							String hpb = i.getItemMeta().getLore().get(index);
-							hpb = ChatColor.stripColor(hpb);
-							hpb = hpb.replace("Armor: ", "");
-							hpb = hpb.replace("%", "");
-							if (Double.valueOf(hpb) instanceof Double) {
-								am+=(Double.valueOf(hpb)/100);
+							if (index < i.getItemMeta().getLore().size()) {
+								String hpb = i.getItemMeta().getLore().get(index);
+								hpb = ChatColor.stripColor(hpb);
+								hpb = hpb.replace("Armor: ", "");
+								hpb = hpb.replace("%", "");
+								if (Double.valueOf(hpb) instanceof Double) {
+									am+=(Double.valueOf(hpb)/100);
+								}
 							}
 						}
 					}
@@ -521,12 +531,14 @@ public class Armor implements Listener {
 									index++;
 								}
 							}
-							String hpb = i.getItemMeta().getLore().get(index);
-							hpb = ChatColor.stripColor(hpb);
-							hpb = hpb.replace("Magic Resist: ", "");
-							hpb = hpb.replace("%", "");
-							if (Double.valueOf(hpb) instanceof Double) {
-								am+=(Double.valueOf(hpb)/100);
+							if (index < i.getItemMeta().getLore().size()) {
+								String hpb = i.getItemMeta().getLore().get(index);
+								hpb = ChatColor.stripColor(hpb);
+								hpb = hpb.replace("Magic Resist: ", "");
+								hpb = hpb.replace("%", "");
+								if (Double.valueOf(hpb) instanceof Double) {
+									mr+=(Double.valueOf(hpb)/100);
+								}
 							}
 						}
 					}
@@ -543,6 +555,7 @@ public class Armor implements Listener {
 			} else {
 				Main.getInstance().getArmorMap().put(p.getUniqueId(), am);
 			}
+			
 			/*if (set.equals("diamond")) {
 				p.setWalkSpeed(0.16F);
 				p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp + diamondA);

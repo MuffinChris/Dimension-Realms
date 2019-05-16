@@ -1,0 +1,78 @@
+name: Core
+main: com.core.java.essentials.Main
+author: eChris
+version: 0.0.1
+description: Command and Feature Suite
+api-version: 1.14
+commands:
+  help:
+    description: Basic Help Command
+    aliases: [helpme, faq]
+  fly:
+    description: Fly and Speed Control
+    permission: core.mod
+  gmss:
+    description: Alias for Spectator
+    permission: core.mod
+  gms:
+    description: Alias for Survival
+    permission: core.mod
+  gmc:
+    description: Alias for Creative
+    permission: core.mod
+  spawn:
+    description: Teleport to Spawn
+  setspawn:
+    description: Set the Spawn Location
+    permission: core.admin
+  armor:
+    description: View the Armor Types
+  lag:
+    description: View detailed RAM Usage
+    aliases: [gc, top, ram]
+  datareload:
+    description: Reload Data Folder (All Hashmaps)
+    aliases: [reloaddata, refresh]
+    permission: core.admin
+  set:
+    description: Set Hashmap Values for a Player
+    aliases: [setvalue, setmap]
+    permission: core.admin
+  money:
+    description: Check a player's balance (Gold Ingot Currency)
+    aliases: [balance, bal]
+  level:
+    description: Check your level information
+    aliases: [exp, experience, levelup, lvl]
+  setlevel:
+    description: Sets a player's level
+    permission: core.admin
+  addlevel:
+    description: Add levels to a player
+    permission: core.admin
+  setexp:
+    description: Set a player's exp
+    permission: core.admin
+  addexp:
+    description: Add exp to a player
+    permission: core.admin
+  stats:
+    description: Check stats of a player
+    aliases: [kdr, kd, kda]
+  info:
+    description: Check info of a player
+    aliases: [whois]
+  sp:
+    description: Base Skill Menu
+    aliases: [skillpoint, skillpoints, attributes, attribute, skilltree, rpg, ability, abilities, class, classes, paths, path]
+  heal:
+    description: Heal a player
+    permission: core.mod
+  mana:
+    description: View your mana
+  speed:
+    description: Set your fly and walk speed
+    permission: core.mod
+  bottle:
+    description: Bottle your Experience for XP Bottles!
+    aliases: [xpbottle]

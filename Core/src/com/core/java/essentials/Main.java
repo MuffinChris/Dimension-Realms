@@ -14,15 +14,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +37,8 @@ import com.core.java.rpgbase.player.Weapons;
 import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
 import com.core.java.rpgbase.bossbars.BossBarManager;
+import com.core.java.rpgbase.entities.PlayerList;
+import com.core.java.rpgbase.entities.PlayerListManager;
 import com.core.java.economy.EconCommands;
 import com.core.java.enchantments.Serration;
 import com.core.java.essentials.commands.BottleCommand;
@@ -62,27 +62,35 @@ import com.core.java.reflection.rutils;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.Entity;
-import net.minecraft.server.v1_14_R1.EntityHuman;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.ViaAPI;
 
 public class Main extends JavaPlugin {
 	
 	
 	//TODO LIST:
+	
 	/* 
-	 * Level Req on Items
-	 * Lev Req Weapons does not work.
-	 * Crossbow Better?
-	 * Bossbar does not update while being left open
-	 * ^^^ this fix can be incorporated with this:
-	 * XP is awarded based on percent of dmg done. Parties simply add a larger bonus that is global share.
+	 * Armor doesnt work lol
+	 * Custom durability with warning?
+	 * Spells do not register kills when used raw
+	 * Wither bar fix (only packet)
+	 * Enderdragon bar fix (only packet)
+	 * Skills damage is raw (without modi) for EXP delivery
+	 * Nerf Spawner Mobs
+	 * PlayerList will not travel over restart. Perhaps swap to NBT
 	 * Custom Enchanting GUI or Way to make axes and stuff get ench
 	 * Make Skilltrees
 	 */
 	
 	//TODO FUTURE:
 	/* 
+	 * Different ranks to uh rankup to
+	 * Stained Glass is fashionable
+	 * Professions
+	 * Have a better more thematic crates system. Like going mining for loot gems that have to be synthesized.
+	 * Also all loot gems have to be synthesized :P
+	 * Souls system
 	 * Making custom mobs, bosses, spawners, etc
 	 * Base Menu Cmd (contains all useful cmd guis)
 	 * Parties, EXP Boosts (compounding)
@@ -130,9 +138,20 @@ public class Main extends JavaPlugin {
 		return rlib;
 	}
 	
+	public ViaAPI vapi = Via.getAPI();
+	
+	public ViaAPI getViaAPI() {
+		return vapi;
+	}
+	
 	public BossBarManager barManager = new BossBarManager();
 	public BossBarManager getBarManager() {
 		return barManager;
+	}
+	
+	public PlayerListManager pManager = new PlayerListManager();
+	public PlayerListManager getPManager() {
+		return pManager;
 	}
 	
 	public double getAttackSpeed(Player p) {
@@ -316,6 +335,15 @@ public class Main extends JavaPlugin {
 		
 		Serration.register();
 		so("&cCORE&7: &fEnchantments Registered!");
+		
+		int count = 0;
+		for (World w : Bukkit.getWorlds()) {
+			for (org.bukkit.entity.Entity e : w.getEntities()) {
+				getPManager().setPlayerList(e, new PlayerList());
+				count++;
+			}
+		}
+		so("&cCORE&7: &fEntities Updated with PlayerLists! &8(&f" + count + "&8)");
 	}
 	
 	@Override
@@ -459,6 +487,8 @@ public class Main extends JavaPlugin {
         abilities.replace(uuid, abs);
         p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
         updateAttackSpeed(p);
+        Armor.updateSet(p);
+        Weapons.updateMainHand(p);
 	}
 	
 	public void levelup (Player p) {
