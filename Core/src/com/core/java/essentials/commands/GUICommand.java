@@ -39,8 +39,8 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color("&4Attack Damage &fis added onto to your Weapon Damage!"));
 		lore.add(Main.color(""));
 		lore.add(Main.color("&bEnchantments &falso deal more damage: "));
-		lore.add(Main.color("&bSharpness: &f5 Damage per Level"));
-		lore.add(Main.color("&bSmite/Bane: &f10 Damage per Level"));
+		lore.add(Main.color("&bSharpness: &f10 Damage per Level"));
+		lore.add(Main.color("&bSmite/Bane: &f20 Damage per Level"));
 		swordMeta.setLore(lore);
 		swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		sword.setItemMeta(swordMeta);
@@ -53,7 +53,7 @@ public class GUICommand implements CommandExecutor {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&fThe Value &cHP &frepresents your Health."));
 		lore.add(Main.color("&fIt is displayed in your Stats Bar."));
-		lore.add(Main.color("&cHealth &fis modified by armor (full sets) &8[&f/armor&8]&f."));
+		lore.add(Main.color("&cHealth &fis modified by armor &8[&f/armor&8]&f."));
 		lore.add(Main.color(""));
 		shieldMeta.setLore(lore);
 		shield.setItemMeta(shieldMeta);

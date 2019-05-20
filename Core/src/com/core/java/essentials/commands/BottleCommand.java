@@ -22,7 +22,7 @@ public class BottleCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (args.length == 0) {
-				Main.msg(p, "Usage: /bottle <levels> || This command will consume some of your RPG Experience and give you xp bottles. &8(&a25% RPG EXP &8: &a1 Level&8)");
+				Main.msg(p, "Usage: /bottle <levels>\nThis command will consume some of your RPG Experience and give you xp bottles. \n&8(&a25% RPG EXP &8: &a1 Level&8)");
 			}
 			if (args.length >= 1) {
 				if (Integer.valueOf(args[0]) instanceof Integer) {

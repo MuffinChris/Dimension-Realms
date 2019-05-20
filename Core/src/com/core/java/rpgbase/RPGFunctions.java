@@ -4,20 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.Server;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,16 +35,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.core.java.essentials.Main;
 import com.core.java.rpgbase.bossbars.BS;
 import com.core.java.rpgbase.entities.PlayerList;
 import com.core.java.rpgbase.player.Armor;
 import com.core.java.rpgbase.player.Weapons;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import com.core.java.essentials.Main;
 
 public class RPGFunctions implements Listener {
 	
@@ -121,16 +120,23 @@ public class RPGFunctions implements Listener {
 					infodmg.add(Main.color("&c" + pl.getName() + "&8: &f" + plugin.getPManager().getPList(e.getEntity()).getDamage(pl) + "\n"));
 				}
 				TextComponent info = new TextComponent("INFO");
+				//BaseComponent[] info = new ComponentBuilder("INFO").color(ChatColor.RED)
+				//	    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(infodmg.toString()))).create();
 				info.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(infodmg.toString()).create()));
 				Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
-				e.setDeathMessage("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &8<&c" + info + "&8>");
+				Bukkit.getServer().broadcastMessage("");
+				p.spigot().sendMessage(info);
+				Bukkit.getServer().broadcast(new TextComponent(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &8<&c" + info + "&8>")));
+				e.setDeathMessage("");
 			} else {
+				Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
+				e.setDeathMessage(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName()));
+			}
+		} else {
+			if (p.getKiller() instanceof LivingEntity) {
 				Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
 				e.setDeathMessage("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
 			}
-		} else {
-			Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
-			e.setDeathMessage("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
 		}
 	}
 	

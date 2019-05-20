@@ -55,6 +55,7 @@ import com.core.java.essentials.commands.HelpCommand;
 import com.core.java.essentials.commands.InfoCommand;
 import com.core.java.essentials.commands.LagCommand;
 import com.core.java.essentials.commands.ManaCommand;
+import com.core.java.essentials.commands.MsgCommand;
 import com.core.java.essentials.commands.SpawnCommand;
 import com.core.java.essentials.commands.SpeedCommand;
 import com.core.java.essentials.commands.StatsCommand;
@@ -71,6 +72,9 @@ public class Main extends JavaPlugin {
 	//TODO LIST:
 	
 	/* 
+	 * Update All armor and weapons in inventory rather than just mainhand
+	 * Update /armor command
+	 * Item helmets broken
 	 * Armor doesnt work lol
 	 * Custom durability with warning?
 	 * Spells do not register kills when used raw
@@ -85,9 +89,18 @@ public class Main extends JavaPlugin {
 	
 	//TODO FUTURE:
 	/* 
+	 * Remember to set world to hard difficulty
 	 * Different ranks to uh rankup to
+	 * Add referrals for invintg
 	 * Stained Glass is fashionable
+	 * https://www.youtube.com/watch?v=Y1BFOzXwVu0 for builds
 	 * Professions
+	 * - Toolsmith (make and repair tools)
+	 * - Armorer (make and repair armor)
+	 * - Farmer (create custom food and grow faster food)
+	 * - Enchanter (custom enchants)
+	 * - Miner (tools for mining faster, better, and synthesizing ores)
+	 * - Fisher (hella fish bro)
 	 * Have a better more thematic crates system. Like going mining for loot gems that have to be synthesized.
 	 * Also all loot gems have to be synthesized :P
 	 * Souls system
@@ -152,6 +165,11 @@ public class Main extends JavaPlugin {
 	public PlayerListManager pManager = new PlayerListManager();
 	public PlayerListManager getPManager() {
 		return pManager;
+	}
+	
+	public playerinfoManager pinf = new playerinfoManager();
+	public playerinfoManager getpinf() {
+		return pinf;
 	}
 	
 	public double getAttackSpeed(Player p) {
@@ -303,8 +321,14 @@ public class Main extends JavaPlugin {
 		getCommand("mana").setExecutor(new ManaCommand());
 		getCommand("speed").setExecutor(new SpeedCommand());
 		getCommand("bottle").setExecutor(new BottleCommand());
+		getCommand("msg").setExecutor(new MsgCommand());
+		getCommand("tell").setExecutor(new MsgCommand());
+		getCommand("message").setExecutor(new MsgCommand());
+		getCommand("r").setExecutor(new MsgCommand());
+		getCommand("reply").setExecutor(new MsgCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
+		Bukkit.getPluginManager().registerEvents(new infoListeners(), this);
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 		Bukkit.getPluginManager().registerEvents(new Motd(), this);
 		Bukkit.getPluginManager().registerEvents(new ChatFunctions(), this);

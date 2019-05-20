@@ -24,6 +24,7 @@ public class HealCommand implements CommandExecutor {
 					for (PotionEffect pot : p.getActivePotionEffects()) {
 						p.removePotionEffect(pot.getType());
 					}
+					p.setFireTicks(0);
 					p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation(), 50, 1, 1, 1);
 				} else if (args.length == 1) {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
@@ -33,6 +34,7 @@ public class HealCommand implements CommandExecutor {
 						for (PotionEffect pot : t.getActivePotionEffects()) {
 							t.removePotionEffect(pot.getType());
 						}
+						t.setFireTicks(0);
 						t.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, t.getLocation(), 50, 1, 1, 1);
 					} else {
 						Main.msg(p, "&cInvalid Target");

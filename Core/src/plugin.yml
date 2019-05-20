@@ -76,3 +76,9 @@ commands:
   bottle:
     description: Bottle your Experience for XP Bottles!
     aliases: [xpbottle]
+  msg:
+    description: Message fellow players
+    aliases: [message, tell]
+  r:
+    description: Reply to messages
+    aliases: [reply]

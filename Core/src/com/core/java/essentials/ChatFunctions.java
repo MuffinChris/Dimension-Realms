@@ -33,7 +33,7 @@ public class ChatFunctions implements Listener {
 	
 	@EventHandler
 	public void leaveMessage (PlayerQuitEvent e) {
-		e.setQuitMessage(Main.color("   &c\u25C0&f" + e.getPlayer().getName()));
+		e.setQuitMessage(Main.color("   &c\u25C0&f " + e.getPlayer().getName()));
 	}
 	
 	@EventHandler

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,11 +17,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,7 +46,7 @@ import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class Armor implements Listener {
 	
-	public static final double basehp = 100;
+	public static final double basehp = 200;
 	public static final double leatherA = 75;
 	public static final double goldenA = 100;
 	public static final double chainmailA = 125;
@@ -167,7 +171,40 @@ public class Armor implements Listener {
 	}*/
 	
 	@EventHandler
-	public void noArmor (PlayerArmorChangeEvent e) {
+	public void onSwap (PlayerItemHeldEvent e) {
+		new BukkitRunnable() {
+			public void run() {
+				fixInventory(e.getPlayer());
+			}
+		}.runTaskLater(plugin, 1L);
+	}
+	
+	@EventHandler
+	public void onPickup (EntityPickupItemEvent e) {
+		if (e.getEntity() instanceof Player) {
+			new BukkitRunnable() {
+				public void run() {
+					fixInventory((Player) e.getEntity());
+				}
+			}.runTaskLater(plugin, 1L);
+		}
+	}
+	
+	@EventHandler
+	public void onCraft (CraftItemEvent e) {
+		for (HumanEntity ent : e.getInventory().getViewers()) {
+			if (ent instanceof Player) {
+				new BukkitRunnable() {
+					public void run() {
+						fixInventory((Player) ent);
+					}
+				}.runTaskLater(plugin, 1L);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void armorChange (PlayerArmorChangeEvent e) {
 		Player p = (Player) e.getPlayer();
 		new BukkitRunnable() {
 			public void run() {
@@ -241,183 +278,213 @@ public class Armor implements Listener {
 		
 	}
 	
-	public static void fixArmor(Player p) {
-		for (ItemStack i : p.getInventory().getArmorContents()) {
-			if (i != null) {
-				net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
-				if (!i.hasItemMeta() || !i.getItemMeta().hasLore() || nmsStack.getTag() == null || nmsStack.getTag().getList("AttributeModifiers", 0) instanceof NBTTagList) {
-					NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
-					NBTTagList modifiers = new NBTTagList();
-					NBTTagCompound itemC = new NBTTagCompound();
-					
-					itemC.set("AttributeName", new NBTTagString("generic.armor"));
-					itemC.set("Name", new NBTTagString("generic.armor"));
-					itemC.set("Amount", new NBTTagDouble(0));
-					itemC.set("Operation", new NBTTagInt(0));
-			        itemC.set("UUIDLeast", new NBTTagInt(894654));
-			        itemC.set("UUIDMost", new NBTTagInt(2872));
-					
-					String item = i.toString().toLowerCase();
-					
-					
-					if (item.contains("helmet") || item.contains("cap")) {
-						itemC.set("Slot", new NBTTagString("head"));
+	public static boolean isArmor(String s) {
+		return (s.contains("HELMET") || s.contains("CHESTPLATE") || s.contains("LEGGINGS") || s.contains("BOOTS"));
+	}
+	
+	public static ItemStack fixItem(ItemStack i) {
+		if (i != null && i.getType() != null && isArmor(i.getType().toString())) {
+			net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+			if (!i.hasItemMeta() || !i.getItemMeta().hasLore() || nmsStack.getTag() == null || nmsStack.getTag().getList("AttributeModifiers", 0) instanceof NBTTagList) {
+				NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+				NBTTagList modifiers = new NBTTagList();
+				NBTTagCompound itemC = new NBTTagCompound();
+				
+				itemC.set("AttributeName", new NBTTagString("generic.armor"));
+				itemC.set("Name", new NBTTagString("generic.armor"));
+				itemC.set("Amount", new NBTTagDouble(0));
+				itemC.set("Operation", new NBTTagInt(0));
+		        itemC.set("UUIDLeast", new NBTTagInt(894654));
+		        itemC.set("UUIDMost", new NBTTagInt(2872));
+				
+				String item = i.toString().toLowerCase();
+				
+				
+				if (item.contains("helmet") || item.contains("cap")) {
+					itemC.set("Slot", new NBTTagString("head"));
+				}
+				if (item.contains("chestplate") || item.contains("tunic")) {
+					itemC.set("Slot", new NBTTagString("chest"));
+				}
+				if (item.contains("leggings") || item.contains("pants")) {
+					itemC.set("Slot", new NBTTagString("legs"));
+				}
+				if (item.contains("boots")) {
+					itemC.set("Slot", new NBTTagString("feet"));
+				}
+				
+				modifiers.add(itemC);
+				itemTagC.set("AttributeModifiers", modifiers);
+				nmsStack.setTag(itemTagC);
+				ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
+				
+				List<String> lore = new ArrayList<String>();
+				String type = nItem.getType().toString().toLowerCase();
+				lore.add("");
+				lore.add(Main.color("&6Level:&7 1"));
+				if (type.contains("turtle")) {
+					lore.add(Main.color("&4Health:&7 100"));
+					lore.add(Main.color("&cArmor:&7 10%"));
+					lore.add(Main.color("&bMagic Resist:&7 10%"));
+				}
+				if (type.contains("diamond")) {
+					if (type.contains("helmet")) {
+						lore.add(Main.color("&4Health:&7 100"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (item.contains("chestplate") || item.contains("tunic")) {
-						itemC.set("Slot", new NBTTagString("chest"));
+					if (type.contains("chestplate")) {
+						lore.add(Main.color("&4Health:&7 150"));
+						lore.add(Main.color("&cArmor:&7 15%"));
+						lore.add(Main.color("&bMagic Resist:&7 10%"));
 					}
-					if (item.contains("leggings") || item.contains("pants")) {
-						itemC.set("Slot", new NBTTagString("legs"));
+					if (type.contains("leggings")) {
+						lore.add(Main.color("&4Health:&7 125"));
+						lore.add(Main.color("&cArmor:&7 10%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (item.contains("boots")) {
-						itemC.set("Slot", new NBTTagString("feet"));
+					if (type.contains("boots")) {
+						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					
-					modifiers.add(itemC);
-					itemTagC.set("AttributeModifiers", modifiers);
-					nmsStack.setTag(itemTagC);
-					ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
-					
-					List<String> lore = new ArrayList<String>();
-					String type = nItem.getType().toString().toLowerCase();
-					lore.add("");
-					lore.add(Main.color("&6Level:&7 1"));
-					if (type.contains("diamond")) {
-						if (type.contains("helmet")) {
-							lore.add(Main.color("&4Health:&7 50"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("chestplate")) {
-							lore.add(Main.color("&4Health:&7 100"));
-							lore.add(Main.color("&cArmor:&7 15%"));
-							lore.add(Main.color("&bMagic Resist:&7 10%"));
-						}
-						if (type.contains("leggings")) {
-							lore.add(Main.color("&4Health:&7 75"));
-							lore.add(Main.color("&cArmor:&7 10%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("boots")) {
-							lore.add(Main.color("&4Health:&7 25"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
+				}
+				if (type.contains("iron")) {
+					if (type.contains("helmet")) {
+						lore.add(Main.color("&4Health:&7 75"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (type.contains("iron")) {
-						if (type.contains("helmet")) {
-							lore.add(Main.color("&4Health:&7 35"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("chestplate")) {
-							lore.add(Main.color("&4Health:&7 80"));
-							lore.add(Main.color("&cArmor:&7 15%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("leggings")) {
-							lore.add(Main.color("&4Health:&7 65"));
-							lore.add(Main.color("&cArmor:&7 10%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("boots")) {
-							lore.add(Main.color("&4Health:&7 15"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
+					if (type.contains("chestplate")) {
+						lore.add(Main.color("&4Health:&7 125"));
+						lore.add(Main.color("&cArmor:&7 15%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (type.contains("chain")) {
-						if (type.contains("helmet")) {
-							lore.add(Main.color("&4Health:&7 25"));
-							lore.add(Main.color("&cArmor:&7 8%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("chestplate")) {
-							lore.add(Main.color("&4Health:&7 70"));
-							lore.add(Main.color("&cArmor:&7 12%"));
-							lore.add(Main.color("&bMagic Resist:&7 8%"));
-						}
-						if (type.contains("leggings")) {
-							lore.add(Main.color("&4Health:&7 50"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 5%"));
-						}
-						if (type.contains("boots")) {
-							lore.add(Main.color("&4Health:&7 10"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 2%"));
-						}
+					if (type.contains("leggings")) {
+						lore.add(Main.color("&4Health:&7 100"));
+						lore.add(Main.color("&cArmor:&7 10%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (type.contains("gold")) {
-						if (type.contains("helmet")) {
-							lore.add(Main.color("&4Health:&7 25"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 15%"));
-						}
-						if (type.contains("chestplate")) {
-							lore.add(Main.color("&4Health:&7 50"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 15%"));
-						}
-						if (type.contains("leggings")) {
-							lore.add(Main.color("&4Health:&7 25"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 15%"));
-						}
-						if (type.contains("boots")) {
-							lore.add(Main.color("&4Health:&7 10"));
-							lore.add(Main.color("&cArmor:&7 5%"));
-							lore.add(Main.color("&bMagic Resist:&7 15%"));
-						}
+					if (type.contains("boots")) {
+						lore.add(Main.color("&4Health:&7 35"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (type.contains("leather")) {
-						if (type.contains("helmet")) {
-							lore.add(Main.color("&4Health:&7 15"));
-							lore.add(Main.color("&cArmor:&7 3%"));
-							lore.add(Main.color("&bMagic Resist:&7 3%"));
-						}
-						if (type.contains("chestplate")) {
-							lore.add(Main.color("&4Health:&7 35"));
-							lore.add(Main.color("&cArmor:&7 3%"));
-							lore.add(Main.color("&bMagic Resist:&7 3%"));
-						}
-						if (type.contains("leggings")) {
-							lore.add(Main.color("&4Health:&7 20"));
-							lore.add(Main.color("&cArmor:&7 3%"));
-							lore.add(Main.color("&bMagic Resist:&7 3%"));
-						}
-						if (type.contains("boots")) {
-							lore.add(Main.color("&4Health:&7 10"));
-							lore.add(Main.color("&cArmor:&7 3%"));
-							lore.add(Main.color("&bMagic Resist:&7 3%"));
-						}
+				}
+				if (type.contains("chain")) {
+					if (type.contains("helmet")) {
+						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&cArmor:&7 8%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					
-					ItemMeta meta = nItem.getItemMeta();
-					meta.setLore(lore);
-					
-					nItem.setItemMeta(meta);
-					
-					i.setAmount(0);
-					if (item.contains("helmet") || item.contains("cap")) {
-						p.getInventory().setHelmet(nItem);
+					if (type.contains("chestplate")) {
+						lore.add(Main.color("&4Health:&7 100"));
+						lore.add(Main.color("&cArmor:&7 12%"));
+						lore.add(Main.color("&bMagic Resist:&7 8%"));
 					}
-					if (item.contains("chestplate") || item.contains("tunic")) {
-						p.getInventory().setChestplate(nItem);
+					if (type.contains("leggings")) {
+						lore.add(Main.color("&4Health:&7 75"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
-					if (item.contains("leggings") || item.contains("pants")) {
-						p.getInventory().setLeggings(nItem);
+					if (type.contains("boots")) {
+						lore.add(Main.color("&4Health:&7 25"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 2%"));
 					}
-					if (item.contains("boots")) {
-						p.getInventory().setBoots(nItem);
+				}
+				if (type.contains("gold")) {
+					if (type.contains("helmet")) {
+						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 15%"));
 					}
+					if (type.contains("chestplate")) {
+						lore.add(Main.color("&4Health:&7 75"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 15%"));
+					}
+					if (type.contains("leggings")) {
+						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 15%"));
+					}
+					if (type.contains("boots")) {
+						lore.add(Main.color("&4Health:&7 20"));
+						lore.add(Main.color("&cArmor:&7 5%"));
+						lore.add(Main.color("&bMagic Resist:&7 15%"));
+					}
+				}
+				if (type.contains("leather")) {
+					if (type.contains("helmet")) {
+						lore.add(Main.color("&4Health:&7 25"));
+						lore.add(Main.color("&cArmor:&7 3%"));
+						lore.add(Main.color("&bMagic Resist:&7 3%"));
+					}
+					if (type.contains("chestplate")) {
+						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&cArmor:&7 3%"));
+						lore.add(Main.color("&bMagic Resist:&7 3%"));
+					}
+					if (type.contains("leggings")) {
+						lore.add(Main.color("&4Health:&7 25"));
+						lore.add(Main.color("&cArmor:&7 3%"));
+						lore.add(Main.color("&bMagic Resist:&7 3%"));
+					}
+					if (type.contains("boots")) {
+						lore.add(Main.color("&4Health:&7 15"));
+						lore.add(Main.color("&cArmor:&7 3%"));
+						lore.add(Main.color("&bMagic Resist:&7 3%"));
+					}
+				}
+				
+				ItemMeta meta = nItem.getItemMeta();
+				meta.setLore(lore);
+				
+				nItem.setItemMeta(meta);
+				return nItem;
+			}
+		}
+		return i;
+	}
+	
+	public static void fixInventory(Player p) {
+		for (int i = 0; i < p.getInventory().getContents().length; i++) {
+			if (p.getInventory().getItem(i) instanceof ItemStack) {
+				ItemStack it = p.getInventory().getItem(i);
+				if (it != null && it.getType() != null && isArmor(it.getType().toString()) && isNotUpdated(it)) {
+					p.getInventory().setItem(i, fixItem(it));
 				}
 			}
 		}
 	}
 	
+	public static boolean isNotUpdated(ItemStack i) {
+		return !(i != null && i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().getLore().toString().toLowerCase().contains("level"));
+	}
+	
+	public static void fixArmor(Player p) {
+		for (ItemStack i : p.getInventory().getArmorContents()) {
+			ItemStack nItem = fixItem(i);
+			i.setAmount(0);
+			String item = nItem.getType().toString().toLowerCase();
+			if (item.contains("helmet") || item.contains("cap")) {
+				p.getInventory().setHelmet(nItem);
+			}
+			if (item.contains("chestplate") || item.contains("tunic")) {
+				p.getInventory().setChestplate(nItem);
+			}
+			if (item.contains("leggings") || item.contains("pants")) {
+				p.getInventory().setLeggings(nItem);
+			}
+			if (item.contains("boots")) {
+				p.getInventory().setBoots(nItem);
+			}
+		}
+	}
+	
 	public static void updateSet(Player p) {
-		fixArmor(p);
+		fixInventory(p);
 		if (p.getInventory().getArmorContents() != null) {
 			for (ItemStack i : p.getInventory().getArmorContents()) {
 				if (i != null && i.getType() != Material.AIR) {

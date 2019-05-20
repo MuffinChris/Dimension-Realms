@@ -133,7 +133,7 @@ public class EXP implements Listener {
 		if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
 			slime = true;
 		}
-		if (e.getEntity().getKiller() instanceof Player && !(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
+		if (!(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
 			int entlevel = level;
 			int exp = ((int) (7 * Math.pow(entlevel, 2.4))) + 50;
 			int random = (int) (Math.random() * (0.20 * exp));
@@ -216,7 +216,7 @@ public class EXP implements Listener {
 			exp = newexp;
 			PlayerList plist = plugin.getPManager().getPList(e.getEntity());
 			double fulldmg = 0;
-			if (plist.getPlayers() != null) {
+			if (plist != null && plist.getPlayers() instanceof List<?>) {
 				for (Player pl : plist.getPlayers()) {
 					fulldmg+=plist.getDamage(pl);
 				}
@@ -265,7 +265,7 @@ public class EXP implements Listener {
 					p.setLevel(p.getLevel() + levels);
 					e.getItem().setAmount(0);
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.0F);
-					expallowed.add(p);
+					//expallowed.add(p);
 					e.setCancelled(true);
 				}
 			}
@@ -279,7 +279,7 @@ public class EXP implements Listener {
 		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
 	}
 	
-	public List<Player> expallowed = new ArrayList<Player>();
+	//public List<Player> expallowed = new ArrayList<Player>();
 	
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void expPickup (PlayerPickupExperienceEvent e) {

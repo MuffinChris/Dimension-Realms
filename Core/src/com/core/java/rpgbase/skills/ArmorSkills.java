@@ -53,20 +53,13 @@ public class ArmorSkills implements Listener {
 	
 	public void spellDamage(Entity e, Player p, double damage) {
 		if (e instanceof LivingEntity) {
-			System.out.println(damage);
-			EntityDamageByEntityEvent en = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, damage);
-			Bukkit.getServer().getPluginManager().callEvent(en);
-			System.out.println(en.isCancelled());
-			if (e instanceof LivingEntity) {
-				((LivingEntity)e).damage(damage);
-			}
-			System.out.println(en.isCancelled());
-			//LivingEntity ent = (LivingEntity) e;
-			//ent.damage(0.01, p);
-			//ent.damage(damage);
-			/*if (main.getPManager().getPList(e) != null) {
+			LivingEntity ent = (LivingEntity) e;
+			ent.damage(0.01, p);
+			ent.setKiller(p);
+			ent.damage(damage);
+			if (main.getPManager().getPList(e) != null) {
 				main.getPManager().getPList(e).addDamage(p, damage);
-			}*/
+			}
 		}
 	}
 	

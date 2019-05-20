@@ -39,7 +39,7 @@ public class SkilltreeListener implements Listener {
 	}
 	
 	public void sendPlayerInv(Player p) {
-		Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&a&lPLAYER UPGRADES"));
+		Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&9&lPLAYER UPGRADES"));
 		ArrayList<String> lore = new ArrayList<>();
 		
 		ItemStack sp = new ItemStack(Material.NETHER_STAR);
@@ -168,7 +168,7 @@ public class SkilltreeListener implements Listener {
 		p.openInventory(playerInv);
 	}
 	
-	public static Inventory spInv = Bukkit.createInventory(null, 27, Main.color("&a&lSKILLPOINTS MENU"));
+	public static Inventory spInv = Bukkit.createInventory(null, 27, Main.color("&9&lSKILLPOINTS MENU"));
 	
 	public static void createSpInv() {
 		ItemStack star = new ItemStack(Material.NETHER_STAR);
