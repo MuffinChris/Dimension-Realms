@@ -72,7 +72,14 @@ public class Main extends JavaPlugin {
 	//TODO LIST:
 	
 	/* 
-	 * Update All armor and weapons in inventory rather than just mainhand
+	 * DecimalFormat percentages in InfoCmd and SP
+	 * Fix mob damage as entity health was lower than expected
+	 * Fix Info Command to show percents when needed
+	 * ManaRegen Item broken
+	 * Info command overriden by WorldEdit
+	 * Add command to disable level factor into mobs for players
+	 * Fix all projectile damages
+	 * Trident throws and who knows what doesnt trig bossbar
 	 * Update /armor command
 	 * Item helmets broken
 	 * Armor doesnt work lol
@@ -282,7 +289,10 @@ public class Main extends JavaPlugin {
 	}*/
 	
 	public int getExp(Player p) {
-		return getExpMap().get(p.getUniqueId());
+		if (getExpMap().get(p.getUniqueId()) != null) {
+			return getExpMap().get(p.getUniqueId());
+		}
+		return 0;
 	}
 	
 	public int getLevel(Player p) {
@@ -455,9 +465,9 @@ public class Main extends JavaPlugin {
 						if (getMana(p) <= mana.get(p.getUniqueId())) {
 							if (!p.isDead()) {
 								if (p.isSleeping()) {
-									setMana(p, Integer.valueOf(Math.min(getMana(p) + 20 + getManaRegenMap().get(p.getUniqueId()) * 10, mana.get(p.getUniqueId()))));
+									setMana(p, Integer.valueOf(Math.min(getMana(p) + 20 + (int) ((1.0 * getManaRegenMap().get(p.getUniqueId()) / 20.0)) * 10, mana.get(p.getUniqueId()))));
 								} else {
-									setMana(p, Integer.valueOf(Math.min(getMana(p) + getManaRegenMap().get(p.getUniqueId()), mana.get(p.getUniqueId()))));
+									setMana(p, Integer.valueOf(Math.min(getMana(p) + (int) ((1.0 * getManaRegenMap().get(p.getUniqueId()) / 20.0)), mana.get(p.getUniqueId()))));
 								}
 								updateExpBar(p);
 							} else {
@@ -525,15 +535,32 @@ public class Main extends JavaPlugin {
 			maxlevel = getExpMax(p);
 			getExpMap().replace(p.getUniqueId(), newexp);
 			setIntValue(p, "Exp", newexp);
-			int newsp = getSPMap().get(p.getUniqueId()) + 2;
+			int newsp = getSPMap().get(p.getUniqueId()) + 5;
 			getSPMap().replace(p.getUniqueId(), newsp);
 			setIntValue(p, "SP", newsp);
 			Main.msg(p, "&7&m--------------------------");
 			Main.msg(p, "");
 			Main.msg(p, "&7» &e&lLEVEL UP: &6" + (newlevel - 1) + " &f-> &6" + newlevel);
-			Main.msg(p, "&7» &e&lSP INCREASE: &f+2");
+			Main.msg(p, "&7» &e&lSP INCREASE: &f+5");
+			Main.msg(p, "&7» &c&lHP INCREASE: &f+10");
+			Main.msg(p, "&7» &b&lMANA INCREASE: &f+250");
 			Main.msg(p, "");
 			Main.msg(p, "&7&m--------------------------");
+			File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+	        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+	        try {
+	            pData.set("BaseHP", pData.getDouble("BaseHP") + 10);
+	            pData.set("BaseMana", pData.getDouble("BaseMana") + 250);
+	            pData.save(pFile);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+	        int SPM = pData.getInt("SPM");
+	        double manaUpgrade = 0.1;
+	        int newmana = pData.getInt("BaseMana") + (int) (SPM * (manaUpgrade * pData.getInt("BaseMana")));
+			setIntValue(p, "Mana", newmana);
+			getManaMap().replace(p.getUniqueId(), newmana);
+	        Armor.updateSet(p);
 			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 		}
 	}
@@ -577,10 +604,26 @@ public class Main extends JavaPlugin {
             exception.printStackTrace();
         }
 	}
+	public void setListValue(Player p, String text, List<String> list) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+        try {
+            pData.set(text, list);
+            pData.save(pFile);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+	}
 	public static String getValue(Player p, String text) {
 		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         return String.valueOf(pData.get(text));
+	}
+	
+	public static Object getObject(Player p, String text) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+        return pData.get(text);
 	}
 	
 	public static void msg(Player p, String text) {

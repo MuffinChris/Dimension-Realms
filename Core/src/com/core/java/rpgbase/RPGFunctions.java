@@ -16,11 +16,11 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -117,16 +117,15 @@ public class RPGFunctions implements Listener {
 			if (plugin.getPManager().getPList(e.getEntity()) instanceof PlayerList) {
 				List<String> infodmg = new ArrayList<String>();
 				for (Player pl : plugin.getPManager().getPList(e.getEntity()).getPlayers()) {
-					infodmg.add(Main.color("&c" + pl.getName() + "&8: &f" + plugin.getPManager().getPList(e.getEntity()).getDamage(pl) + "\n"));
+					infodmg.add(Main.color("&7" + pl.getName() + "&8: &c" + plugin.getPManager().getPList(e.getEntity()).getDamage(pl) + "\n"));
 				}
-				TextComponent info = new TextComponent("INFO");
+				TextComponent info = new TextComponent(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &8<&cINFO&8>"));
 				//BaseComponent[] info = new ComponentBuilder("INFO").color(ChatColor.RED)
 				//	    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(infodmg.toString()))).create();
 				info.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(infodmg.toString()).create()));
 				Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
 				Bukkit.getServer().broadcastMessage("");
-				p.spigot().sendMessage(info);
-				Bukkit.getServer().broadcast(new TextComponent(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &8<&c" + info + "&8>")));
+				Bukkit.getServer().broadcast(info);
 				e.setDeathMessage("");
 			} else {
 				Main.so("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName());
@@ -222,12 +221,12 @@ public class RPGFunctions implements Listener {
 	        			plugin.getBarManager().getBS(p).setInfo(e, "", BarColor.RED, BarStyle.SOLID, 0.0, false, true);
 	        		}
         		}
-        }.runTaskLater(plugin, 20L);
+        }.runTaskLater(plugin, 40L);
 	}
 	
 	@EventHandler (priority = EventPriority.HIGH)
 	public void bossbarHPInit (EntityDamageByEntityEvent e) {
-		if (e.getDamager() instanceof Player || e.getDamager() instanceof Arrow) {
+		if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
 			if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && e.getEntity().getType() != EntityType.ARMOR_STAND) {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				LivingEntity ent = (LivingEntity) e.getEntity();
@@ -235,7 +234,7 @@ public class RPGFunctions implements Listener {
 				if (e.getDamager() instanceof Player) {
 					p = (Player) e.getDamager();
 				} else {
-					Arrow a = (Arrow) e.getDamager();
+					Projectile a = (Projectile) e.getDamager();
 					if (a.getShooter() instanceof Player) {
 						p = (Player) a.getShooter();
 					} else {
@@ -272,7 +271,7 @@ public class RPGFunctions implements Listener {
 				if (e.getDamager() instanceof Player) {
 					p = (Player) e.getDamager();
 				} else {
-					Arrow a = (Arrow) e.getDamager();
+					Projectile a = (Projectile) e.getDamager();
 					if (a.getShooter() instanceof Player) {
 						p = (Player) a.getShooter();
 					} else {
@@ -319,13 +318,19 @@ public class RPGFunctions implements Listener {
             	pData.set("Mana", 5000);
             }
             if (!pData.isSet("ManaRegen")) {
-            	pData.set("ManaRegen", 2);
+            	pData.set("ManaRegen", 20);
             }
             if (!pData.isSet("Cmana")) {
             	pData.set("Cmana", 0);
             }
+            if (!pData.isSet("BaseHP")) {
+            	pData.set("BaseHP", 200.0);
+            }
+            if (!pData.isSet("BaseMana")) {
+            	pData.set("BaseMana", 5000);
+            }
             if (!pData.isSet("AD")) {
-            	pData.set("AD", 1.0);
+            	pData.set("AD", 0.0);
             }
             if (!pData.isSet("HP")) {
             	pData.set("HP", 0.0);
@@ -363,6 +368,9 @@ public class RPGFunctions implements Listener {
             if (!pData.isSet("SPMR")) {
             	pData.set("SPMR", 0);
             }
+            if (!pData.isSet("Skills")) {
+            	pData.set("Skills", new ArrayList<String>());
+            }
             pData.save(pFile);
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -383,7 +391,7 @@ public class RPGFunctions implements Listener {
         plugin.getAbilities().put(uuid, abs);
         
 		plugin.updateAttackSpeed(e.getPlayer());
-		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pData.getDouble("AD"));
+		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(1.0);
 		e.getPlayer().getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(pData.getDouble("AttackSpeed"));
 		e.getPlayer().getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.8);
 		if (e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() < hp) {
@@ -436,7 +444,7 @@ public class RPGFunctions implements Listener {
 			codex.setItemMeta(meta);
 			p.getInventory().setItem(8, codex);
 			
-			bread.setAmount(12);
+			bread.setAmount(6);
 		}
 		
 		p.getInventory().setItem(4, bread);

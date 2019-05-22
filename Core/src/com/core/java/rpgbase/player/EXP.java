@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.core.java.essentials.Main;
 import com.core.java.rpgbase.entities.PlayerList;
@@ -245,13 +246,17 @@ public class EXP implements Listener {
 			giveExp(pl, -exp);
 		}
 		e.setDroppedExp(0);
-		if (!(e.getEntity() instanceof Player)) {
-			if (plugin.getPManager().getPList().containsKey(e.getEntity())) {
-				plugin.getPManager().getPList().remove(e.getEntity());
+		new BukkitRunnable() {
+			public void run() {
+				if (!(e.getEntity() instanceof Player)) {
+					if (plugin.getPManager().getPList().containsKey(e.getEntity())) {
+						plugin.getPManager().getPList().remove(e.getEntity());
+					}
+				} else {
+					plugin.getPManager().getPList(e.getEntity()).getList().clear();
+				}
 			}
-		} else {
-			plugin.getPManager().getPList(e.getEntity()).getList().clear();
-		}
+		}.runTaskLater(plugin, 10L);
 	}
 	
 	@EventHandler

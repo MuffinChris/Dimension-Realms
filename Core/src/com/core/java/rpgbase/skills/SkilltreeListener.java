@@ -1,10 +1,14 @@
 package com.core.java.rpgbase.skills;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,19 +27,65 @@ public class SkilltreeListener implements Listener {
 	private Main main = Main.getInstance();
 	
 	public double getAdUpgrade(Player p) {
-		return 0.5;
+		return 0.05;
 	}
 	
-	public int getManaUpgrade(Player p) {
-		return 500;
+	public double getManaUpgrade(Player p) {
+		return 0.1;
 	}
 	
-	public int getManaRegenUpgrade(Player p) {
-		return 1;
+	public double getManaRegenUpgrade(Player p) {
+		return 0.2;
 	}
 	
 	public double getHPUpgrade(Player p) {
-		return 5;
+		return 0.05;
+	}
+	
+	public void sendAssassinInv(Player p) {
+		Inventory playerInv = Bukkit.createInventory(null, 54, Main.color("&aAssassin Skill Tree"));
+		ArrayList<String> lore = new ArrayList<>();
+		
+		ItemStack sp = new ItemStack(Material.NETHER_STAR);
+		ItemMeta spMeta = sp.getItemMeta();
+		spMeta.setDisplayName(Main.color("&aRemaining SP: &f" + main.getSPMap().get(p.getUniqueId())));
+		sp.setItemMeta(spMeta);
+		
+		playerInv.setItem(8, sp);
+		
+		if (Main.getObject(p, "Skills") instanceof List<?>) {
+			List<String> skills = (List<String>) (Main.getObject(p, "Skills"));
+			ItemStack mobi = new ItemStack(Material.LEATHER_BOOTS);
+			ItemMeta mobiMeta = mobi.getItemMeta();
+			mobiMeta.setDisplayName(Main.color("&aMobility Skills"));
+			mobiMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			mobi.setItemMeta(mobiMeta);
+			playerInv.setItem(0, mobi);
+			if (skills.toString().contains("Leap")) {
+				ItemStack leap = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
+				ItemMeta leapMeta = leap.getItemMeta();
+				leapMeta.setDisplayName(Main.color("&aLeap"));
+				lore.clear();
+				lore.add(Main.color("&aUNLOCKED"));
+				lore.add(Main.color("&bMana Cost: &f500"));
+				lore.add(Main.color("&fLeap into the air!"));
+				leapMeta.setLore(lore);
+				leap.setItemMeta(leapMeta);
+				playerInv.setItem(9, leap);
+			} else {
+				ItemStack leap = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+				ItemMeta leapMeta = leap.getItemMeta();
+				leapMeta.setDisplayName(Main.color("&cLeap"));
+				lore.clear();
+				lore.add(Main.color("&cLOCKED &8(&cCOST: &f5 SP&8)"));
+				lore.add(Main.color("&bMana Cost: &f500"));
+				lore.add(Main.color("&fLeap into the air!"));
+				leapMeta.setLore(lore);
+				leap.setItemMeta(leapMeta);
+				playerInv.setItem(9, leap);
+			}
+			p.openInventory(playerInv);
+		}
 	}
 	
 	public void sendPlayerInv(Player p) {
@@ -54,21 +104,21 @@ public class SkilltreeListener implements Listener {
 		int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
 		int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
 		
-		double ad = SPAD * getAdUpgrade(p);
-		if (ad >= 100) {
+		double ad = SPAD * getAdUpgrade(p) * 100;
+		//if (ad >= 100) {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
 			ItemMeta swordMeta = sword.getItemMeta();
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad));
-			lore.add(Main.color("&fAttack Damage Maxed Out!"));
+			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad + "%"));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &4" + getAdUpgrade(p) * 100 + "%"));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
 			swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			sword.setItemMeta(swordMeta);
 			playerInv.setItem(11, sword);
-		} else {
+			/* else {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
 			ItemMeta swordMeta = sword.getItemMeta();
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
@@ -81,10 +131,10 @@ public class SkilltreeListener implements Listener {
 			swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			sword.setItemMeta(swordMeta);
 			playerInv.setItem(11, sword);
-		}
+		}*/
 		
-		double hp = SPHP * getHPUpgrade(p);
-		if (hp >= 500) {
+		double hp = SPHP * getHPUpgrade(p) * 100;
+		/*if (hp >= 500) {
 			ItemStack chest = new ItemStack(Material.DIAMOND_CHESTPLATE);
 			ItemMeta chestMeta = chest.getItemMeta();
 			chestMeta.setDisplayName(Main.color("&cHealth Bonus Upgrade"));
@@ -97,23 +147,23 @@ public class SkilltreeListener implements Listener {
 			chestMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			chest.setItemMeta(chestMeta);
 			playerInv.setItem(12, chest);
-		} else {
+		} else {*/
 			ItemStack chest = new ItemStack(Material.DIAMOND_CHESTPLATE);
 			ItemMeta chestMeta = chest.getItemMeta();
 			chestMeta.setDisplayName(Main.color("&cHealth Bonus Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp));
-			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &c" + getHPUpgrade(p)));
+			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp + "%"));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &c" + getHPUpgrade(p) * 100 + "%"));
 			lore.add(Main.color(""));
 			chestMeta.setLore(lore);
 			chestMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			chest.setItemMeta(chestMeta);
 			playerInv.setItem(12, chest);
-		}
+		//}
 		
-		int maxmana = SPM * getManaUpgrade(p);
-		if (maxmana >= 100000) {
+		double maxmana = SPM * getManaUpgrade(p) * 100;
+		/*if (maxmana >= 100000) {
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
@@ -125,22 +175,22 @@ public class SkilltreeListener implements Listener {
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
 			playerInv.setItem(14, hs);
-		} else {
+		} else {*/
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana));
-			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p)));
+			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana + "%"));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p) * 100 + "%"));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
 			playerInv.setItem(14, hs);
-		}
+		//}
 		
-		int manaregen = SPMR * getManaRegenUpgrade(p);
-		if (manaregen * 20 >= 2000) {
+		double manaregen = SPMR * getManaRegenUpgrade(p) * 100;
+		/*if (manaregen * 20 >= 2000) {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
 			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
@@ -152,19 +202,19 @@ public class SkilltreeListener implements Listener {
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
 			playerInv.setItem(15, hs);
-		} else {
-			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
-			ItemMeta hsMeta = hs.getItemMeta();
-			hsMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
+		} else {*/
+			ItemStack mr = new ItemStack(Material.LIGHT_BLUE_DYE);
+			ItemMeta mrMeta = mr.getItemMeta();
+			mrMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen * 20 + "/s"));
-			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p) * 20));
+			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen + "%"));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p) * 100 + "%"));
 			lore.add(Main.color(""));
-			hsMeta.setLore(lore);
-			hs.setItemMeta(hsMeta);
-			playerInv.setItem(15, hs);
-		}
+			mrMeta.setLore(lore);
+			mr.setItemMeta(hsMeta);
+			playerInv.setItem(15, mr);
+		//}
 		p.openInventory(playerInv);
 	}
 	
@@ -199,6 +249,39 @@ public class SkilltreeListener implements Listener {
 	public void playerUpgradeClick (InventoryClickEvent e) {
 		if (e.getInventory() != null) {
 			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("Assassin Skill Tree")) {
+					if (e.getCurrentItem() != null) {
+						if (e.getCurrentItem().getType() != null) {
+							if (e.getWhoClicked() instanceof Player) {
+								Player p = (Player) e.getWhoClicked();
+								if (Main.getObject(p, "Skills") instanceof List<?>) {
+									List<String> skills = (List<String>) (Main.getObject(p, "Skills"));
+									if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Leap")) {
+										if (skills.contains("Leap")) {
+											Main.msg(p, "&cSkill already unlocked!");
+										} else {
+											int sp = main.getSPMap().get(p.getUniqueId());
+											if (sp >= 5) {
+												int newsp = sp - 5;
+												main.setIntValue(p, "SP", newsp);
+											    main.getSPMap().replace(p.getUniqueId(), newsp);
+											    skills.add("Leap");
+											    main.setListValue(p, "Skills", skills);
+											    if (e.getWhoClicked() instanceof Player) {
+													sendAssassinInv((Player) e.getWhoClicked());
+												}
+											} else {
+												Main.msg(p, "&cNot enough skillpoints!");
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					e.setCancelled(true);
+					return;
+				}
 				if (e.getView().getTitle().contains("PLAYER UPGRADES")) {
 					if (e.getCurrentItem() != null) {
 						if (e.getCurrentItem().getType() != null) {
@@ -211,11 +294,11 @@ public class SkilltreeListener implements Listener {
 								if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										if (getAdUpgrade(p) * SPAD < 100) {
+										//if (getAdUpgrade(p) * SPAD < 100) {
 											SPAD++;
 											main.setIntValue(p, "SPAD", SPAD);
 											
-											double newad = SPAD * getAdUpgrade(p) + 1;
+											double newad = SPAD * getAdUpgrade(p);
 											main.setDoubleValue(p, "AD", newad);
 											
 											int newsp = sp - 1;
@@ -224,16 +307,16 @@ public class SkilltreeListener implements Listener {
 										    main.getAdMap().replace(p.getUniqueId(), newad);
 										    main.getSPMap().replace(p.getUniqueId(), newsp);
 										    
-										    p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
+										    //p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
 											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) + " AD");
+										    Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) * 100 + "% AD");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										} else {
+										/*} else {
 											Main.msg(p, "&cThis upgrade is maxed out!");
-										}
+										}*/
 									} else {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
@@ -241,7 +324,7 @@ public class SkilltreeListener implements Listener {
 								if (e.getCurrentItem().getType() == Material.DIAMOND_CHESTPLATE) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										if (getHPUpgrade(p) * SPHP < 500) {
+										//if (getHPUpgrade(p) * SPHP < 500) {
 											SPHP++;
 											main.setIntValue(p, "SPHP", SPHP);
 											
@@ -252,15 +335,15 @@ public class SkilltreeListener implements Listener {
 											main.setIntValue(p, "SP", newsp);
 										    main.getSPMap().replace(p.getUniqueId(), newsp);
 											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) + " HP");
+										    Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) * 100 + "% HP");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
 											Armor.updateSet(p);
-										} else {
+										/*} else {
 											Main.msg(p, "&cThis upgrade is maxed out!");
-										}
+										}*/
 									} else {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
@@ -268,10 +351,13 @@ public class SkilltreeListener implements Listener {
 							if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										if (getManaUpgrade(p) * SPM < 500000) {
+										//if (getManaUpgrade(p) * SPM < 500000) {
 											SPM++;
 											main.setIntValue(p, "SPM", SPM);
-											int newmana = SPM * getManaUpgrade(p) + 5000;
+											File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+									        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+									        
+											int newmana = pData.getInt("BaseMana") + (int) (SPM * (getManaUpgrade(p) * pData.getInt("BaseMana")));
 											main.setIntValue(p, "Mana", newmana);
 											
 											int newsp = sp - 1;
@@ -280,14 +366,14 @@ public class SkilltreeListener implements Listener {
 										    main.getManaMap().replace(p.getUniqueId(), newmana);
 										    main.getSPMap().replace(p.getUniqueId(), newsp);
 											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) + " Max Mana");
+										    Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) * 100 + "% Max Mana");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										} else {
+										/*} else {
 											Main.msg(p, "&cThis upgrade is maxed out!");
-										}
+										}*/
 									} else {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
@@ -295,10 +381,11 @@ public class SkilltreeListener implements Listener {
 							if (e.getCurrentItem().getType() == Material.LIGHT_BLUE_DYE) {
 									int sp = main.getSPMap().get(p.getUniqueId());
 									if (sp >= 1) {
-										if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
+										//if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
 											SPMR++;
+											// BROKEN AS OF UPDATE
 											main.setIntValue(p, "SPMR", SPMR);
-											int newmanar = SPMR * getManaRegenUpgrade(p) + 1;
+											int newmanar = 20 * (int) ((SPMR * getManaRegenUpgrade(p) * 20));
 											main.setIntValue(p, "ManaRegen", newmanar);
 											
 											int newsp = sp - 1;
@@ -307,14 +394,14 @@ public class SkilltreeListener implements Listener {
 										    main.getManaRegenMap().replace(p.getUniqueId(), newmanar);
 										    main.getSPMap().replace(p.getUniqueId(), newsp);
 											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p) * 20) + " Mana Regen");
+										    Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p) * 100) + "% Mana Regen");
 										    Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										} else {
+										/*} else {
 											Main.msg(p, "&cThis upgrade is maxed out!");
-										}
+										}*/
 									} else {
 										Main.msg(p, "&cNot enough Skillpoints!");
 									}
@@ -353,7 +440,9 @@ public class SkilltreeListener implements Listener {
 							}
 							if (e.getCurrentItem().getType() == Material.DIAMOND_SWORD) {
 								e.getWhoClicked().closeInventory();
-								//e.getWhoClicked().openInventory(asInv);
+								if (e.getWhoClicked() instanceof Player) {
+									sendAssassinInv((Player) e.getWhoClicked());
+								}
 								return;
 							}
 						}
@@ -366,6 +455,14 @@ public class SkilltreeListener implements Listener {
 		if (e.getClickedInventory() != null) {
 			if (e.getView().getTitle() != null) {
 				if (e.getView().getTitle().contains("SKILLPOINTS MENU")) {
+					e.setCancelled(true);
+					return;
+				}
+			}
+		}
+		if (e.getClickedInventory() != null) {
+			if (e.getView().getTitle() != null) {
+				if (e.getView().getTitle().contains("ASSASSIN")) {
 					e.setCancelled(true);
 					return;
 				}

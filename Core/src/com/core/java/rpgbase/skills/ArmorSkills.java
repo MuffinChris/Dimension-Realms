@@ -100,7 +100,6 @@ public class ArmorSkills implements Listener {
 												double handdmg = main.getAdMap().get(e.getPlayer().getUniqueId()) * 1.25 + 20;
 												handdmg += Weapons.getWeaponAttackDamage(e.getPlayer()) * 1.25;
 												spellDamage(ent, e.getPlayer(), handdmg);
-												//ent.setLastDamageCause(new EntityDamageEvent(e.getPlayer(), DamageCause.ENTITY_ATTACK, handdmg));
 												entities.add(ent);
 												BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
 												ent.getWorld().spawnParticle(Particle.BLOCK_CRACK, ent.getLocation(), 100, 1, 1, 1, blood);

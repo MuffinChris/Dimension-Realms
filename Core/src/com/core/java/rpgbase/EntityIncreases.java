@@ -7,14 +7,28 @@ import org.bukkit.ChatColor;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.EvokerFangs;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -48,31 +62,46 @@ public class EntityIncreases implements Listener {
 				}
 			}
 			if (e.getCause() == DamageCause.STARVATION) {
-				e.setDamage(hp * 0.01);
+				e.setDamage(hp * 0.05);
 			}
 			if (e.getCause() == DamageCause.DROWNING) {
-				e.setDamage(hp * 0.01);
+				e.setDamage(hp * 0.05);
 			}
 			if (e.getCause() == DamageCause.WITHER) {
 				e.setDamage(hp / 30.0);
 			}
 			if (e.getCause() == DamageCause.FIRE_TICK) {
-				e.setDamage(10);
+				e.setDamage(hp / 40.0);
+			}
+			if (e.getCause() == DamageCause.FIRE) {
+				e.setDamage(hp / 40.0);
 			}
 			if (e.getCause() == DamageCause.LAVA) {
 				e.setDamage(hp * 0.15);
 			}
 			if (e.getCause() == DamageCause.ENTITY_EXPLOSION) {
-				e.setDamage(e.getDamage() * 5);
+				e.setDamage(hp/6.0 + e.getDamage() * 3.0);
 			}
 			if (e.getCause() == DamageCause.BLOCK_EXPLOSION) {
-				e.setDamage(e.getDamage() * 4);
+				e.setDamage(hp/6.0 + e.getDamage() * 3.0);
 			}
 			if (e.getCause() == DamageCause.LIGHTNING) {
-				e.setDamage(50);
+				e.setDamage(hp / 4.0);
 			}
 			if (e.getCause() == DamageCause.CONTACT) {
-				e.setDamage(10);
+				e.setDamage(hp / 40.0);
+			}
+			if (e.getCause() == DamageCause.MELTING) {
+				e.setDamage(hp / 20.0);
+			}
+			if (e.getCause() == DamageCause.FALLING_BLOCK) {
+				e.setDamage(hp / 20.0);
+			}
+			if (e.getCause() == DamageCause.HOT_FLOOR) {
+				e.setDamage(hp / 20.0);
+			}
+			if (e.getCause() == DamageCause.DRYOUT) {
+				e.setDamage(hp / 20.0);
 			}
 		}
 	}
@@ -90,6 +119,21 @@ public class EntityIncreases implements Listener {
 		return ents;
 	}
 	
+	@EventHandler (priority = EventPriority.LOWEST)
+	public void entityDamage (EntityDamageByEntityEvent e) {
+		int level = 1;
+		Entity ent = e.getDamager();
+		if (ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+			level = Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+",""));
+		}
+		if (e.getDamager() instanceof IronGolem) {
+			e.setDamage(30 + 3 * level);
+		}
+		if (e.getDamager() instanceof Slime || e.getDamager() instanceof MagmaCube) {
+			e.setDamage(10 + 1.5 * level);
+		}
+	}
+	/*
 	@EventHandler
 	public void ironGolemSlam (EntityDamageEvent e) {
 		if (e.getEntity() instanceof Entity) {
@@ -109,7 +153,7 @@ public class EntityIncreases implements Listener {
 										level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
 									}
 									for (LivingEntity ent : getNearbyEnts(golem, 7, 5, 7)) {
-										ent.damage(level * 0.5 + 20);
+										ent.damage(level * 3.0 + 20);
 									}
 									golem.getWorld().spawnParticle(Particle.TOTEM, golem.getLocation(), 100, 3, 0.1, 3);
 									golem.getWorld().playSound(golem.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1.0F, 1.0F);
@@ -120,7 +164,7 @@ public class EntityIncreases implements Listener {
 				}
 			}
 		}
-	}
+	}*/
 	
 	@EventHandler
 	public void entityInfoSpawn (EntityAddToWorldEvent e) {
@@ -148,11 +192,13 @@ public class EntityIncreases implements Listener {
 						}
 						int level = 0;
 						int terms = 0;
-						for (Entity en : ent.getNearbyEntities(64, 32, 64)) {
-							if (en instanceof Player) {
-								Player p = (Player) en;
-								terms++;
-								level+=Main.getInstance().getLevelMap().get(p.getUniqueId());
+						if (ent.getNearbyEntities(64, 32, 64) instanceof List<?>) {
+							for (Entity en : ent.getNearbyEntities(64, 32, 64)) {
+								if (en instanceof Player) {
+									Player p = (Player) en;
+									terms++;
+									level+=Main.getInstance().getLevelMap().get(p.getUniqueId());
+								}
 							}
 						}
 						if (terms > 0) {
@@ -162,34 +208,34 @@ public class EntityIncreases implements Listener {
 							level = 1;
 						}
 						double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-						double hpmod = (8 * (hp/20.0)) * level * (Math.random() * 0.2 + 1);
-						double admod = 0.5 * level;
-						double adpmod = 1.0;
-						if (ent.getType() == EntityType.WOLF) {
-							adpmod = 0.8;
+						double hpper = level * hp * 0.10;
+						double hpmod = 20 + hpper * (Math.random() * 0.2 + 1) * 20;
+						//double hpmod = (10 * (hp/20.0)) * level * (Math.random() * 0.2 + 1);
+						double admod = 20 + 0.5 * level;
+						if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+							double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
+							admod = ad * 0.1 * level * 10;
 						}
 						if (ent.getType() == EntityType.IRON_GOLEM) {
 							hpmod*=2;
 						}
 						if (ent.getType() == EntityType.SLIME || ent.getType() == EntityType.MAGMA_CUBE) {
-							hpmod = (50 * (hp/20.0)) * level;
-							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
-							ent.setHealth(hp * 4 + hpmod);
+							hpmod*=1.25;
+							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hpmod);
+							ent.setHealth(hpmod);
 						}
 						if (!slime) {
-							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
-							ent.setHealth(hp * 4 + hpmod);
+							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hpmod);
+							ent.setHealth(hpmod);
 							if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
-								double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(adpmod * ((ad/4.0) * admod));
+								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(admod);
 							}
 							ent.setCustomName(Main.color("&8[&6" + level + "&8] &f" + ent.getName()));
 							ent.setCustomNameVisible(true);
 						} else {
-							int slimelevel = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
-							hpmod = (50 * (hp/20.0)) * slimelevel;
-							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 4 + hpmod);
-							ent.setHealth(hp * 4 + hpmod);
+							hpmod*=1.25;
+							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hpmod);
+							ent.setHealth(hpmod);
 						}
 						/*
 						if (ent.getType() != null) {

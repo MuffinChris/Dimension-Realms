@@ -1,5 +1,7 @@
 package com.core.java.essentials.commands;
 
+import java.text.DecimalFormat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -100,10 +102,9 @@ public class ExpCommand implements CommandExecutor {
 						if (Bukkit.getPlayer(args[0]) instanceof Player) {
 							Player target = (Player) Bukkit.getPlayer(args[0]);
 							if (Integer.valueOf(args[1]) instanceof Integer) {
-								int newexp = Integer.valueOf(args[1]) + main.getExp(target);
-								main.setIntValue(target, "Exp", newexp);
-								main.getLevelMap().replace(target.getUniqueId(), newexp);
-								Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + newexp);
+								//int newexp = Integer.valueOf(args[1]) + main.getExp(target);
+								giveExp(target, Integer.valueOf(args[1]), 100);
+								Main.msg(p, "&eAdded " + args[1] + " EXP to &6" + target.getName());
 								main.levelup(target);
 							} else {
 								Main.msg(p, "&cInvalid Value");
@@ -212,6 +213,14 @@ public class ExpCommand implements CommandExecutor {
 			}
 		}
 		return false;
+	}
+	private Main plugin = Main.getInstance();
+	public void giveExp (Player p, int exp, double percent) {
+		DecimalFormat df = new DecimalFormat("#.##");
+		Main.msg(p, "&7[+" + exp + " &7(" + df.format(percent * 100) + "%) XP]");
+		plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+		plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
+		plugin.levelup(p);
 	}
 		
 }

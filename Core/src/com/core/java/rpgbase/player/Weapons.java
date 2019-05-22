@@ -13,11 +13,19 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.EvokerFangs;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Trident;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,6 +36,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -371,8 +380,11 @@ public class Weapons  implements Listener {
 							p.getInventory().getItemInMainHand().setAmount(0);
 							p.getInventory().setItemInMainHand(nItem);
 						} else if (s.contains("crossbow")) {
-							double ogdmg = 60;
-							ItemStack it = new ItemStack(Material.CROSSBOW);
+							double ogdmg = 70;
+							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+							nmsStack.setTag(itemTagC);
+							ItemStack it = CraftItemStack.asBukkitCopy(nmsStack);
 							ItemMeta meta = it.getItemMeta();
 							List<String> lore = new ArrayList<String>();
 							lore.add(Main.color("&8« Common &7Tier Weapon &8»"));
@@ -387,7 +399,10 @@ public class Weapons  implements Listener {
 							p.getInventory().setItemInMainHand(it);
 						} else if (s.contains("bow")) {
 							double ogdmg = 50;
-							ItemStack it = new ItemStack(Material.BOW);
+							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
+							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+							nmsStack.setTag(itemTagC);
+							ItemStack it = CraftItemStack.asBukkitCopy(nmsStack);
 							ItemMeta meta = it.getItemMeta();
 							List<String> lore = new ArrayList<String>();
 							lore.add(Main.color("&8« Common &7Tier Weapon &8»"));
@@ -399,7 +414,7 @@ public class Weapons  implements Listener {
 							((Damageable) meta).setDamage(d);
 							it.setItemMeta(meta);
 							p.getInventory().getItemInMainHand().setAmount(0);
-							p.getInventory().setItemInMainHand(it); 
+							p.getInventory().setItemInMainHand(it);
 						} else if (s.contains("trident")) {
 							double ogdmg = 150;
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
@@ -457,7 +472,7 @@ public class Weapons  implements Listener {
 					ad = ChatColor.stripColor(ad);
 					ad = ad.replace("Damage: ", "");
 					if (Double.valueOf(ad) instanceof Double) {
-						return Double.valueOf(ad);
+						return Double.valueOf(ad) * (1 + Main.getInstance().getAdMap().get(p.getUniqueId()));
 					}
 				}
 			}
@@ -502,21 +517,55 @@ public class Weapons  implements Listener {
 	
 	@EventHandler (priority = EventPriority.LOW)
 	public void bowDmg (EntityDamageByEntityEvent e) {
-		if (e.getDamage() <= 0.0) {
-			return;
-		}
-		if (e.getDamager() instanceof Arrow) {
-			Arrow a = (Arrow) e.getDamager();
+		if (e.getDamager() instanceof Projectile) {
+			Projectile a = (Projectile) e.getDamager();
 			if (a.getShooter() instanceof Player) {
-				double dmg = Double.valueOf(a.getCustomName());
-				e.setDamage(dmg);
+				if (a.getCustomName() instanceof String) {
+					double dmg = Double.valueOf(a.getCustomName());
+					e.setDamage(dmg);
+				}
 			} else if (a.getShooter() instanceof Entity) {
 				Entity ent = (Entity) a.getShooter();
 				int level = 1;
 				if (ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 					level = Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+",""));
 				}
-				e.setDamage(20 + 0.35 * level);
+				double mod = 1.0;
+				if (e.getDamager() instanceof ShulkerBullet) {
+					mod = 1.0;
+				}
+				if (e.getDamager() instanceof Fireball) {
+					mod = 0.7;
+				}
+				if (e.getDamager() instanceof SmallFireball) {
+					mod = 0.8;
+					e.getEntity().setFireTicks(100);
+				}
+				if (e.getDamager() instanceof DragonFireball) {
+					mod = 0.7;
+				}
+				if (e.getDamager() instanceof WitherSkull) {
+					mod = 0.5;
+				}
+				e.setDamage((20 + 0.2 * e.getDamage() * level) * mod);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void projDmgSetup (ProjectileLaunchEvent e) {
+		if (e.getEntity() instanceof Trident) {
+			Trident trident = (Trident) e.getEntity();
+			if (trident.getShooter() instanceof Player) {
+				Player p = (Player) trident.getShooter();
+				double dmg = getWeaponAttackDamage(p);
+				ItemStack i = p.getInventory().getItemInMainHand();
+				if (i.containsEnchantment(Enchantment.IMPALING)) {
+					if (e.getEntity().getType() == EntityType.PLAYER || e.getEntity().getType() == EntityType.GUARDIAN || e.getEntity().getType() == EntityType.ELDER_GUARDIAN || e.getEntity().getType() == EntityType.DOLPHIN || e.getEntity().getType() == EntityType.COD || e.getEntity().getType() == EntityType.PUFFERFISH || e.getEntity().getType() == EntityType.TROPICAL_FISH || e.getEntity().getType() == EntityType.SALMON || e.getEntity().getType() == EntityType.SQUID || e.getEntity().getType() == EntityType.TURTLE) {
+						dmg+=(10 * i.getEnchantmentLevel(Enchantment.IMPALING));
+					}
+				}
+				e.getEntity().setCustomName(String.valueOf(dmg));
 			}
 		}
 	}
