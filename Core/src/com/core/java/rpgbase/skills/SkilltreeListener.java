@@ -1,6 +1,7 @@
 package com.core.java.rpgbase.skills;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class SkilltreeListener implements Listener {
 		return 0.1;
 	}
 	
-	public double getManaRegenUpgrade(Player p) {
-		return 0.2;
+	public int getManaRegenUpgrade(Player p) {
+		return 5;
 	}
 	
 	public double getHPUpgrade(Player p) {
@@ -89,8 +90,9 @@ public class SkilltreeListener implements Listener {
 	}
 	
 	public void sendPlayerInv(Player p) {
+		DecimalFormat dF = new DecimalFormat("#.##");
 		Inventory playerInv = Bukkit.createInventory(null, 27, Main.color("&9&lPLAYER UPGRADES"));
-		ArrayList<String> lore = new ArrayList<>();
+		ArrayList<String> lore;
 		
 		ItemStack sp = new ItemStack(Material.NETHER_STAR);
 		ItemMeta spMeta = sp.getItemMeta();
@@ -105,6 +107,7 @@ public class SkilltreeListener implements Listener {
 		int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
 		
 		double ad = SPAD * getAdUpgrade(p) * 100;
+		ad = Double.valueOf(dF.format(ad));
 		//if (ad >= 100) {
 			ItemStack sword = new ItemStack(Material.IRON_SWORD);
 			ItemMeta swordMeta = sword.getItemMeta();
@@ -113,6 +116,7 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color(""));
 			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &4" + getAdUpgrade(p) * 100 + "%"));
+			lore.add(Main.color("&fRight-Click to apply 5 points."));
 			lore.add(Main.color(""));
 			swordMeta.setLore(lore);
 			swordMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -134,6 +138,7 @@ public class SkilltreeListener implements Listener {
 		}*/
 		
 		double hp = SPHP * getHPUpgrade(p) * 100;
+		hp = Double.valueOf(dF.format(hp));
 		/*if (hp >= 500) {
 			ItemStack chest = new ItemStack(Material.DIAMOND_CHESTPLATE);
 			ItemMeta chestMeta = chest.getItemMeta();
@@ -155,6 +160,7 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color(""));
 			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &c" + getHPUpgrade(p) * 100 + "%"));
+			lore.add(Main.color("&fRight-Click to apply 5 points."));
 			lore.add(Main.color(""));
 			chestMeta.setLore(lore);
 			chestMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -163,6 +169,7 @@ public class SkilltreeListener implements Listener {
 		//}
 		
 		double maxmana = SPM * getManaUpgrade(p) * 100;
+		maxmana = Double.valueOf(dF.format(maxmana));
 		/*if (maxmana >= 100000) {
 			ItemStack hs = new ItemStack(Material.HEART_OF_THE_SEA);
 			ItemMeta hsMeta = hs.getItemMeta();
@@ -183,13 +190,14 @@ public class SkilltreeListener implements Listener {
 			lore.add(Main.color(""));
 			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p) * 100 + "%"));
+			lore.add(Main.color("&fRight-Click to apply 5 points."));
 			lore.add(Main.color(""));
 			hsMeta.setLore(lore);
 			hs.setItemMeta(hsMeta);
 			playerInv.setItem(14, hs);
 		//}
 		
-		double manaregen = SPMR * getManaRegenUpgrade(p) * 100;
+		double manaregen = SPMR * getManaRegenUpgrade(p);
 		/*if (manaregen * 20 >= 2000) {
 			ItemStack hs = new ItemStack(Material.LIGHT_BLUE_DYE);
 			ItemMeta hsMeta = hs.getItemMeta();
@@ -208,11 +216,12 @@ public class SkilltreeListener implements Listener {
 			mrMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
-			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen + "%"));
-			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p) * 100 + "%"));
+			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen));
+			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p)));
+			lore.add(Main.color("&fRight-Click to apply 5 points."));
 			lore.add(Main.color(""));
 			mrMeta.setLore(lore);
-			mr.setItemMeta(hsMeta);
+			mr.setItemMeta(mrMeta);
 			playerInv.setItem(15, mr);
 		//}
 		p.openInventory(playerInv);
@@ -291,119 +300,237 @@ public class SkilltreeListener implements Listener {
 								int SPHP = Integer.valueOf(Main.getValue(p, "SPHP"));
 								int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
 								int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
-								if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
-									int sp = main.getSPMap().get(p.getUniqueId());
-									if (sp >= 1) {
-										//if (getAdUpgrade(p) * SPAD < 100) {
+								if (e.getClick().isLeftClick()) {
+									if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 1) {
+											//if (getAdUpgrade(p) * SPAD < 100) {
 											SPAD++;
 											main.setIntValue(p, "SPAD", SPAD);
-											
+
 											double newad = SPAD * getAdUpgrade(p);
 											main.setDoubleValue(p, "AD", newad);
-											
+
 											int newsp = sp - 1;
 											main.setIntValue(p, "SP", newsp);
-											
-										    main.getAdMap().replace(p.getUniqueId(), newad);
-										    main.getSPMap().replace(p.getUniqueId(), newsp);
-										    
-										    //p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
-											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) * 100 + "% AD");
-										    Main.msg(p, "&aRemaining SP: &f" + newsp);
+
+											main.getAdMap().replace(p.getUniqueId(), newad);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											//p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) * 100 + "% AD");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										/*} else {
-											Main.msg(p, "&cThis upgrade is maxed out!");
-										}*/
-									} else {
-										Main.msg(p, "&cNot enough Skillpoints!");
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
 									}
-								}
-								if (e.getCurrentItem().getType() == Material.DIAMOND_CHESTPLATE) {
-									int sp = main.getSPMap().get(p.getUniqueId());
-									if (sp >= 1) {
-										//if (getHPUpgrade(p) * SPHP < 500) {
+									if (e.getCurrentItem().getType() == Material.DIAMOND_CHESTPLATE) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 1) {
+											//if (getHPUpgrade(p) * SPHP < 500) {
 											SPHP++;
 											main.setIntValue(p, "SPHP", SPHP);
-											
+
 											double newhp = SPHP * getHPUpgrade(p);
 											main.setDoubleValue(p, "HP", newhp);
-											
+
 											int newsp = sp - 1;
 											main.setIntValue(p, "SP", newsp);
-										    main.getSPMap().replace(p.getUniqueId(), newsp);
-											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) * 100 + "% HP");
-										    Main.msg(p, "&aRemaining SP: &f" + newsp);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) * 100 + "% HP");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
 											Armor.updateSet(p);
-										/*} else {
-											Main.msg(p, "&cThis upgrade is maxed out!");
-										}*/
-									} else {
-										Main.msg(p, "&cNot enough Skillpoints!");
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
 									}
-							}
-							if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
-									int sp = main.getSPMap().get(p.getUniqueId());
-									if (sp >= 1) {
-										//if (getManaUpgrade(p) * SPM < 500000) {
+									if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 1) {
+											//if (getManaUpgrade(p) * SPM < 500000) {
 											SPM++;
 											main.setIntValue(p, "SPM", SPM);
 											File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
-									        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
-									        
+											FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+
 											int newmana = pData.getInt("BaseMana") + (int) (SPM * (getManaUpgrade(p) * pData.getInt("BaseMana")));
 											main.setIntValue(p, "Mana", newmana);
-											
+
 											int newsp = sp - 1;
 											main.setIntValue(p, "SP", newsp);
-											
-										    main.getManaMap().replace(p.getUniqueId(), newmana);
-										    main.getSPMap().replace(p.getUniqueId(), newsp);
-											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) * 100 + "% Max Mana");
-										    Main.msg(p, "&aRemaining SP: &f" + newsp);
+
+											main.getManaMap().replace(p.getUniqueId(), newmana);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) * 100 + "% Max Mana");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										/*} else {
-											Main.msg(p, "&cThis upgrade is maxed out!");
-										}*/
-									} else {
-										Main.msg(p, "&cNot enough Skillpoints!");
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
 									}
-							}
-							if (e.getCurrentItem().getType() == Material.LIGHT_BLUE_DYE) {
-									int sp = main.getSPMap().get(p.getUniqueId());
-									if (sp >= 1) {
-										//if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
+									if (e.getCurrentItem().getType() == Material.LIGHT_BLUE_DYE) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 1) {
+											//if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
 											SPMR++;
 											// BROKEN AS OF UPDATE
 											main.setIntValue(p, "SPMR", SPMR);
-											int newmanar = 20 * (int) ((SPMR * getManaRegenUpgrade(p) * 20));
+											int newmanar = (SPMR * getManaRegenUpgrade(p) + 20);
 											main.setIntValue(p, "ManaRegen", newmanar);
-											
+
 											int newsp = sp - 1;
 											main.setIntValue(p, "SP", newsp);
-											
-										    main.getManaRegenMap().replace(p.getUniqueId(), newmanar);
-										    main.getSPMap().replace(p.getUniqueId(), newsp);
-											
-										    Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p) * 100) + "% Mana Regen");
-										    Main.msg(p, "&aRemaining SP: &f" + newsp);
+
+											main.getManaRegenMap().replace(p.getUniqueId(), newmanar);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p)) + " Mana Regen");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
 											if (e.getWhoClicked() instanceof Player) {
 												sendPlayerInv((Player) e.getWhoClicked());
 											}
-										/*} else {
-											Main.msg(p, "&cThis upgrade is maxed out!");
-										}*/
-									} else {
-										Main.msg(p, "&cNot enough Skillpoints!");
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
+									}
+								}
+								if (e.getClick().isRightClick()) {
+									if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 5) {
+											//if (getAdUpgrade(p) * SPAD < 100) {
+											SPAD+=5;
+											main.setIntValue(p, "SPAD", SPAD);
+
+											double newad = SPAD * getAdUpgrade(p);
+											main.setDoubleValue(p, "AD", newad);
+
+											int newsp = sp - 5;
+											main.setIntValue(p, "SP", newsp);
+
+											main.getAdMap().replace(p.getUniqueId(), newad);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											//p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(newad);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getAdUpgrade(p) * 100 + "% AD");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
+											if (e.getWhoClicked() instanceof Player) {
+												sendPlayerInv((Player) e.getWhoClicked());
+											}
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
+									}
+									if (e.getCurrentItem().getType() == Material.DIAMOND_CHESTPLATE) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 5) {
+											//if (getHPUpgrade(p) * SPHP < 500) {
+											SPHP+=5;
+											main.setIntValue(p, "SPHP", SPHP);
+
+											double newhp = SPHP * getHPUpgrade(p);
+											main.setDoubleValue(p, "HP", newhp);
+
+											int newsp = sp - 5;
+											main.setIntValue(p, "SP", newsp);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getHPUpgrade(p) * 100 + "% HP");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
+											if (e.getWhoClicked() instanceof Player) {
+												sendPlayerInv((Player) e.getWhoClicked());
+											}
+											Armor.updateSet(p);
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
+									}
+									if (e.getCurrentItem().getType() == Material.HEART_OF_THE_SEA) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 5) {
+											//if (getManaUpgrade(p) * SPM < 500000) {
+											SPM+=5;
+											main.setIntValue(p, "SPM", SPM);
+											File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+											FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+
+											int newmana = pData.getInt("BaseMana") + (int) (SPM * (getManaUpgrade(p) * pData.getInt("BaseMana")));
+											main.setIntValue(p, "Mana", newmana);
+
+											int newsp = sp - 5;
+											main.setIntValue(p, "SP", newsp);
+
+											main.getManaMap().replace(p.getUniqueId(), newmana);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + getManaUpgrade(p) * 100 + "% Max Mana");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
+											if (e.getWhoClicked() instanceof Player) {
+												sendPlayerInv((Player) e.getWhoClicked());
+											}
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
+									}
+									if (e.getCurrentItem().getType() == Material.LIGHT_BLUE_DYE) {
+										int sp = main.getSPMap().get(p.getUniqueId());
+										if (sp >= 5) {
+											//if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
+											SPMR+=5;
+											main.setIntValue(p, "SPMR", SPMR);
+											int newmanar = (SPMR * getManaRegenUpgrade(p) + 20);
+											main.setIntValue(p, "ManaRegen", newmanar);
+
+											int newsp = sp - 5;
+											main.setIntValue(p, "SP", newsp);
+
+											main.getManaRegenMap().replace(p.getUniqueId(), newmanar);
+											main.getSPMap().replace(p.getUniqueId(), newsp);
+
+											Main.msg(p, "&aUpgrade Successful: &f+" + (getManaRegenUpgrade(p)) + " Mana Regen");
+											Main.msg(p, "&aRemaining SP: &f" + newsp);
+											if (e.getWhoClicked() instanceof Player) {
+												sendPlayerInv((Player) e.getWhoClicked());
+											}
+											/*} else {
+												Main.msg(p, "&cThis upgrade is maxed out!");
+											}*/
+										} else {
+											Main.msg(p, "&cNot enough Skillpoints!");
+										}
 									}
 								}
 							}

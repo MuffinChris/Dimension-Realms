@@ -30,7 +30,7 @@ public class EconCommands implements CommandExecutor {
 						}
 					}
 					
-					Main.msg(p, "&8» &e&lYour Balance: &f" + balance);
+					Main.msg(p, "&8Â« &e&lYour Balance: &f" + balance);
 				} else {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
 						Player target = Bukkit.getPlayer(args[0]);
@@ -46,7 +46,7 @@ public class EconCommands implements CommandExecutor {
 							}
 						}
 						
-						Main.msg(p, "&8» &e&l" + target.getName() + "'s Balance: &f" + balance);
+						Main.msg(p, "&8Â« &e&l" + target.getName() + "'s Balance: &f" + balance);
 					} else {
 						Main.msg(p, "&cInvalid Player.");
 					}
@@ -68,7 +68,7 @@ public class EconCommands implements CommandExecutor {
 						}
 					}
 					
-					Main.so("&8» &e&l" + target.getName() + "'s Balance: &f" + balance);
+					Main.so("&8Â« &e&l" + target.getName() + "'s Balance: &f" + balance);
 				} else {
 					Main.so("&cInvalid Player.");
 				}

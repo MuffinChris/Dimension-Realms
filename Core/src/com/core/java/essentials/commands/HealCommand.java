@@ -43,7 +43,7 @@ public class HealCommand implements CommandExecutor {
 					Main.msg(p, "Usage: /heal <player>");
 				}
 			} else {
-				Main.msg(p, "&cNo permission.");
+				Main.msg(p, Main.getInstance().noperm);
 			}
 		} else {
 			if (args.length == 1) {

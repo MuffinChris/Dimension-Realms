@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -123,7 +124,7 @@ public class Armor implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler (priority = EventPriority.LOW)
 	public void armorDamage (EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
@@ -131,7 +132,7 @@ public class Armor implements Listener {
 			//String set = getSet(p);
 			double armor = plugin.getArmorMap().get(p.getUniqueId());
 			double mr = plugin.getMRMap().get(p.getUniqueId());
-			if (e.getCause() == DamageCause.CUSTOM) {
+			if (e.getCause() == DamageCause.CUSTOM || e.getCause() == DamageCause.MAGIC) {
 				/*if (set.equals("diamond")) {
 					e.setDamage(e.getDamage() * diamondMagDefense);
 				} else if (set.equals("iron")) {
@@ -144,7 +145,7 @@ public class Armor implements Listener {
 					e.setDamage(e.getDamage() * leatherMagDefense);
 				}*/
 				e.setDamage(e.getDamage() * (1-mr));
-			} else if (e.getCause() == DamageCause.ENTITY_ATTACK || e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK || e.getCause() == DamageCause.PROJECTILE) {
+			} else if (e.getCause() == DamageCause.ENTITY_ATTACK || e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK || e.getCause() == DamageCause.PROJECTILE || e.getCause() == DamageCause.ENTITY_EXPLOSION || e.getCause() == DamageCause.THORNS) {
 				/*if (set.equals("diamond")) {
 					e.setDamage(e.getDamage() * diamondADDefense);
 				} else if (set.equals("iron")) {
@@ -283,7 +284,7 @@ public class Armor implements Listener {
 	}
 	
 	public static boolean isArmor(String s) {
-		return (s.contains("HELMET") || s.contains("CHESTPLATE") || s.contains("LEGGINGS") || s.contains("BOOTS"));
+		return (s.contains("HELMET") || s.contains("CHESTPLATE") || s.contains("LEGGINGS") || s.contains("BOOTS") || s.contains("ELYTRA"));
 	}
 	
 	public static ItemStack fixItem(ItemStack i) {
@@ -307,7 +308,7 @@ public class Armor implements Listener {
 				if (item.contains("helmet") || item.contains("cap")) {
 					itemC.set("Slot", new NBTTagString("head"));
 				}
-				if (item.contains("chestplate") || item.contains("tunic")) {
+				if (item.contains("chestplate") || item.contains("tunic") || item.contains("elytra")) {
 					itemC.set("Slot", new NBTTagString("chest"));
 				}
 				if (item.contains("leggings") || item.contains("pants")) {
@@ -325,118 +326,123 @@ public class Armor implements Listener {
 				List<String> lore = new ArrayList<String>();
 				String type = nItem.getType().toString().toLowerCase();
 				lore.add("");
-				lore.add(Main.color("&6Level:&7 1"));
+				lore.add(Main.color("&6Level:&7 0"));
 				if (type.contains("turtle")) {
-					lore.add(Main.color("&4Health:&7 300"));
+					lore.add(Main.color("&4Health:&7 2000"));
+					lore.add(Main.color("&cArmor:&7 10%"));
+					lore.add(Main.color("&bMagic Resist:&7 10%"));
+				}
+				if (type.contains("elytra")) {
+					lore.add(Main.color("&4Health:&7 5000"));
 					lore.add(Main.color("&cArmor:&7 10%"));
 					lore.add(Main.color("&bMagic Resist:&7 10%"));
 				}
 				if (type.contains("diamond")) {
 					if (type.contains("helmet")) {
-						lore.add(Main.color("&4Health:&7 250"));
+						lore.add(Main.color("&4Health:&7 1000"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("chestplate")) {
-						lore.add(Main.color("&4Health:&7 500"));
+						lore.add(Main.color("&4Health:&7 2000"));
 						lore.add(Main.color("&cArmor:&7 15%"));
 						lore.add(Main.color("&bMagic Resist:&7 10%"));
 					}
 					if (type.contains("leggings")) {
-						lore.add(Main.color("&4Health:&7 350"));
+						lore.add(Main.color("&4Health:&7 1750"));
 						lore.add(Main.color("&cArmor:&7 10%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("boots")) {
-						lore.add(Main.color("&4Health:&7 150"));
+						lore.add(Main.color("&4Health:&7 750"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 				}
 				if (type.contains("iron")) {
 					if (type.contains("helmet")) {
-						lore.add(Main.color("&4Health:&7 200"));
+						lore.add(Main.color("&4Health:&7 800"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("chestplate")) {
-						lore.add(Main.color("&4Health:&7 400"));
+						lore.add(Main.color("&4Health:&7 1800"));
 						lore.add(Main.color("&cArmor:&7 15%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("leggings")) {
-						lore.add(Main.color("&4Health:&7 300"));
+						lore.add(Main.color("&4Health:&7 1250"));
 						lore.add(Main.color("&cArmor:&7 10%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("boots")) {
-						lore.add(Main.color("&4Health:&7 125"));
+						lore.add(Main.color("&4Health:&7 400"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 				}
 				if (type.contains("chain")) {
 					if (type.contains("helmet")) {
-						lore.add(Main.color("&4Health:&7 150"));
+						lore.add(Main.color("&4Health:&7 400"));
 						lore.add(Main.color("&cArmor:&7 8%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("chestplate")) {
-						lore.add(Main.color("&4Health:&7 350"));
+						lore.add(Main.color("&4Health:&7 1200"));
 						lore.add(Main.color("&cArmor:&7 12%"));
 						lore.add(Main.color("&bMagic Resist:&7 8%"));
 					}
 					if (type.contains("leggings")) {
-						lore.add(Main.color("&4Health:&7 250"));
+						lore.add(Main.color("&4Health:&7 1000"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 5%"));
 					}
 					if (type.contains("boots")) {
-						lore.add(Main.color("&4Health:&7 75"));
+						lore.add(Main.color("&4Health:&7 200"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 2%"));
 					}
 				}
 				if (type.contains("gold")) {
 					if (type.contains("helmet")) {
-						lore.add(Main.color("&4Health:&7 100"));
+						lore.add(Main.color("&4Health:&7 300"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 15%"));
 					}
 					if (type.contains("chestplate")) {
-						lore.add(Main.color("&4Health:&7 250"));
+						lore.add(Main.color("&4Health:&7 1000"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 15%"));
 					}
 					if (type.contains("leggings")) {
-						lore.add(Main.color("&4Health:&7 150"));
+						lore.add(Main.color("&4Health:&7 500"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 15%"));
 					}
 					if (type.contains("boots")) {
-						lore.add(Main.color("&4Health:&7 50"));
+						lore.add(Main.color("&4Health:&7 150"));
 						lore.add(Main.color("&cArmor:&7 5%"));
 						lore.add(Main.color("&bMagic Resist:&7 15%"));
 					}
 				}
 				if (type.contains("leather")) {
 					if (type.contains("helmet")) {
-						lore.add(Main.color("&4Health:&7 75"));
+						lore.add(Main.color("&4Health:&7 100"));
 						lore.add(Main.color("&cArmor:&7 3%"));
 						lore.add(Main.color("&bMagic Resist:&7 3%"));
 					}
 					if (type.contains("chestplate")) {
-						lore.add(Main.color("&4Health:&7 200"));
+						lore.add(Main.color("&4Health:&7 500"));
 						lore.add(Main.color("&cArmor:&7 3%"));
 						lore.add(Main.color("&bMagic Resist:&7 3%"));
 					}
 					if (type.contains("leggings")) {
-						lore.add(Main.color("&4Health:&7 125"));
+						lore.add(Main.color("&4Health:&7 225"));
 						lore.add(Main.color("&cArmor:&7 3%"));
 						lore.add(Main.color("&bMagic Resist:&7 3%"));
 					}
 					if (type.contains("boots")) {
-						lore.add(Main.color("&4Health:&7 40"));
+						lore.add(Main.color("&4Health:&7 50"));
 						lore.add(Main.color("&cArmor:&7 3%"));
 						lore.add(Main.color("&bMagic Resist:&7 3%"));
 					}
@@ -567,7 +573,7 @@ public class Armor implements Listener {
 			double am = 0.0;
 			double mr = 0.0;
 			
-			p.setHealthScale(20);
+			p.setHealthScale(40);
 			
 			if (p.getInventory().getArmorContents() != null) {
 				for (ItemStack i : p.getInventory().getArmorContents()) {

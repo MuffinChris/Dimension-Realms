@@ -6,6 +6,15 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Core</name>
   <build>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>*</include>
+        </includes>
+      </resource>
+    </resources>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
@@ -27,7 +36,7 @@
     </plugins>
   </build>
   <dependencies>
-  <dependency>
+      <dependency>
     <groupId>com.destroystokyo.paper</groupId>
     <artifactId>paper-server</artifactId>
     <version>1.14.1-R0.1-SNAPSHOT</version>
@@ -41,5 +50,26 @@
     <scope>system</scope>
     <systemPath>${project.basedir}/resources/ViaVersion-2.1.0.jar</systemPath>
   </dependency>
+      <dependency>
+          <groupId>vault.api</groupId>
+          <artifactId>vault</artifactId>
+          <version>1.7</version>
+          <scope>system</scope>
+          <systemPath>${project.basedir}/resources/VaultAPI-1.7.jar</systemPath>
+      </dependency>
+  <dependency>
+    <groupId>protlib.api</groupId>
+    <artifactId>protocollib</artifactId>
+    <version>1.14</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/resources/ProtocolLib.jar</systemPath>
+  </dependency>
+    <dependency>
+      <groupId>holo.api</groupId>
+      <artifactId>holographicdisplays</artifactId>
+      <version>2.3.3</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/resources/HolographicDisplays-2.3.3.jar</systemPath>
+    </dependency>
   </dependencies>
 </project>

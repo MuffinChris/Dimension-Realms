@@ -20,10 +20,10 @@ public class LagCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			Main.msg(p, "");
-			Main.msg(p, "&8» &e&lRAM USAGE: &f" + min + " GB &8/ &f" + max + " GB");
+			Main.msg(p, "&8Â» &e&lRAM USAGE: &f" + min + " GB &8/ &f" + max + " GB");
 			Main.msg(p, "");
 		} else {
-			Main.so("&8» &e&lRAM USAGE: &f" + min + " GB &8/ &f" + max + " GB");
+			Main.so("&8Â» &e&lRAM USAGE: &f" + min + " GB &8/ &f" + max + " GB");
 		}
 		return false;
 		

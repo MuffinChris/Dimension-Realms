@@ -2,6 +2,7 @@ package com.core.java.essentials.commands;
 
 import java.text.DecimalFormat;
 
+import com.destroystokyo.paper.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,15 +22,15 @@ public class ExpCommand implements CommandExecutor {
 			if (cmd.getLabel().equalsIgnoreCase("level") || cmd.getLabel().equalsIgnoreCase("lvl") || cmd.getLabel().equalsIgnoreCase("exp") || cmd.getLabel().equalsIgnoreCase("experience") || cmd.getLabel().equalsIgnoreCase("levelup")) {
 				if (args.length == 0) {
 					Main.msg(p, "");
-					Main.msg(p, "&8» &e&lLEVEL: &f" + main.getLevel(p) + " &8/&f 100");
-					Main.msg(p, "&8» &e&lEXP: &f" + main.getExp(p) + " &8/&f " + main.getExpMax(p));
+					Main.msg(p, "&8Â» &e&lLEVEL: &f" + main.getLevel(p) + " &8/&f 100");
+					Main.msg(p, "&8Â» &e&lEXP: &f" + main.getExp(p) + " &8/&f " + main.getExpMax(p));
 					Main.msg(p, "");
 				} else if (args.length == 1) {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
 						Player target = (Player) Bukkit.getPlayer(args[0]);
 						Main.msg(p, "");
-						Main.msg(p, "&8» &e&lLEVEL: &f" + main.getLevel(target) + " &8/&f 100");
-						Main.msg(p, "&8» &e&lEXP: &f" + main.getExp(target) + " &8/&f " + main.getExpMax(target));
+						Main.msg(p, "&8Â» &e&lLEVEL: &f" + main.getLevel(target) + " &8/&f 100");
+						Main.msg(p, "&8Â» &e&lEXP: &f" + main.getExp(target) + " &8/&f " + main.getExpMax(target));
 						Main.msg(p, "");
 					} else {
 						Main.msg(p, "&cInvalid Player");
@@ -44,10 +45,13 @@ public class ExpCommand implements CommandExecutor {
 						if (Bukkit.getPlayer(args[0]) instanceof Player) {
 							Player target = (Player) Bukkit.getPlayer(args[0]);
 							if (Integer.valueOf(args[1]) instanceof Integer) {
-								main.getLevelMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
-								main.setIntValue(target, "Level", Integer.valueOf(args[1]));
-								Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + Integer.valueOf(args[1]));
-								main.levelup(target);
+								if (Integer.valueOf(args[1]) <= main.getLevel(p)) {
+									main.getLevelMap().replace(target.getUniqueId(), Integer.valueOf(args[1]));
+									main.setIntValue(target, "Level", Integer.valueOf(args[1]));
+									Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + Integer.valueOf(args[1]) + " &8(&cNo Stat Change&8)");
+								} else {
+									p.performCommand("addlevel " + target.getName() + " " + (Integer.valueOf(args[1]) - main.getLevel(target)));
+								}
 							} else {
 								Main.msg(p, "&cInvalid Value");
 							}
@@ -63,11 +67,22 @@ public class ExpCommand implements CommandExecutor {
 						if (Bukkit.getPlayer(args[0]) instanceof Player) {
 							Player target = (Player) Bukkit.getPlayer(args[0]);
 							if (Integer.valueOf(args[1]) instanceof Integer) {
+								int times = Integer.valueOf(args[1]);
 								int newlevel = Integer.valueOf(args[1]) + main.getLevel(target);
-								main.getLevelMap().replace(target.getUniqueId(), newlevel);
-								main.setIntValue(target, "Level", newlevel);
+								for (int i = 1; i <= times; i++) {
+									main.getExpMap().replace(target.getUniqueId(), main.getExpMax(target));
+									main.levelup(target, true);
+								}
+								Main.msg(p, "");
+								Main.msg(p, "&7Â» &e&lLEVEL UP: &6" + (newlevel - times) + " &f-> &6" + newlevel);
+								Main.msg(p, "&7Â» &e&lSP INCREASE: &f+" + (5 * times));
+								Main.msg(p, "&7Â» &4&lAD INCREASE: &f+" + (5 * times));
+								Main.msg(p, "&7Â» &c&lHP INCREASE: &f+" + (100 * times));
+								Main.msg(p, "&7Â» &b&lMANA INCREASE: &f+" + (50 * times));
+								Main.msg(p, "");
 								Main.msg(p, "&eSet &6" + target.getName() + "'s &elevel to " + newlevel);
-								main.levelup(target);
+
+								p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - times) + " &f-> &6" + newlevel), 5, 20, 5));
 							} else {
 								Main.msg(p, "&cInvalid Value");
 							}
@@ -103,7 +118,7 @@ public class ExpCommand implements CommandExecutor {
 							Player target = (Player) Bukkit.getPlayer(args[0]);
 							if (Integer.valueOf(args[1]) instanceof Integer) {
 								//int newexp = Integer.valueOf(args[1]) + main.getExp(target);
-								giveExp(target, Integer.valueOf(args[1]), 100);
+								giveExp(target, Integer.valueOf(args[1]), 1);
 								Main.msg(p, "&eAdded " + args[1] + " EXP to &6" + target.getName());
 								main.levelup(target);
 							} else {
@@ -117,15 +132,15 @@ public class ExpCommand implements CommandExecutor {
 					}
 				}
 			} else {
-				Main.msg(p, "&cNo permission.");
+				Main.msg(p, main.noperm);
 			}
 		} else {
 			if (cmd.getLabel().equalsIgnoreCase("level") || cmd.getLabel().equalsIgnoreCase("lvl") || cmd.getLabel().equalsIgnoreCase("exp") || cmd.getLabel().equalsIgnoreCase("experience") || cmd.getLabel().equalsIgnoreCase("levelup")) {	
 				if (args.length == 1) {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
 						Player target = (Player) Bukkit.getPlayer(args[0]);
-						Main.so("&8» &e&lLEVEL: &f" + main.getLevel(target) + " &8/&f 100");
-						Main.so("&8» &e&lEXP: &f" + main.getExp(target) + " &8/&f " + main.getExpMax(target));
+						Main.so("&8Â» &e&lLEVEL: &f" + main.getLevel(target) + " &8/&f 100");
+						Main.so("&8Â» &e&lEXP: &f" + main.getExp(target) + " &8/&f " + main.getExpMax(target));
 					} else {
 						Main.so("&cInvalid Player");
 					}

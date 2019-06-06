@@ -59,9 +59,9 @@ commands:
   stats:
     description: Check stats of a player
     aliases: [kdr, kd, kda]
-  info:
+  information:
     description: Check info of a player
-    aliases: [whois]
+    aliases: [whois, info]
   sp:
     description: Base Skill Menu
     aliases: [skillpoint, skillpoints, attributes, attribute, skilltree, rpg, ability, abilities, class, classes, paths, path]
@@ -82,3 +82,18 @@ commands:
   r:
     description: Reply to messages
     aliases: [reply]
+  reset:
+    description: Reset yourself to a fresh playerfile
+    aliases: [datareset]
+    permission: core.admin
+  killall:
+    description: Kill all entities in your world
+    permission: core.admin
+  god:
+    description: Enter or exit godmode
+    permission: core.admin
+  invsee:
+    description: View a player's inventory
+    permission: core.mod
+    aliases: [inv]
+depend: [ProtocolLib, ViaVersion, Vault]

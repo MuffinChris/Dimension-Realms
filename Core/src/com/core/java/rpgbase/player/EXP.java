@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,6 +24,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -127,7 +129,7 @@ public class EXP implements Listener {
 	@EventHandler
 	public void expDeath (EntityDeathEvent e) {
 		int level = 1;
-		if (e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+		if (e.getEntity().isCustomNameVisible() && e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 			level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
 		}
 		boolean slime = false;
@@ -136,7 +138,7 @@ public class EXP implements Listener {
 		}
 		if (!(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
 			int entlevel = level;
-			int exp = ((int) (7 * Math.pow(entlevel, 2.4))) + 50;
+			int exp = ((int) (1 * Math.pow(entlevel, 2.4))) + 50;
 			int random = (int) (Math.random() * (0.20 * exp));
 			
 			exp+=random;
@@ -218,9 +220,7 @@ public class EXP implements Listener {
 			PlayerList plist = plugin.getPManager().getPList(e.getEntity());
 			double fulldmg = 0;
 			if (plist != null && plist.getPlayers() instanceof List<?>) {
-				for (Player pl : plist.getPlayers()) {
-					fulldmg+=plist.getDamage(pl);
-				}
+				fulldmg = plugin.getPManager().getPList(e.getEntity()).getFullDmg();
 				for (Player pl : plist.getPlayers()) {
 					double dmg = plist.getDamage(pl);
 					if ((dmg / fulldmg) >= 1.0) {
@@ -276,12 +276,18 @@ public class EXP implements Listener {
 			}
 		}
 	}
-	
+
+	@EventHandler
+	public void expOnDeath (PlayerDeathEvent e) {
+		Player p = (Player) e.getEntity();
+		plugin.getCManaMap().replace(p.getUniqueId(), 0);
+	}
+
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void expBar (PlayerExpChangeEvent e) {
 		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
-		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+		e.getPlayer().setExp(Math.max(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F), 0.0F));
 	}
 	
 	//public List<Player> expallowed = new ArrayList<Player>();
@@ -291,7 +297,7 @@ public class EXP implements Listener {
 		e.setCancelled(true);
 		int maxmana = plugin.getManaMap().get(e.getPlayer().getUniqueId());
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
-		e.getPlayer().setExp(Math.max(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+		e.getPlayer().setExp(Math.max(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F), 0.0F));
 		int level = plugin.getLevel(e.getPlayer());
 		int amount = e.getExperienceOrb().getExperience();
 		giveExp(e.getPlayer(), (int) (5 + Math.pow((level*1.0)/2.0, 1.8) * Math.pow(amount, 1.8)));

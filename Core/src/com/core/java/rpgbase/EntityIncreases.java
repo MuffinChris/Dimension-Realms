@@ -1,29 +1,14 @@
 package com.core.java.rpgbase;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Blaze;
-import org.bukkit.entity.DragonFireball;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.EvokerFangs;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.ShulkerBullet;
-import org.bukkit.entity.Slime;
-import org.bukkit.entity.SmallFireball;
-import org.bukkit.entity.Wither;
-import org.bukkit.entity.WitherSkull;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -34,6 +19,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -51,10 +38,10 @@ public class EntityIncreases implements Listener {
 			LivingEntity p = (LivingEntity) e.getEntity();
 			double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 			if (e.getCause() == DamageCause.FALL) {
-				e.setDamage(e.getDamage() * (hp / 20.0));
+				e.setDamage(e.getDamage() * (hp / 40.0));
 			}
 			if (e.getCause() == DamageCause.MAGIC) {
-				e.setDamage(e.getDamage() * 4.0);
+				e.setDamage(e.getDamage()/4 * hp/20.0);
 			}
 			if (e.getCause() == DamageCause.POISON) {
 				if (p.getHealth() > (hp * 0.025)) {
@@ -80,13 +67,13 @@ public class EntityIncreases implements Listener {
 				e.setDamage(hp * 0.15);
 			}
 			if (e.getCause() == DamageCause.ENTITY_EXPLOSION) {
-				e.setDamage(hp/6.0 + e.getDamage() * 3.0);
+				e.setDamage(0.4 * (e.getDamage()/20.0) * hp);
 			}
 			if (e.getCause() == DamageCause.BLOCK_EXPLOSION) {
-				e.setDamage(hp/6.0 + e.getDamage() * 3.0);
+				e.setDamage(0.3 * (e.getDamage()/20.0) * hp);
 			}
 			if (e.getCause() == DamageCause.LIGHTNING) {
-				e.setDamage(hp / 4.0);
+				e.setDamage(hp / 5.0);
 			}
 			if (e.getCause() == DamageCause.CONTACT) {
 				e.setDamage(hp / 40.0);
@@ -101,7 +88,27 @@ public class EntityIncreases implements Listener {
 				e.setDamage(hp / 20.0);
 			}
 			if (e.getCause() == DamageCause.DRYOUT) {
-				e.setDamage(hp / 20.0);
+				e.setDamage(hp / 10.0);
+			}
+			if (e.getCause() == DamageCause.VOID) {
+				if (e.getDamage() < 1000000) {
+					e.setDamage(hp * 0.1);
+				}
+			}
+			if (e.getCause() == DamageCause.FLY_INTO_WALL) {
+				e.setDamage((e.getDamage() / 4.0) * hp * 0.1);
+			}
+		}
+	}
+
+	@EventHandler
+	public void lingeringPotion(EntityDamageByEntityEvent e) {
+		if (e.getDamager() instanceof AreaEffectCloud) {
+			AreaEffectCloud cloud = (AreaEffectCloud) e.getDamager();
+			if (cloud.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
+				if (e.getEntity() instanceof LivingEntity) {
+					e.setDamage((e.getDamage() / 3.0) * (((LivingEntity)e.getEntity()).getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * 0.04));
+				}
 			}
 		}
 	}
@@ -123,14 +130,14 @@ public class EntityIncreases implements Listener {
 	public void entityDamage (EntityDamageByEntityEvent e) {
 		int level = 1;
 		Entity ent = e.getDamager();
-		if (ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+		if (ent.isCustomNameVisible() && ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 			level = Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+",""));
 		}
 		if (e.getDamager() instanceof IronGolem) {
-			e.setDamage(30 + 3 * level);
+			e.setDamage(300 + 20 * level);
 		}
 		if (e.getDamager() instanceof Slime || e.getDamager() instanceof MagmaCube) {
-			e.setDamage(10 + 1.5 * level);
+			e.setDamage(50 + 5 * level);
 		}
 	}
 	/*
@@ -165,7 +172,7 @@ public class EntityIncreases implements Listener {
 			}
 		}
 	}*/
-	
+
 	@EventHandler
 	public void entityInfoSpawn (EntityAddToWorldEvent e) {
 		new BukkitRunnable() {
@@ -174,7 +181,7 @@ public class EntityIncreases implements Listener {
 				if (main.getPManager().getPList(e.getEntity()) == null) {
 					main.getPManager().setPlayerList(e.getEntity(), new PlayerList());
 				}
-				if (e.getEntity() instanceof LivingEntity) {
+				if (e.getEntity() instanceof LivingEntity && e.getEntity().getType() != EntityType.ARMOR_STAND) {
 					boolean slime = false;
 					if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
 						if (e.getEntity().getCustomName() instanceof String && ((LivingEntity) e.getEntity()).getCustomName().contains("[")) {
@@ -192,15 +199,22 @@ public class EntityIncreases implements Listener {
 						}
 						int level = 0;
 						int terms = 0;
-						if (ent.getNearbyEntities(64, 32, 64) instanceof List<?>) {
-							for (Entity en : ent.getNearbyEntities(64, 32, 64)) {
-								if (en instanceof Player) {
-									Player p = (Player) en;
-									terms++;
-									level+=Main.getInstance().getLevelMap().get(p.getUniqueId());
-								}
-							}
-						}
+						//if (ent.getNearbyEntities(64, 32, 64) instanceof List<?>) {
+                        try {
+                            for (Entity en : ent.getNearbyEntities(64, 32, 64)) {
+                                if (en instanceof Player) {
+                                    Player p = (Player) en;
+                                    if (p.getGameMode() == GameMode.SURVIVAL) {
+										terms++;
+										level += Main.getInstance().getLevelMap().get(p.getUniqueId());
+									}
+                                }
+                            }
+                            //}
+                        } catch (Exception ex) {
+                            level = 1;
+                            Main.so("&c&lERROR: &fException upon spawning of entity. (level defaulted to 1)");
+                        }
 						if (terms > 0) {
 							level/=terms;
 						}
@@ -208,19 +222,20 @@ public class EntityIncreases implements Listener {
 							level = 1;
 						}
 						double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-						double hpper = level * hp * 0.10;
-						double hpmod = 20 + hpper * (Math.random() * 0.2 + 1) * 20;
+						//double hpper = level * hp * 0.10;
+						double hpmod = main.gn().getMobHp(level) * hp;
 						//double hpmod = (10 * (hp/20.0)) * level * (Math.random() * 0.2 + 1);
-						double admod = 20 + 0.5 * level;
-						if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
-							double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
-							admod = ad * 0.1 * level * 10;
-						}
-						if (ent.getType() == EntityType.IRON_GOLEM) {
+						double admod = main.gn().getMobDmg(level, 1);
+
+						if (ent.getType() == EntityType.ENDER_DRAGON) {
 							hpmod*=2;
 						}
+
+						if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+							double ad = ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue();
+							admod = main.gn().getMobDmg(level, ad);
+						}
 						if (ent.getType() == EntityType.SLIME || ent.getType() == EntityType.MAGMA_CUBE) {
-							hpmod*=1.25;
 							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hpmod);
 							ent.setHealth(hpmod);
 						}
@@ -233,47 +248,9 @@ public class EntityIncreases implements Listener {
 							ent.setCustomName(Main.color("&8[&6" + level + "&8] &f" + ent.getName()));
 							ent.setCustomNameVisible(true);
 						} else {
-							hpmod*=1.25;
 							ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hpmod);
 							ent.setHealth(hpmod);
 						}
-						/*
-						if (ent.getType() != null) {
-							if (ent.getType() == EntityType.ZOMBIE) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(23);
-							}
-							if (ent.getType() == EntityType.SPIDER) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25);
-							}
-							if (ent.getType() == EntityType.CAVE_SPIDER) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(23);
-							}
-							if (ent.getType() == EntityType.SLIME) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(20);
-							}
-							if (ent.getType() == EntityType.MAGMA_CUBE) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(22);
-							}
-							if (ent.getType() == EntityType.ENDER_DRAGON) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(50);
-							}
-							if (ent.getType() == EntityType.WOLF) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(30);
-							}
-							if (ent.getType() == EntityType.IRON_GOLEM) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(40);
-							}
-							if (ent.getType() == EntityType.SILVERFISH) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(15);
-							}
-							if (ent.getType() == EntityType.DROWNED) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(30);
-							}
-							if (ent.getType() == EntityType.HUSK) {
-								ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(25);
-							}
-						}
-						*/
 					}
 				}
 			}
@@ -283,26 +260,40 @@ public class EntityIncreases implements Listener {
 	
 	@EventHandler
 	public void bonusRegen (EntityRegainHealthEvent e) {
-		if (e.getEntity() instanceof Player) {
+		if (e.getEntity() instanceof LivingEntity) {
 			if (e.getEntity().isDead()) {
 				e.setCancelled(true);
 			} else {
-				Player p = (Player) e.getEntity();
-				double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+				LivingEntity ent = (LivingEntity) e.getEntity();
+				double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
 				if (e.getRegainReason() == RegainReason.REGEN || e.getRegainReason() == RegainReason.SATIATED) {
-					e.setAmount(hp * 0.05);
-				} else {
-					if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
-						e.setAmount(e.getAmount() * 4 + hp * 0.04);
-					} else if (e.getRegainReason() == RegainReason.MAGIC) {
-						e.setAmount(e.getAmount() * 3 + hp * 0.075);
-					} else if (e.getRegainReason() == RegainReason.EATING) {
-						e.setAmount(e.getAmount() * 5 + hp * 0.05);
+					e.setAmount(hp * 0.02);
+				} else if (e.getRegainReason() == RegainReason.MAGIC_REGEN) {
+					e.setAmount((e.getAmount() / 1) * hp * 0.04);
+				} else if (e.getRegainReason() == RegainReason.MAGIC) {
+					e.setAmount((e.getAmount() / 4) * hp * 0.1);
+				} else if (e.getRegainReason() == RegainReason.EATING) {
+					e.setAmount(e.getAmount() * 5 + hp * 0.01);
+				} else if (e.getRegainReason() == RegainReason.ENDER_CRYSTAL) {
+					e.setAmount(hp * 0.005);
+				} else if (e.getRegainReason() == RegainReason.WITHER) {
+					e.setAmount(hp * 0.005);
+				} else if (e.getRegainReason() == RegainReason.WITHER_SPAWN) {
+					e.setAmount(5);
+				}
+				Hologram damageHolo = HologramsAPI.createHologram(main, new Location(e.getEntity().getWorld(), e.getEntity().getLocation().getX(), e.getEntity().getLocation().getY() + e.getEntity().getHeight() + 0.3, e.getEntity().getLocation().getZ()));
+				DecimalFormat df = new DecimalFormat("#.##");
+				damageHolo.appendTextLine(Main.color("&a&l+" + df.format(e.getAmount())));
+				new BukkitRunnable() {
+					public void run() {
+						damageHolo.delete();
 					}
-				//}
+				}.runTaskLater(main, 20L);
+				if (e.getEntity() instanceof Player) {
+					Main.sendHp((Player) e.getEntity());
+				}
 			}
 		}
 	}
 	//Healing should be main method of health increase
-	}
 }

@@ -58,7 +58,7 @@ public class BS {
 		bossbar.setTitle(s);
 		bossbar.setColor(bc);
 		bossbar.setStyle(bs);
-		bossbar.setProgress(progress);
+		bossbar.setProgress(Math.min(progress, 1.0));
 		bossbar.setVisible(b);
 		if (b) {
 			bossbar.addPlayer(p);

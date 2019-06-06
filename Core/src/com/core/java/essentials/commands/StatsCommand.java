@@ -26,7 +26,7 @@ public class StatsCommand implements CommandExecutor {
 			    int deaths = pData.getInt("Deaths");
 			    double kdr = (1.0 * kills) / (1.0 * deaths);
 			    DecimalFormat df = new DecimalFormat("#.##");
-			    Main.msg(p, "&8» &c&lKDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
+			    Main.msg(p, "&8Â» &c&lKDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
 			} else if (args.length == 1) {
 				if (Bukkit.getPlayer(args[0]) instanceof Player) {
 					Player t = Bukkit.getPlayer(args[0]);
@@ -36,7 +36,7 @@ public class StatsCommand implements CommandExecutor {
 				    int deaths = pData.getInt("Deaths");
 				    double kdr = (1.0 * kills) / (1.0 * deaths);
 				    DecimalFormat df = new DecimalFormat("#.##");
-				    Main.msg(p, "&8» &c&l" + t.getName() + "'s KDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
+				    Main.msg(p, "&8Â» &c&l" + t.getName() + "'s KDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
 				} else {
 					Main.msg(p, "&cInvalid Player");
 				}
@@ -53,7 +53,7 @@ public class StatsCommand implements CommandExecutor {
 				    int deaths = pData.getInt("Deaths");
 				    double kdr = (1.0 * kills) / (1.0 * deaths);
 				    DecimalFormat df = new DecimalFormat("#.##");
-				    Main.so("&8» &c&l" + t.getName() + "'s KDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
+				    Main.so("&8Â» &c&l" + t.getName() + "'s KDR: &f" + df.format(kdr) + " &8(&c" + kills + "&8/&c" + deaths + "&8)");
 				} else {
 					Main.so("&cInvalid Player");
 				}

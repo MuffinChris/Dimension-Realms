@@ -9,6 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.core.java.Numbers;
+import com.core.java.essentials.commands.*;
+import com.destroystokyo.paper.Title;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -23,6 +36,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -41,24 +57,6 @@ import com.core.java.rpgbase.entities.PlayerList;
 import com.core.java.rpgbase.entities.PlayerListManager;
 import com.core.java.economy.EconCommands;
 import com.core.java.enchantments.Serration;
-import com.core.java.essentials.commands.BottleCommand;
-import com.core.java.essentials.commands.Codex;
-import com.core.java.essentials.commands.DataReloadCommand;
-import com.core.java.essentials.commands.ExpCommand;
-import com.core.java.essentials.commands.FlyCommand;
-import com.core.java.essentials.commands.GUICommand;
-import com.core.java.essentials.commands.GUIListener;
-import com.core.java.essentials.commands.GamemodeCommand;
-import com.core.java.essentials.commands.HashmapCommand;
-import com.core.java.essentials.commands.HealCommand;
-import com.core.java.essentials.commands.HelpCommand;
-import com.core.java.essentials.commands.InfoCommand;
-import com.core.java.essentials.commands.LagCommand;
-import com.core.java.essentials.commands.ManaCommand;
-import com.core.java.essentials.commands.MsgCommand;
-import com.core.java.essentials.commands.SpawnCommand;
-import com.core.java.essentials.commands.SpeedCommand;
-import com.core.java.essentials.commands.StatsCommand;
 import com.core.java.reflection.rutils;
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -71,25 +69,20 @@ public class Main extends JavaPlugin {
 	
 	//TODO LIST:
 	
-	/* 
-	 * DecimalFormat percentages in InfoCmd and SP
-	 * Fix mob damage as entity health was lower than expected
-	 * Fix Info Command to show percents when needed
-	 * ManaRegen Item broken
+	/*
+	Soulbound Enchantment.
+	Item combining so you don't have to choosebetween items.
+	Party command
+	Make enchant dmg work for nonplayers
+	Make explosion regen?
+	Test out fixed death messages by mobs
+	 * Debug kill info (weird dmg levels, also second ] is red, make it white
 	 * Info command overriden by WorldEdit
 	 * Add command to disable level factor into mobs for players
-	 * Fix all projectile damages
-	 * Trident throws and who knows what doesnt trig bossbar
 	 * Update /armor command
-	 * Item helmets broken
-	 * Armor doesnt work lol
-	 * Custom durability with warning?
 	 * Spells do not register kills when used raw
 	 * Wither bar fix (only packet)
 	 * Enderdragon bar fix (only packet)
-	 * Skills damage is raw (without modi) for EXP delivery
-	 * Nerf Spawner Mobs
-	 * PlayerList will not travel over restart. Perhaps swap to NBT
 	 * Custom Enchanting GUI or Way to make axes and stuff get ench
 	 * Make Skilltrees
 	 */
@@ -100,6 +93,7 @@ public class Main extends JavaPlugin {
 	 * Different ranks to uh rankup to
 	 * Add referrals for invintg
 	 * Stained Glass is fashionable
+	 * https://www.youtube.com/watch?v=BcKzswBhjQM
 	 * https://www.youtube.com/watch?v=Y1BFOzXwVu0 for builds
 	 * Professions
 	 * - Toolsmith (make and repair tools)
@@ -124,7 +118,7 @@ public class Main extends JavaPlugin {
 	 */
 	
 	public final String version = "0.0.1";
-	public final String noperm = "&cNo permission!";
+	public final String noperm = "&cNo permission.";
 	
 	public int uniquejoins = 0;
 	public int getJoins() {
@@ -229,11 +223,16 @@ public class Main extends JavaPlugin {
 	public Map<UUID, Double> getMRMap() {
 		return mr;
 	}
+
+	public Map<UUID, Boolean> godmode = new HashMap<>();
+	public Map<UUID, Boolean> getGodMode() {
+		return godmode;
+	}
 	
 	public void updateExpBar(Player p) {
 		int maxmana = getManaMap().get(p.getUniqueId());
 		int cmana = getCManaMap().get(p.getUniqueId());
-		p.setExp(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F));
+		p.setExp(Math.max(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F), 0.0F));
 	}
 	
 	public Map<UUID, Float> attackCooldown = new HashMap<UUID, Float>();
@@ -302,11 +301,48 @@ public class Main extends JavaPlugin {
 	public int getExpMax(Player p) {
 		return (int) ((Math.pow(getLevel(p), 3) * 77) + 500);
 	}
-	
+
+	private ProtocolManager protocolManager;
+	public void setupPacketListeners() {
+		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.WORLD_PARTICLES) {
+			@Override
+			public void onPacketSending(PacketEvent event) {
+					if (event.getPacketType() == PacketType.Play.Server.WORLD_PARTICLES) {
+						if (event.getPacket().getNewParticles().getValues().get(0).getParticle().name().contains("DAMAGE_INDICATOR")) {
+							event.setCancelled(true);
+						}
+					}
+			}
+		});
+
+
+	}
+
+	private Numbers numbers;
+	public Numbers gn() {
+		return numbers;
+	}
+
 	@Override
 	public void onEnable() {
 		
-		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fEnabled!");
+		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fEnabling!");
+		numbers = new Numbers();
+		//Plugin vault = getServer().getPluginManager().getPlugin("Vault");
+		//Vault.hookChat();
+		//ChatFunctions vaultSetup = new ChatFunctions();
+		//vaultSetup.loadVault();
+		//Bukkit.getServicesManager().register(Chat.class, new ChatManager(Permission), this, ServicePriority.Normal);
+
+		this.setupChat();
+		so("&cCORE&7: &fVault hooked!");
+
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		so("&cCORE&7: &fProtocolLib hooked!");
+
+		setupPacketListeners();
+		so("&cCORE&7: &fProtocolLib Packet Listeners Enabled!");
+
 		getCommand("help").setExecutor(new HelpCommand());
 		getCommand("fly").setExecutor(new FlyCommand());
 		getCommand("gms").setExecutor(new GamemodeCommand());
@@ -324,7 +360,7 @@ public class Main extends JavaPlugin {
 		getCommand("addlevel").setExecutor(new ExpCommand());
 		getCommand("setexp").setExecutor(new ExpCommand());
 		getCommand("addexp").setExecutor(new ExpCommand());
-		getCommand("info").setExecutor(new InfoCommand());
+		getCommand("information").setExecutor(new InfoCommand());
 		getCommand("stats").setExecutor(new StatsCommand());
 		getCommand("sp").setExecutor(new SkilltreeCommand());
 		getCommand("heal").setExecutor(new HealCommand());
@@ -336,6 +372,10 @@ public class Main extends JavaPlugin {
 		getCommand("message").setExecutor(new MsgCommand());
 		getCommand("r").setExecutor(new MsgCommand());
 		getCommand("reply").setExecutor(new MsgCommand());
+		getCommand("reset").setExecutor(new ResetCommand());
+		getCommand("killall").setExecutor(new KillAllCommand());
+		getCommand("god").setExecutor(new GodCommand());
+		getCommand("invsee").setExecutor(new InvseeCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new infoListeners(), this);
@@ -362,9 +402,9 @@ public class Main extends JavaPlugin {
 		manaRegen();
 		hpPeriodic();
 		updatePeriodic();
-		armorPeriodic();
 		absorption();
-		acPeriodic();
+		//acPeriodic();
+		midPeriodic();
 		so("&cCORE&7: &fPeriodics Enabled!");
 		
 		Serration.register();
@@ -378,29 +418,44 @@ public class Main extends JavaPlugin {
 			}
 		}
 		so("&cCORE&7: &fEntities Updated with PlayerLists! &8(&f" + count + "&8)");
+
+		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fEnabled!");
 	}
 	
 	@Override
 	public void onDisable() {
-		
+
+		for (Hologram h : HologramsAPI.getHolograms(this)) {
+			h.delete();
+		}
 		updateFunc();
 		so("&cCORE&7: &fCore Plugin Version &c" + version + " &fDisabled!");
-		
+
 	}
-	
-	public void createRecipes() {
-		ItemStack armorgem = new ItemStack(Material.EMERALD);
-		ItemMeta armorgemmeta = armorgem.getItemMeta();
-		armorgemmeta.setDisplayName(ChatColor.GREEN + "Armor Gem");
-		List<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.GRAY + "Used to craft Armor.");
-		armorgemmeta.setLore(lore);
-		armorgem.addEnchantment(Enchantment.MENDING, 1);
-		armorgem.setItemMeta(armorgemmeta);
-		
-		
+
+	private Chat chat;
+
+	private boolean setupChat() {
+		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		chat = rsp.getProvider();
+		return chat != null;
 	}
-	
+
+	public Chat getChat() {
+		return chat;
+	}
+
+	public void midPeriodic() {
+		new BukkitRunnable() {
+			public void run() {
+				for (Player  p : Bukkit.getOnlinePlayers()) {
+					ChatFunctions.updateName(p);
+					levelup(p);
+				}
+			}
+		}.runTaskTimerAsynchronously(this, 10L, 80L);
+	}
+
 	public void updatePeriodic() {
 		new BukkitRunnable() {
 			@Override
@@ -409,7 +464,7 @@ public class Main extends JavaPlugin {
 					updateFunc();
 				}
 			}
-		}.runTaskTimer(this, 12000L, 12000L);
+		}.runTaskTimer(this, 1000L, 6000L);
 	}
 	
 	public void updateFunc() {
@@ -428,10 +483,10 @@ public class Main extends JavaPlugin {
 					sendHp(p);
 				}
 			}
-		}.runTaskTimer(this, 20L, 5L);
+		}.runTaskTimer(this, 20L, 4L);
 	}
 	
-	public void acPeriodic() {
+	/*public void acPeriodic() {
 		new BukkitRunnable() {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
@@ -441,20 +496,7 @@ public class Main extends JavaPlugin {
 				}
 			}
 		}.runTaskTimer(this, 1L, 1L);
-	}
-	
-	public void armorPeriodic() {
-		new BukkitRunnable() {
-			public void run() {
-				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-					if (!p.isDead()) {
-						//String set = Armor.getSet(p);
-						Armor.updateSet(p);
-					}
-				}
-			}
-		}.runTaskTimer(this, 200L, 1200L);
-	}
+	}*/
 	
 	public void manaRegen() {
 		new BukkitRunnable() {
@@ -464,12 +506,14 @@ public class Main extends JavaPlugin {
 					if (mana.get(p.getUniqueId()) != null) {
 						if (getMana(p) <= mana.get(p.getUniqueId())) {
 							if (!p.isDead()) {
+								int manaGain = getManaRegenMap().get(p.getUniqueId())/5;
 								if (p.isSleeping()) {
-									setMana(p, Integer.valueOf(Math.min(getMana(p) + 20 + (int) ((1.0 * getManaRegenMap().get(p.getUniqueId()) / 20.0)) * 10, mana.get(p.getUniqueId()))));
+									setMana(p, Math.min(getMana(p) + 20 + manaGain * 10, mana.get(p.getUniqueId())));
 								} else {
-									setMana(p, Integer.valueOf(Math.min(getMana(p) + (int) ((1.0 * getManaRegenMap().get(p.getUniqueId()) / 20.0)), mana.get(p.getUniqueId()))));
+									setMana(p, Math.min(getMana(p) + manaGain, mana.get(p.getUniqueId())));
 								}
 								updateExpBar(p);
+								sendHp(p);
 							} else {
 								setMana(p, 0);
 							}
@@ -477,7 +521,7 @@ public class Main extends JavaPlugin {
 					}
 				}
 			}
-		}.runTaskTimerAsynchronously(this, 20L, 1L);
+		}.runTaskTimerAsynchronously(this, 20L, 4L);
 	}
 	
 	public void absorption() {
@@ -486,7 +530,7 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 					if (p.hasPotionEffect(PotionEffectType.ABSORPTION)) {
-						double heal = 4;
+						double heal = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 80.0;
 						int amp = p.getPotionEffect(PotionEffectType.ABSORPTION).getAmplifier();
 						int duration = p.getPotionEffect(PotionEffectType.ABSORPTION).getDuration();
 						p.removePotionEffect(PotionEffectType.ABSORPTION);
@@ -504,27 +548,176 @@ public class Main extends JavaPlugin {
 			}
 		}.runTaskTimer(this, 20L, 20L);
 	}
-	
+
+	public void resetPlayer(Player p) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+		try {
+			pData.set("Username", p.getName());
+			pData.set("Level", 0);
+			pData.set("Exp", 0);
+			pData.set("SP", 0);
+			pData.set("Mana", 5000);
+			pData.set("ManaRegen", 20);
+			pData.set("Cmana", 0);
+			getCManaMap().replace(p.getUniqueId(), 0);
+			pData.set("BaseHP", 2000.0);
+			pData.set("BaseMana", 5000);
+			pData.set("AD", 0.0);
+			pData.set("HP", 0.0);
+			pData.set("AttackSpeed", 4.0);
+			pData.set("AbilityOne", "None");
+			pData.set("AbilityTwo", "None");
+			pData.set("AbilityThree", "None");
+			pData.set("AbilityFour", "None");
+			pData.set("Kills", 0);
+			pData.set("Deaths", 0);
+			pData.set("SPAD", 0);
+			pData.set("SPHP", 0);
+			pData.set("SPM", 0);
+			pData.set("SPMR", 0);
+			pData.set("Skills", new ArrayList<String>());
+			pData.save(pFile);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
+
+	public void presetPlayer(Player p) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+		try {
+			pData.set("Username", p.getName());
+			if (!pData.isSet("Level")) {
+				pData.set("Level", 0);
+			}
+			if (!pData.isSet("Exp")) {
+				pData.set("Exp", 0);
+			}
+			if (!pData.isSet("SP")) {
+				pData.set("SP", 0);
+			}
+			if (!pData.isSet("Mana")) {
+				pData.set("Mana", 5000);
+			}
+			if (!pData.isSet("ManaRegen")) {
+				pData.set("ManaRegen", 20);
+			}
+			if (!pData.isSet("Cmana")) {
+				pData.set("Cmana", 0);
+			}
+			if (!pData.isSet("BaseHP")) {
+				pData.set("BaseHP", 2000.0);
+			}
+			if (!pData.isSet("BaseMana")) {
+				pData.set("BaseMana", 5000);
+			}
+			if (!pData.isSet("AD")) {
+				pData.set("AD", 0.0);
+			}
+			if (!pData.isSet("HP")) {
+				pData.set("HP", 0.0);
+			}
+			if (!pData.isSet("AttackSpeed")) {
+				pData.set("AttackSpeed", 4.0);
+			}
+			if (!pData.isSet("AbilityOne")) {
+				pData.set("AbilityOne", "None");
+			}
+			if (!pData.isSet("AbilityTwo")) {
+				pData.set("AbilityTwo", "None");
+			}
+			if (!pData.isSet("AbilityThree")) {
+				pData.set("AbilityThree", "None");
+			}
+			if (!pData.isSet("AbilityFour")) {
+				pData.set("AbilityFour", "None");
+			}
+			if (!pData.isSet("Kills")) {
+				pData.set("Kills", 0);
+			}
+			if (!pData.isSet("Deaths")) {
+				pData.set("Deaths", 0);
+			}
+			if (!pData.isSet("SPAD")) {
+				pData.set("SPAD", 0);
+			}
+			if (!pData.isSet("SPHP")) {
+				pData.set("SPHP", 0);
+			}
+			if (!pData.isSet("SPM")) {
+				pData.set("SPM", 0);
+			}
+			if (!pData.isSet("SPMR")) {
+				pData.set("SPMR", 0);
+			}
+			if (!pData.isSet("Skills")) {
+				pData.set("Skills", new ArrayList<String>());
+			}
+			pData.save(pFile);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+	}
+
 	public void hashmapUpdate(Player p) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 		UUID uuid = p.getUniqueId();
-        mana.replace(uuid, Integer.valueOf(getValue(p, "Mana")));
-        manaRegen.replace(uuid, Integer.valueOf(getValue(p, "ManaRegen")));
-        ad.replace(uuid, Double.valueOf(getValue(p, "AD")));
-        level.replace(uuid, Integer.valueOf(getValue(p, "Level")));
-        exp.replace(uuid, Integer.valueOf(getValue(p, "Exp")));
-        sp.replace(uuid, Integer.valueOf(getValue(p, "SP")));
-        List<String> abs = new ArrayList<String>();
-        abs.add(getValue(p, "AbilityOne"));
-        abs.add(getValue(p, "AbilityTwo"));
-        abs.add(getValue(p, "AbilityThree"));
-        abs.add(getValue(p, "AbilityFour"));
-        abilities.replace(uuid, abs);
-        p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(ad.get(uuid));
+		getManaMap().put(uuid, pData.getInt("Mana"));
+		getManaRegenMap().put(uuid, pData.getInt("ManaRegen"));
+		getAdMap().put(uuid, pData.getDouble("AD"));
+		getLevelMap().put(uuid, pData.getInt("Level"));
+		getExpMap().put(uuid, pData.getInt("Exp"));
+		getSPMap().put(uuid, pData.getInt("SP"));
+		if (!getCManaMap().containsKey(uuid)) {
+			getCManaMap().put(uuid, pData.getInt("Cmana"));
+		}
+		List<String> abs = new ArrayList<String>();
+		abs.add(pData.getString("AbilityOne"));
+		abs.add(pData.getString("AbilityTwo"));
+		abs.add(pData.getString("AbilityThree"));
+		abs.add(pData.getString("AbilityFour"));
+		getAbilities().put(uuid, abs);
         updateAttackSpeed(p);
         Armor.updateSet(p);
-        Weapons.updateMainHand(p);
+        Weapons.updateInventory(p);
 	}
-	
+
+	public void levelup(Player p, boolean silent) {
+		if (silent) {
+			while (getExpMax(p) <= getExp(p) && getLevel(p) < 100) {
+				int maxlevel = getExpMax(p);
+				int newexp = (getExp(p) - maxlevel);
+				int newlevel = getLevel(p) + 1;
+				getLevelMap().replace(p.getUniqueId(), newlevel);
+				setIntValue(p, "Level", newlevel);
+				maxlevel = getExpMax(p);
+				getExpMap().replace(p.getUniqueId(), newexp);
+				setIntValue(p, "Exp", newexp);
+				int newsp = getSPMap().get(p.getUniqueId()) + 5;
+				getSPMap().replace(p.getUniqueId(), newsp);
+				setIntValue(p, "SP", newsp);
+				File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+				FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+				try {
+					pData.set("BaseHP", pData.getDouble("BaseHP") + 100);
+					pData.set("BaseMana", pData.getDouble("BaseMana") + 50);
+					pData.save(pFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				int SPM = pData.getInt("SPM");
+				double manaUpgrade = 0.1;
+				int newmana = pData.getInt("BaseMana") + (int) (SPM * (manaUpgrade * pData.getInt("BaseMana")));
+				setIntValue(p, "Mana", newmana);
+				getManaMap().replace(p.getUniqueId(), newmana);
+				Armor.updateSet(p);
+				Weapons.updateInventory(p);
+			}
+		}
+	}
+
 	public void levelup (Player p) {
 		while (getExpMax(p) <= getExp(p) && getLevel(p) < 100) {
 			int maxlevel = getExpMax(p);
@@ -538,19 +731,19 @@ public class Main extends JavaPlugin {
 			int newsp = getSPMap().get(p.getUniqueId()) + 5;
 			getSPMap().replace(p.getUniqueId(), newsp);
 			setIntValue(p, "SP", newsp);
-			Main.msg(p, "&7&m--------------------------");
 			Main.msg(p, "");
-			Main.msg(p, "&7» &e&lLEVEL UP: &6" + (newlevel - 1) + " &f-> &6" + newlevel);
-			Main.msg(p, "&7» &e&lSP INCREASE: &f+5");
-			Main.msg(p, "&7» &c&lHP INCREASE: &f+10");
-			Main.msg(p, "&7» &b&lMANA INCREASE: &f+250");
+			Main.msg(p, "&7Â» &e&lLEVEL UP: &6" + (newlevel - 1) + " &f-> &6" + newlevel);
+			Main.msg(p, "&7Â» &e&lSP INCREASE: &f+5");
+			Main.msg(p, "&7Â» &4&lAD INCREASE: &f+5");
+			Main.msg(p, "&7Â» &c&lHP INCREASE: &f+100");
+			Main.msg(p, "&7Â» &b&lMANA INCREASE: &f+50");
 			Main.msg(p, "");
-			Main.msg(p, "&7&m--------------------------");
+			p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - 1) + " &f-> &6" + newlevel), 5, 20, 5));
 			File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
 	        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 	        try {
-	            pData.set("BaseHP", pData.getDouble("BaseHP") + 10);
-	            pData.set("BaseMana", pData.getDouble("BaseMana") + 250);
+	            pData.set("BaseHP", pData.getDouble("BaseHP") + 100);
+	            pData.set("BaseMana", pData.getDouble("BaseMana") + 50);
 	            pData.save(pFile);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
@@ -561,6 +754,7 @@ public class Main extends JavaPlugin {
 			setIntValue(p, "Mana", newmana);
 			getManaMap().replace(p.getUniqueId(), newmana);
 	        Armor.updateSet(p);
+	        Weapons.updateInventory(p);
 			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 		}
 	}
@@ -571,7 +765,8 @@ public class Main extends JavaPlugin {
 		int exp = getInstance().getExp(p);
 		double exppercent = ((1.0 * exp) / (1.0 * max)) * 100;
 		int mana = getInstance().getMana(p);
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
+		//TextComponent bar = new TextComponent(color("&8---&r&8Â« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8Â»---"));
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8Â« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8Â»---")));
 	}
 	
 	public void setStringValue(Player p, String text, String value) {
