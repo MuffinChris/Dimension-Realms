@@ -56,15 +56,15 @@ commands:
   addexp:
     description: Add exp to a player
     permission: core.admin
-  stats:
+  kdr:
     description: Check stats of a player
-    aliases: [kdr, kd, kda]
+    aliases: [kills, kd, kda, deaths]
   information:
     description: Check info of a player
     aliases: [whois, info]
-  sp:
+  stats:
     description: Base Skill Menu
-    aliases: [skillpoint, skillpoints, attributes, attribute, skilltree, rpg, ability, abilities, class, classes, paths, path]
+    aliases: [sp, skillpoint, skillpoints, attributes, attribute]
   heal:
     description: Heal a player
     permission: core.mod
@@ -96,4 +96,22 @@ commands:
     description: View a player's inventory
     permission: core.mod
     aliases: [inv]
+  addlore:
+    description: Add item lore
+    permission: core.admin
+  party:
+    description: Party base command
+    aliases: [parties, group, p, pa]
+  horse:
+    description: Access your horse!
+    aliases: [steed, mount, horses]
+  list:
+    description: List all online players
+    aliases: [listplayers, playerlist]
+  rtp:
+    description: Randomly teleport
+    aliases: [wild]
+  prof:
+    description: View your professions
+    aliases: [job, jobs, profs, professions, mcmmo]
 depend: [ProtocolLib, ViaVersion, Vault]

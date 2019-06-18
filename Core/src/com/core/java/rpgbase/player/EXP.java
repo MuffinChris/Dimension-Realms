@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -103,44 +102,91 @@ public class EXP implements Listener {
 		e.setShowEffect(false);
 	}*/
 
-	public void giveExp (Player p, int exp) {
-		if (exp >= 0) {
-			Main.msg(p, "&7[+" + exp + "&7 XP]");
+	public boolean checkExp (double exp) {
+		if (Double.isFinite(exp)) {
+			return true;
+		}
+		return false;
+	}
+
+	public void giveExp (Player p, double exp) {
+		if (checkExp(exp)) {
+			DecimalFormat df = new DecimalFormat("#");
+			if (exp >= 0) {
+				Main.msg(p, "&7[+" + df.format(exp) + "&7 XP]");
+				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				plugin.levelup(p);
+			} else {
+				Main.msg(p, "&7[-" + df.format(Math.abs(exp)) + "&7 XP]");
+				double newexp = Math.max(plugin.getExp(p) + exp, 0);
+				plugin.getExpMap().replace(p.getUniqueId(), newexp);
+				plugin.setDoubleValue(p, "Exp", newexp);
+				plugin.levelup(p);
+			}
+		}
+	}
+
+	public void giveExp (Player p, double exp, boolean party) {
+		if (checkExp(exp)) {
+			DecimalFormat df = new DecimalFormat("#");
+			Main.msg(p, "&7[+" + df.format(exp) + " &7(&a+" + df.format(exp * (Constants.PartyXPMult-1)) + "&7)" + "&7 XP]");
+			exp = (exp * Constants.PartyXPMult);
 			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-			plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
-			plugin.levelup(p);
-		} else {
-			Main.msg(p, "&7[-" + Math.abs(exp) + "&7 XP]");
-			int newexp = Math.max(plugin.getExp(p) + exp, 0);
-			plugin.getExpMap().replace(p.getUniqueId(), newexp);
-			plugin.setIntValue(p, "Exp", newexp);
+			plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
 			plugin.levelup(p);
 		}
 	}
+
+	public void giveExp (Player p, double exp, double percent, boolean party) {
+		if (checkExp(exp)) {
+			if (percent >= 0 && percent <= 1) {
+				exp = Math.abs(exp);
+				DecimalFormat df = new DecimalFormat("#");
+				DecimalFormat dF = new DecimalFormat("#.##");
+				Main.msg(p, "&7[+" + df.format(exp) + " &7(&a+" + df.format(exp * (Constants.PartyXPMult - 1)) + "&7)" + " &7(" + dF.format(percent * 100) + "%) XP]");
+				exp = (exp * Constants.PartyXPMult);
+				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				plugin.levelup(p);
+			}
+		}
+	}
 	
-	public void giveExp (Player p, int exp, double percent) {
-		DecimalFormat df = new DecimalFormat("#.##");
-		Main.msg(p, "&7[+" + exp + " &7(" + df.format(percent * 100) + "%) XP]");
-		plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-		plugin.setIntValue(p, "Exp", exp + plugin.getExp(p));
-		plugin.levelup(p);
+	public void giveExp (Player p, double exp, double percent) {
+		if (checkExp(exp)) {
+			if (percent >= 0 && percent <= 1) {
+				exp = Math.abs(exp);
+				DecimalFormat dF = new DecimalFormat("#.##");
+				DecimalFormat df = new DecimalFormat("#");
+				Main.msg(p, "&7[+" + df.format(exp) + " &7(" + dF.format(percent * 100) + "%) XP]");
+				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
+				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				plugin.levelup(p);
+			}
+		}
 	}
 	
 	@EventHandler
 	public void expDeath (EntityDeathEvent e) {
 		int level = 1;
-		if (e.getEntity().isCustomNameVisible() && e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+		if (e.getEntity().getCustomName() != null && Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 			level = Integer.valueOf(ChatColor.stripColor(e.getEntity().getCustomName()).replaceAll("\\D+",""));
 		}
 		boolean slime = false;
 		if (e.getEntity().getType() == EntityType.SLIME || e.getEntity().getType() == EntityType.MAGMA_CUBE) {
 			slime = true;
 		}
-		if (!(e.getEntity() instanceof Player) && (slime || e.getEntity().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null)) {
+		if (!(e.getEntity() instanceof Player)) {
 			int entlevel = level;
-			int exp = ((int) (1 * Math.pow(entlevel, 2.4))) + 50;
-			int random = (int) (Math.random() * (0.20 * exp));
-			
+			double exp = ((1 * Math.pow(entlevel, 2.4))) + 50;
+			double random = (Math.random() * (0.50 * exp));
+
+			if ((e.getEntity() instanceof Animals || e.getEntity() instanceof Fish || e.getEntity() instanceof Squid) && !slime) {
+				exp = (exp/25.0);
+				random = (Math.random() * (2 * exp));
+			}
+
 			exp+=random;
 			double diffi = 1;
 			Entity ent = e.getEntity();
@@ -149,16 +195,16 @@ public class EXP implements Listener {
 					diffi = 1;
 				}
 				if (ent.getType() == EntityType.SPIDER) {
-					diffi = 1.6;
+					diffi = 1.2;
 				}
 				if (ent.getType() == EntityType.CAVE_SPIDER) {
-					diffi = 1.7;
+					diffi = 1.4;
 				}
 				if (ent.getType() == EntityType.SLIME) {
-					diffi = 0.1;
+					diffi = 1.0;
 				}
 				if (ent.getType() == EntityType.MAGMA_CUBE) {
-					diffi = 0.1;
+					diffi = 1.0;
 				}
 				if (ent.getType() == EntityType.WOLF) {
 					diffi = 1;
@@ -199,6 +245,9 @@ public class EXP implements Listener {
 				if (ent.getType() == EntityType.GHAST) {
 					diffi = 2.5;
 				}
+				if (ent.getType() == EntityType.PIG_ZOMBIE) {
+					diffi = 1.5;
+				}
 				if (ent.getType() == EntityType.GIANT) {
 					diffi = 3.0;
 				}
@@ -214,19 +263,77 @@ public class EXP implements Listener {
 				if (ent.getType() == EntityType.ENDER_DRAGON) {
 					diffi = 1000;
 				}
+				if (ent.getType() == EntityType.PILLAGER) {
+					diffi = 2;
+				}
+				if (ent.getType() == EntityType.VINDICATOR) {
+					diffi = 5;
+				}
+				//
+				if (ent.getType() == EntityType.GUARDIAN) {
+					diffi = 2.5;
+				}
+				if (ent.getType() == EntityType.ILLUSIONER) {
+					diffi = 5;
+				}
+				if (ent.getType() == EntityType.RAVAGER) {
+					diffi = 10;
+				}
 			}
-			int newexp = (int) (exp * diffi);
+			double newexp = (exp * diffi);
 			exp = newexp;
 			PlayerList plist = plugin.getPManager().getPList(e.getEntity());
+			if (!checkExp(exp)) {
+				exp = 1000000;
+			}
 			double fulldmg = 0;
 			if (plist != null && plist.getPlayers() instanceof List<?>) {
 				fulldmg = plugin.getPManager().getPList(e.getEntity()).getFullDmg();
+				if (fulldmg <= 0) {
+					return;
+				}
 				for (Player pl : plist.getPlayers()) {
 					double dmg = plist.getDamage(pl);
 					if ((dmg / fulldmg) >= 1.0) {
-						giveExp(pl, (int) (exp * (dmg / fulldmg)));
+						boolean go = true;
+						if (plugin.getPM().hasParty(pl)) {
+							Party party = plugin.getPM().getParty(pl);
+							if (party.getPlayers().size() > 1 && party.getShare()) {
+								go = false;
+								int size = party.getPlayers().size();
+								for (Player pp : party.getPlayers()) {
+									if (pl.getLocation().distance(pp.getLocation()) <= 100) {
+										if (!pp.equals(pl)) {
+											giveExp(pp, ((exp * (dmg / fulldmg)) / size), true);
+										}
+									}
+								}
+								giveExp(pl, ((exp * (dmg / fulldmg)) / size), true);
+							}
+						}
+						if (go) {
+							giveExp(pl, (exp * (dmg / fulldmg)));
+						}
 					} else {
-						giveExp(pl, (int) (exp * (dmg / fulldmg)), (dmg / fulldmg));
+						boolean go = true;
+						if (plugin.getPM().hasParty(pl)) {
+							Party party = plugin.getPM().getParty(pl);
+							if (party.getPlayers().size() > 1 && party.getShare()) {
+								go = false;
+								int size = party.getPlayers().size();
+								for (Player pp : party.getPlayers()) {
+									if (pl.getLocation().distance(pp.getLocation()) <= 100) {
+										if (!pp.equals(pl)) {
+											giveExp(pp, ((exp * (dmg / fulldmg)) / size), (dmg / fulldmg), true);
+										}
+									}
+								}
+								giveExp(pl, ((exp * (dmg / fulldmg)) / size), (dmg / fulldmg), true);
+							}
+						}
+						if (go) {
+							giveExp(pl, (exp * (dmg / fulldmg)), (dmg / fulldmg));
+						}
 					}
 				}
 			}
@@ -235,13 +342,31 @@ public class EXP implements Listener {
 			Player pl = (Player) e.getEntity();
 			if (pl.getKiller() instanceof Player) {
 				Player p = (Player) e.getEntity().getKiller();
-				int exp = ((int) (27 * Math.pow(plugin.getLevel(pl), 3))) + 50;
-				int random = (int) (Math.random() * (0.15 * exp));
+				double exp = ((27 * Math.pow(plugin.getLevel(pl), 3))) + 50;
+				double random = (Math.random() * (0.15 * exp));
 				exp+=random;
-				giveExp(p, exp);
+				boolean go = true;
+				if (plugin.getPM().hasParty(p)) {
+					Party party = plugin.getPM().getParty(p);
+					if (party.getPlayers().size() > 1 && party.getShare()) {
+						go = false;
+						int size = party.getPlayers().size();
+						for (Player pp : party.getPlayers()) {
+							if (p.getLocation().distance(pp.getLocation()) <= 100) {
+								if (!p.equals(pp)) {
+									giveExp(pp, ((exp) / size), true);
+								}
+							}
+						}
+						giveExp(p, ((exp) / size), true);
+					}
+				}
+				if (go) {
+					giveExp(p, ((exp)));
+				}
 			}
-			int exp = ((int) (27 * Math.pow(plugin.getLevel(pl), 3))) + 50;
-			int random = (int) (Math.random() * (0.15 * exp));
+			double exp = ((12 * Math.pow(plugin.getLevel(pl), 3))) + 50;
+			double random = (Math.random() * (0.75 * exp));
 			exp+=random;
 			giveExp(pl, -exp);
 		}
@@ -299,8 +424,8 @@ public class EXP implements Listener {
 		int cmana = plugin.getCManaMap().get(e.getPlayer().getUniqueId());
 		e.getPlayer().setExp(Math.max(Math.min(((1.0F * cmana) / (1.0F * maxmana)), 0.99F), 0.0F));
 		int level = plugin.getLevel(e.getPlayer());
-		int amount = e.getExperienceOrb().getExperience();
-		giveExp(e.getPlayer(), (int) (5 + Math.pow((level*1.0)/2.0, 1.8) * Math.pow(amount, 1.8)));
+		double amount = e.getExperienceOrb().getExperience();
+		giveExp(e.getPlayer(), (30 + Math.pow((level * 1.0) / 2.0, 1.8) * Math.pow(amount, 1.8)));
 		e.getExperienceOrb().remove();
 	}
 	

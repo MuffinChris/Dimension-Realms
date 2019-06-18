@@ -2,37 +2,43 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc2cac6d-f15b-4cee-9ffd-b59b116ab179" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/Numbers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/ChatManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/GodCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/InvseeCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/KillAllCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Permissions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ListCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/LoreCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/RTPCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/HorseCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Core.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/Numbers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/Numbers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/economy/EconCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/economy/EconCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/enchantments/Serration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/enchantments/Serration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/Motd.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/Motd.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/HealCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/HealCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/LagCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/LagCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ManaCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ManaCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/essentials/commands/KdrCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerListManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerListManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/plugin.yml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -50,113 +56,96 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="73" column="60" selection-start-line="73" selection-start-column="60" selection-end-line="73" selection-end-column="60" />
+            <state relative-caret-position="-2029">
+              <caret line="787" column="47" lean-forward="true" selection-start-line="787" selection-start-column="47" selection-end-line="787" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5202#5203#0" expanded="true" />
-                <element signature="e#5220#5221#0" expanded="true" />
-                <element signature="e#5451#5452#0" expanded="true" />
-                <element signature="e#5473#5474#0" expanded="true" />
-                <element signature="e#7127#7128#0" expanded="true" />
-                <element signature="e#7148#7149#0" expanded="true" />
-                <element signature="e#7804#7819#0" expanded="true" />
-                <element signature="e#9638#9639#0" expanded="true" />
-                <element signature="e#9659#9660#0" expanded="true" />
-                <element signature="e#14165#14297#1" expanded="true" />
-                <element signature="e#14296#14297#0" expanded="true" />
-                <element signature="e#15517#16177#0" expanded="true" />
-                <element signature="e#16176#16177#0" expanded="true" />
-                <element signature="e#16256#17158#0" expanded="true" />
-                <element signature="e#17157#17158#0" expanded="true" />
-                <element signature="e#27000#27001#0" expanded="true" />
-                <element signature="e#27071#27072#0" expanded="true" />
-                <element signature="e#27265#27266#0" expanded="true" />
-                <element signature="e#27328#27329#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="62" column="9" lean-forward="true" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#470#471#0" expanded="true" />
-                <element signature="e#498#499#0" expanded="true" />
-                <element signature="e#556#557#0" expanded="true" />
-                <element signature="e#599#600#0" expanded="true" />
-                <element signature="e#603#604#0" expanded="true" />
-                <element signature="e#633#634#0" expanded="true" />
-                <element signature="e#682#683#0" expanded="true" />
-                <element signature="e#702#703#0" expanded="true" />
-                <element signature="e#748#749#0" expanded="true" />
-                <element signature="e#773#774#0" expanded="true" />
-                <element signature="e#808#809#0" expanded="true" />
-                <element signature="e#829#830#0" expanded="true" />
-                <element signature="e#871#872#0" expanded="true" />
-                <element signature="e#899#900#0" expanded="true" />
-                <element signature="e#1340#1341#0" expanded="true" />
-                <element signature="e#1368#1369#0" expanded="true" />
+                <element signature="e#10017#10032#0" expanded="true" />
+                <element signature="e#10072#10073#0" expanded="true" />
+                <element signature="e#10090#10091#0" expanded="true" />
+                <element signature="e#9883#9901#0" expanded="true" />
+                <element signature="e#9945#9946#0" expanded="true" />
+                <element signature="e#9964#9965#0" expanded="true" />
+                <element signature="e#32635#32636#0" expanded="true" />
+                <element signature="e#32892#32893#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/enchantments/Serration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="32" column="23" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+            <state relative-caret-position="210">
+              <caret line="24" column="63" selection-start-line="24" selection-start-column="63" selection-end-line="24" selection-end-column="63" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="22" column="17" lean-forward="true" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#277#595#0" expanded="true" />
-                <element signature="e#594#595#0" expanded="true" />
-                <element signature="e#812#813#0" expanded="true" />
-                <element signature="e#842#843#0" expanded="true" />
+                <element signature="e#296#297#0" expanded="true" />
+                <element signature="e#323#324#0" expanded="true" />
+                <element signature="e#425#426#0" expanded="true" />
+                <element signature="e#473#474#0" expanded="true" />
+                <element signature="e#415#416#0" expanded="true" />
+                <element signature="e#443#444#0" expanded="true" />
+                <element signature="e#479#480#0" expanded="true" />
+                <element signature="e#507#508#0" expanded="true" />
+                <element signature="e#541#542#0" expanded="true" />
+                <element signature="e#567#568#0" expanded="true" />
+                <element signature="e#606#607#0" expanded="true" />
+                <element signature="e#631#632#0" expanded="true" />
+                <element signature="e#671#672#0" expanded="true" />
+                <element signature="e#694#695#0" expanded="true" />
+                <element signature="e#930#931#0" expanded="true" />
+                <element signature="e#960#961#0" expanded="true" />
+                <element signature="e#1350#1351#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="147" column="54" selection-start-line="147" selection-start-column="54" selection-end-line="147" selection-end-column="54" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="664" column="42" lean-forward="true" selection-start-line="664" selection-start-column="42" selection-end-line="664" selection-end-column="42" />
+            <state relative-caret-position="225">
+              <caret line="45" column="63" selection-start-line="45" selection-start-column="63" selection-end-line="45" selection-end-column="63" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#5424#5432#0" expanded="true" />
-                <element signature="e#26757#26844#0" expanded="true" />
-                <element signature="e#26843#26844#0" expanded="true" />
-                <element signature="e#27134#27225#0" expanded="true" />
-                <element signature="e#27224#27225#0" expanded="true" />
+                <element signature="e#424#425#0" expanded="true" />
+                <element signature="e#451#452#0" expanded="true" />
+                <element signature="e#497#498#0" expanded="true" />
+                <element signature="e#518#519#0" expanded="true" />
+                <element signature="e#421#422#0" expanded="true" />
+                <element signature="e#459#460#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-105">
-              <caret line="233" column="47" lean-forward="true" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+            <state relative-caret-position="290">
+              <caret line="163" column="47" selection-start-line="163" selection-start-column="47" selection-end-line="163" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1064#1065#0" expanded="true" />
-                <element signature="e#1079#1080#0" expanded="true" />
+                <element signature="e#1342#1352#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -165,25 +154,30 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="70" column="54" lean-forward="true" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
+            <state relative-caret-position="921">
+              <caret line="117" column="35" lean-forward="true" selection-start-line="117" selection-start-column="35" selection-end-line="117" selection-end-column="35" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/Numbers.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/Constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="55" selection-start-line="13" selection-start-column="55" selection-end-line="13" selection-end-column="55" />
+            <state relative-caret-position="395">
+              <caret line="37" column="83" selection-start-line="37" selection-start-column="83" selection-end-line="37" selection-end-column="83" />
               <folding>
-                <element signature="e#109#110#0" expanded="true" />
-                <element signature="e#177#178#0" expanded="true" />
-                <element signature="e#222#223#0" expanded="true" />
-                <element signature="e#284#285#0" expanded="true" />
-                <element signature="e#327#328#0" expanded="true" />
-                <element signature="e#348#349#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#843#855#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-681">
+              <caret line="170" column="38" selection-start-line="170" selection-start-column="38" selection-end-line="170" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -191,28 +185,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="16" column="30" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="30" />
-              <folding>
-                <element signature="e#12343#12344#0" expanded="true" />
-                <element signature="e#12386#12387#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="129" column="60" selection-start-line="129" selection-start-column="60" selection-end-line="129" selection-end-column="60" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#6006#10860#0" expanded="true" />
-                <element signature="e#10859#10860#0" expanded="true" />
-                <element signature="e#12347#12434#0" expanded="true" />
-                <element signature="e#12433#12434#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="731">
+              <caret line="148" column="61" lean-forward="true" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="61" />
             </state>
           </provider>
         </entry>
@@ -228,45 +202,52 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setup</find>
-      <find>god</find>
-      <find>onJoin</find>
-      <find>firework</find>
-      <find>hit</find>
-      <find>fulldmg</find>
-      <find>wither</find>
-      <find>Elytra</find>
-      <find>armor</find>
-      <find>getArmor</find>
-      <find>ArmorMap</find>
-      <find>updateExp</find>
-      <find>armorDamage</find>
-      <find>PlayerDeath</find>
-      <find>manaRegen</find>
-      <find>canUseWeapon</find>
-      <find>Attack</find>
-      <find>1000</find>
-      <find>level</find>
-      <find>CMana</find>
-      <find>void</find>
-      <find>+</find>
-      <find>damageHolo</find>
-      <find>levelup</find>
+      <find>(int)</find>
+      <find>pickup</find>
+      <find>You don't</find>
+      <find>df.format</find>
+      <find>format</find>
+      <find>exp</find>
+      <find>main.getExp</find>
+      <find>giveExp</find>
+      <find>SPAD</find>
+      <find>e.getEntity().getKiller()</find>
+      <find>FreeAttack</find>
+      <find>FreeAttackDamage</find>
       <find>bonusDmg</find>
-      <find>getAcMap</find>
-      <find>particle</find>
+      <find>levelup</find>
+      <find>getExpMax</find>
+      <find>e.getEntityType()</find>
+      <find>&amp;b</find>
+      <find>Knock</find>
       <find>death</find>
-      <find>ratio</find>
-      <find>acPeriodic</find>
+      <find>Level defaulted</find>
+      <find>defau</find>
+      <find>FileC</find>
+      <find>for</find>
+      <find>hashmapUpdate</find>
+      <find>mcmmo</find>
+      <find>drown</find>
+      <find>minMax</find>
+      <find>PICKAXE</find>
+      <find>datareload</find>
+      <find>&amp;aBountiful Harvest</find>
     </findStrings>
     <replaceStrings>
       <replace>»</replace>
       <replace>&amp;8»</replace>
       <replace>&amp;8«</replace>
+      <replace>play</replace>
+      <replace>ent.getEntityType()</replace>
+      <replace>ent.getType()</replace>
+      <replace>&amp;e</replace>
+      <replace>HOE</replace>
+      <replace>AXE</replace>
+      <replace>&amp;eBountiful Harvest</replace>
     </replaceStrings>
     <dirStrings>
-      <dir>C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Core\src</dir>
       <dir>C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Core\src\com\core\java</dir>
+      <dir>C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Core\src</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -277,33 +258,49 @@
       <list>
         <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/GUIListener.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Permissions.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/essentials/ChatManager.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ManaCommand.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/essentials/Motd.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/HealCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" />
         <option value="$PROJECT_DIR$/src/KillAllCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/KillAllCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/GodCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/InvseeCommand.java" />
-        <option value="$PROJECT_DIR$/src/resources/plugin.yml" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/LoreCommand.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/Numbers.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/Main.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/HealCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ManaCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/KdrCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" />
         <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerListManager.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/HorseCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/KillAllCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ListCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/economy/EconCommands.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/RTPCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java" />
+        <option value="$PROJECT_DIR$/src/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/Constants.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/essentials/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java" />
+        <option value="$PROJECT_DIR$/src/com/core/java/enchantments/Serration.java" />
       </list>
     </option>
   </component>
@@ -330,16 +327,6 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectConfigurationFiles">
-    <option name="files">
-      <list>
-        <option value="$PROJECT_DIR$/.idea/compiler.xml" />
-        <option value="$PROJECT_DIR$/.idea/dictionaries/aiden.xml" />
-        <option value="$PROJECT_DIR$/.idea/encodings.xml" />
-        <option value="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      </list>
-    </option>
-  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="15" />
     <option name="y" value="30" />
@@ -353,7 +340,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -450,6 +436,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="rpgbase" type="462c0819:PsiDirectoryNode" />
+              <item name="player" type="462c0819:PsiDirectoryNode" />
+              <item name="professions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="rpgbase" type="462c0819:PsiDirectoryNode" />
               <item name="skills" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -462,11 +457,13 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../APCSAFinalProject" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
   </component>
   <component name="RecentsManager">
@@ -566,7 +563,7 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2825911" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28421053" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -576,7 +573,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3285968" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49959514" weight="0.3285968" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39964476" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -599,34 +596,27 @@
     <option name="LAST_COMMIT_MESSAGE" value="Fixing Bugs" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/bukkit/bukkit/1.13.1-R0.1-SNAPSHOT/bukkit-1.13.1-R0.1-20181022.190036-99.jar!/org/bukkit/Material.class">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="290" column="29" lean-forward="true" selection-start-line="290" selection-start-column="29" selection-end-line="290" selection-end-column="29" />
+        <state relative-caret-position="223">
+          <caret line="164" column="53" selection-start-line="164" selection-start-column="53" selection-end-line="164" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/resources/paper-1.14.1.jar!/org/bukkit/permissions/Permissible.class">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="28" />
+        <state relative-caret-position="164">
+          <caret line="62" column="9" lean-forward="true" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/resources/paper-1.14.1.jar!/org/bukkit/permissions/PermissionAttachment.class">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/economy/EconCommands.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="71" column="85" selection-start-line="71" selection-start-column="84" selection-end-line="71" selection-end-column="85" />
+        <state relative-caret-position="-45">
+          <caret line="32" column="36" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -639,7 +629,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/FlyCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-75">
+        <state relative-caret-position="60">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
@@ -651,10 +641,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/GodCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/GUICommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        <state relative-caret-position="1545">
+          <caret line="203" column="31" selection-start-line="203" selection-start-column="31" selection-end-line="203" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -667,15 +667,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/HashmapCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
+        <state relative-caret-position="-435">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/HealCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -686,55 +679,95 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InvseeCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+        <state relative-caret-position="300">
+          <caret line="29" column="50" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/KdrCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/KillAllCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="21" column="35" lean-forward="true" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/LagCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ListCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/LoreCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="31" column="63" selection-start-line="31" selection-start-column="63" selection-end-line="31" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ManaCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" column="39" lean-forward="true" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="39" />
+        <state relative-caret-position="270">
+          <caret line="23" column="4" lean-forward="true" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpawnCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        <state relative-caret-position="-684">
+          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpeedCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
+        <state relative-caret-position="15">
           <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        <state relative-caret-position="106">
+          <caret line="63" column="93" selection-start-line="63" selection-start-column="93" selection-end-line="63" selection-end-column="93" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/ChatManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="25" column="24" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="60">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -752,312 +785,263 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/playerinfoManager.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/playerinfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/Motd.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="21" column="34" selection-start-line="21" selection-start-column="34" selection-end-line="21" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Permissions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="73" column="54" selection-start-line="73" selection-start-column="54" selection-end-line="73" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/resources/paper-1.14.1.jar!/org/bukkit/entity/Entity.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="91" column="32" lean-forward="true" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="25" column="38" lean-forward="true" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/resources/paper-1.14.1.jar!/org/bukkit/entity/Player.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="42" column="17" selection-start-line="42" selection-start-column="17" selection-end-line="42" selection-end-column="17" />
+        <state relative-caret-position="240">
+          <caret line="20" column="5" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerListManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="8" column="36" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
+        <state relative-caret-position="253">
+          <caret line="27" column="22" selection-start-line="27" selection-start-column="22" selection-end-line="27" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/playerinfo.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+        <state relative-caret-position="255">
+          <caret line="27" column="51" selection-start-line="27" selection-start-column="51" selection-end-line="27" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="11" column="4" selection-start-line="11" selection-end-line="28" />
+        <state relative-caret-position="335">
+          <caret line="92" column="41" selection-start-line="92" selection-start-column="41" selection-end-line="92" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpawnCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="45" column="16" lean-forward="true" selection-start-line="45" selection-start-column="16" selection-end-line="45" selection-end-column="16" />
-          <folding>
-            <element signature="e#921#922#0" expanded="true" />
-            <element signature="e#942#943#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="120">
+          <caret line="23" column="76" lean-forward="true" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="76" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/GodCommand.java">
+    <entry file="jar://$PROJECT_DIR$/resources/paper-1.14.1.jar!/org/bukkit/Location.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/LagCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        <state relative-caret-position="179">
+          <caret line="33" column="40" lean-forward="true" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="466" column="17" selection-start-line="466" selection-start-column="17" selection-end-line="466" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/ChatFunctions.java">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="34" column="91" lean-forward="true" selection-start-line="34" selection-start-column="91" selection-end-line="34" selection-end-column="91" />
+          <caret line="17" column="37" lean-forward="true" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/KillAllCommand.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="43" column="5" lean-forward="true" selection-start-line="14" selection-start-column="4" selection-end-line="43" selection-end-column="5" />
+        <state relative-caret-position="141">
+          <caret line="38" column="18" lean-forward="true" selection-start-line="38" selection-start-column="18" selection-end-line="38" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/entities/PlayerList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="29" column="18" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/RTPCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="54" column="46" selection-start-line="54" selection-start-column="46" selection-end-line="54" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2280#5137#0" expanded="true" />
+            <element signature="e#5136#5137#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/HorseCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="27" column="39" lean-forward="true" selection-start-line="27" selection-start-column="39" selection-end-line="27" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="39" column="39" lean-forward="true" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="85" column="9" lean-forward="true" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2340#2341#0" expanded="true" />
+            <element signature="e#2397#2398#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="244" column="8" lean-forward="true" selection-start-line="244" selection-start-column="8" selection-end-line="252" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1046#1047#0" expanded="true" />
+            <element signature="e#1079#1080#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/plugin.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="92" column="32" lean-forward="true" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
+        <state relative-caret-position="304">
+          <caret line="110" column="6" lean-forward="true" selection-start-line="110" selection-start-column="6" selection-end-line="110" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="78" column="78" selection-start-line="78" selection-start-column="78" selection-end-line="78" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InvseeCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="50" selection-start-line="29" selection-start-column="50" selection-end-line="29" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/Numbers.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="55" selection-start-line="13" selection-start-column="55" selection-end-line="13" selection-end-column="55" />
-          <folding>
-            <element signature="e#109#110#0" expanded="true" />
-            <element signature="e#177#178#0" expanded="true" />
-            <element signature="e#222#223#0" expanded="true" />
-            <element signature="e#284#285#0" expanded="true" />
-            <element signature="e#327#328#0" expanded="true" />
-            <element signature="e#348#349#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-681">
+          <caret line="170" column="38" selection-start-line="170" selection-start-column="38" selection-end-line="170" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="129" column="60" selection-start-line="129" selection-start-column="60" selection-end-line="129" selection-end-column="60" />
+        <state relative-caret-position="994">
+          <caret line="255" column="13" lean-forward="true" selection-start-line="255" selection-start-column="13" selection-end-line="255" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6006#10860#0" expanded="true" />
-            <element signature="e#10859#10860#0" expanded="true" />
-            <element signature="e#12347#12434#0" expanded="true" />
-            <element signature="e#12433#12434#0" expanded="true" />
+            <element signature="e#9663#15060#0" expanded="true" />
+            <element signature="e#15059#15060#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="16" column="30" selection-start-line="16" selection-start-column="25" selection-end-line="16" selection-end-column="30" />
-          <folding>
-            <element signature="e#12343#12344#0" expanded="true" />
-            <element signature="e#12386#12387#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="731">
+          <caret line="148" column="61" lean-forward="true" selection-start-line="148" selection-start-column="61" selection-end-line="148" selection-end-column="61" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="147" column="54" selection-start-line="147" selection-start-column="54" selection-end-line="147" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="664" column="42" lean-forward="true" selection-start-line="664" selection-start-column="42" selection-end-line="664" selection-end-column="42" />
+        <state relative-caret-position="395">
+          <caret line="37" column="83" selection-start-line="37" selection-start-column="83" selection-end-line="37" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5424#5432#0" expanded="true" />
-            <element signature="e#26757#26844#0" expanded="true" />
-            <element signature="e#26843#26844#0" expanded="true" />
-            <element signature="e#27134#27225#0" expanded="true" />
-            <element signature="e#27224#27225#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-105">
-          <caret line="233" column="47" lean-forward="true" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1064#1065#0" expanded="true" />
-            <element signature="e#1079#1080#0" expanded="true" />
+            <element signature="e#843#855#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/BottleCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="70" column="54" lean-forward="true" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
+        <state relative-caret-position="921">
+          <caret line="117" column="35" lean-forward="true" selection-start-line="117" selection-start-column="35" selection-end-line="117" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="73" column="60" selection-start-line="73" selection-start-column="60" selection-end-line="73" selection-end-column="60" />
+        <state relative-caret-position="-2029">
+          <caret line="787" column="47" lean-forward="true" selection-start-line="787" selection-start-column="47" selection-end-line="787" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5202#5203#0" expanded="true" />
-            <element signature="e#5220#5221#0" expanded="true" />
-            <element signature="e#5451#5452#0" expanded="true" />
-            <element signature="e#5473#5474#0" expanded="true" />
-            <element signature="e#7127#7128#0" expanded="true" />
-            <element signature="e#7148#7149#0" expanded="true" />
-            <element signature="e#7804#7819#0" expanded="true" />
-            <element signature="e#9638#9639#0" expanded="true" />
-            <element signature="e#9659#9660#0" expanded="true" />
-            <element signature="e#14165#14297#1" expanded="true" />
-            <element signature="e#14296#14297#0" expanded="true" />
-            <element signature="e#15517#16177#0" expanded="true" />
-            <element signature="e#16176#16177#0" expanded="true" />
-            <element signature="e#16256#17158#0" expanded="true" />
-            <element signature="e#17157#17158#0" expanded="true" />
-            <element signature="e#27000#27001#0" expanded="true" />
-            <element signature="e#27071#27072#0" expanded="true" />
-            <element signature="e#27265#27266#0" expanded="true" />
-            <element signature="e#27328#27329#0" expanded="true" />
+            <element signature="e#10017#10032#0" expanded="true" />
+            <element signature="e#10072#10073#0" expanded="true" />
+            <element signature="e#10090#10091#0" expanded="true" />
+            <element signature="e#9883#9901#0" expanded="true" />
+            <element signature="e#9945#9946#0" expanded="true" />
+            <element signature="e#9964#9965#0" expanded="true" />
+            <element signature="e#32635#32636#0" expanded="true" />
+            <element signature="e#32892#32893#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Party.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="62" column="9" lean-forward="true" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
+        <state relative-caret-position="225">
+          <caret line="45" column="63" selection-start-line="45" selection-start-column="63" selection-end-line="45" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#470#471#0" expanded="true" />
-            <element signature="e#498#499#0" expanded="true" />
-            <element signature="e#556#557#0" expanded="true" />
-            <element signature="e#599#600#0" expanded="true" />
-            <element signature="e#603#604#0" expanded="true" />
-            <element signature="e#633#634#0" expanded="true" />
-            <element signature="e#682#683#0" expanded="true" />
-            <element signature="e#702#703#0" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#773#774#0" expanded="true" />
-            <element signature="e#808#809#0" expanded="true" />
-            <element signature="e#829#830#0" expanded="true" />
-            <element signature="e#871#872#0" expanded="true" />
-            <element signature="e#899#900#0" expanded="true" />
-            <element signature="e#1340#1341#0" expanded="true" />
-            <element signature="e#1368#1369#0" expanded="true" />
+            <element signature="e#424#425#0" expanded="true" />
+            <element signature="e#451#452#0" expanded="true" />
+            <element signature="e#497#498#0" expanded="true" />
+            <element signature="e#518#519#0" expanded="true" />
+            <element signature="e#421#422#0" expanded="true" />
+            <element signature="e#459#460#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyManager.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="32" column="23" selection-start-line="32" selection-start-column="23" selection-end-line="32" selection-end-column="23" />
+        <state relative-caret-position="231">
+          <caret line="22" column="17" lean-forward="true" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#277#595#0" expanded="true" />
-            <element signature="e#594#595#0" expanded="true" />
-            <element signature="e#812#813#0" expanded="true" />
-            <element signature="e#842#843#0" expanded="true" />
+            <element signature="e#296#297#0" expanded="true" />
+            <element signature="e#323#324#0" expanded="true" />
+            <element signature="e#425#426#0" expanded="true" />
+            <element signature="e#473#474#0" expanded="true" />
+            <element signature="e#415#416#0" expanded="true" />
+            <element signature="e#443#444#0" expanded="true" />
+            <element signature="e#479#480#0" expanded="true" />
+            <element signature="e#507#508#0" expanded="true" />
+            <element signature="e#541#542#0" expanded="true" />
+            <element signature="e#567#568#0" expanded="true" />
+            <element signature="e#606#607#0" expanded="true" />
+            <element signature="e#631#632#0" expanded="true" />
+            <element signature="e#671#672#0" expanded="true" />
+            <element signature="e#694#695#0" expanded="true" />
+            <element signature="e#930#931#0" expanded="true" />
+            <element signature="e#960#961#0" expanded="true" />
+            <element signature="e#1350#1351#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="163" column="47" selection-start-line="163" selection-start-column="47" selection-end-line="163" selection-end-column="47" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1342#1352#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/enchantments/Serration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="24" column="63" selection-start-line="24" selection-start-column="63" selection-end-line="24" selection-end-column="63" />
         </state>
       </provider>
     </entry>

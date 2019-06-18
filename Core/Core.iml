@@ -17,9 +17,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER" level="application" />
     <orderEntry type="module-library">
-      <library name="Maven: com.destroystokyo.paper:paper-server:1.14.1-R0.1-SNAPSHOT">
+      <library name="Maven: com.destroystokyo.paper:paper-server:1.14.2-R0.1-SNAPSHOT">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/paper-1.14.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/resources/paper-1.14.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -39,9 +39,9 @@
       <dependency>
     <groupId>com.destroystokyo.paper</groupId>
     <artifactId>paper-server</artifactId>
-    <version>1.14.1-R0.1-SNAPSHOT</version>
+    <version>1.14.2-R0.1-SNAPSHOT</version>
     <scope>system</scope>
-    <systemPath>${project.basedir}/resources/paper-1.14.1.jar</systemPath>
+    <systemPath>${project.basedir}/resources/paper-1.14.2.jar</systemPath>
   </dependency>
   <dependency>
     <groupId>viaver.api</groupId>

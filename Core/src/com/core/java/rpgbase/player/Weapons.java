@@ -6,11 +6,13 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.core.java.Constants;
 import com.core.java.rpgbase.entities.PlayerList;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftHumanEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -93,7 +95,7 @@ public class Weapons  implements Listener {
 	
 	public static boolean isWeapon(ItemStack i) {
 		String s = i.getType().toString().toLowerCase();
-		return (s.contains("sword") || s.contains("axe") || s.contains("bow") || s.contains("trident"));
+		return (!s.contains("pick") && (s.contains("sword") || s.contains("axe") || s.contains("bow") || s.contains("trident")));
 	}
 	
 	public static ItemStack fixItem(ItemStack i) {
@@ -106,19 +108,19 @@ public class Weapons  implements Listener {
 						if (s.contains("sword")) {
 							double ogdmg = 5;
 							if (s.contains("diamond")) {
-								ogdmg = 300;
+								ogdmg = 400;
 							}
 							if (s.contains("iron")) {
-								ogdmg = 280;
+								ogdmg = 325;
 							}
 							if (s.contains("stone")) {
-								ogdmg = 250;
+								ogdmg = 225;
 							}
 							if (s.contains("wood")) {
 								ogdmg = 150;
 							}
 							if (s.contains("gold")) {
-								ogdmg = 310;
+								ogdmg = 425;
 							}
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
 							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -149,19 +151,19 @@ public class Weapons  implements Listener {
 						} else if (s.contains("axe")) {
 							double ogdmg = 8;
 							if (s.contains("diamond")) {
-								ogdmg = 600;
+								ogdmg = 650;
 							}
 							if (s.contains("iron")) {
-								ogdmg = 580;
+								ogdmg = 500;
 							}
 							if (s.contains("stone")) {
-								ogdmg = 400;
+								ogdmg = 350;
 							}
 							if (s.contains("wood")) {
-								ogdmg = 300;
+								ogdmg = 200;
 							}
 							if (s.contains("gold")) {
-								ogdmg = 610;
+								ogdmg = 675;
 							}
 							net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
 							NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
@@ -272,7 +274,7 @@ public class Weapons  implements Listener {
 			}
 		}
 		Main.getInstance().updateAttackSpeed(p);
-		p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(5 * Main.getInstance().getLevel(p) + 1);
+		p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(Constants.ADPerLevel * Main.getInstance().getLevel(p) + Constants.FreeAttackDamage);
 	}
 	
 	public static boolean isNotUpdated(ItemStack i) {
@@ -321,7 +323,7 @@ public class Weapons  implements Listener {
 			} else if (a.getShooter() instanceof Entity) {
 				Entity ent = (Entity) a.getShooter();
 				int level = 1;
-				if (ent.isCustomNameVisible() && ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
+				if (ent.getCustomName() != null && Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+","")) instanceof Integer) {
 					level = Integer.valueOf(ChatColor.stripColor(ent.getCustomName()).replaceAll("\\D+",""));
 				}
 				double mod = 1.0;
@@ -453,7 +455,7 @@ public class Weapons  implements Listener {
 				}
 			}
 		}
-		return 0;
+		return p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * (1 + Main.getInstance().getAdMap().get(p.getUniqueId())) ;
 	}
 
 	public static double getRangedAttackDamage(Player p) {
@@ -527,28 +529,6 @@ public class Weapons  implements Listener {
 		return 0;
 	}
 
-	@EventHandler (priority = EventPriority.HIGHEST)
-	public void weaponAttributes (EntityDamageByEntityEvent e) {
-		if (e.getDamage() <= 0.01) {
-			return;
-		}
-		if (e.getCause() == DamageCause.ENTITY_ATTACK || e.getCause() == DamageCause.ENTITY_SWEEP_ATTACK || e.getCause() == DamageCause.PROJECTILE) {
-			if (e.getDamager() instanceof Player) {
-				Player p = (Player) e.getDamager();
-				if (getCrit(p) > 0) {
-					double rand = Math.random();
-					if (rand <= getCrit(p)) {
-						if (getCritDamage(p) > 0) {
-							e.setDamage(e.getDamage() * (1 + getCritDamage(p)));
-							e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
-							e.getEntity().getWorld().spawnParticle(Particle.CRIT, e.getEntity().getLocation(), 10);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	@EventHandler
 	public void bonusDmg (EntityDamageByEntityEvent e) {
 		if (e.getDamage() <= 0.01) {
@@ -569,7 +549,7 @@ public class Weapons  implements Listener {
 					Main.msg(p, "&cYou do not meet this item's level requirements.");
 					return;
 				}
-				e.setDamage(getWeaponAttackDamage((Player) e.getDamager()) + 4);
+				e.setDamage(getWeaponAttackDamage((Player) e.getDamager()));
 				if (Double.valueOf(getWeaponAttackDamage(p)) instanceof Double) {
 					ItemStack i = p.getInventory().getItemInMainHand();
 					if (i.containsEnchantment(Enchantment.DAMAGE_ALL)) {
@@ -600,6 +580,18 @@ public class Weapons  implements Listener {
 					if (i.containsEnchantment(Enchantment.IMPALING)) {
 						if (e.getEntity().getType() == EntityType.PLAYER || e.getEntity().getType() == EntityType.GUARDIAN || e.getEntity().getType() == EntityType.ELDER_GUARDIAN || e.getEntity().getType() == EntityType.DOLPHIN || e.getEntity().getType() == EntityType.COD || e.getEntity().getType() == EntityType.PUFFERFISH || e.getEntity().getType() == EntityType.TROPICAL_FISH || e.getEntity().getType() == EntityType.SALMON || e.getEntity().getType() == EntityType.SQUID || e.getEntity().getType() == EntityType.TURTLE) {
 							e.setDamage(e.getDamage() + 100 * i.getEnchantmentLevel(Enchantment.IMPALING));
+						}
+					}
+				}
+				if (getCrit(p) > 0) {
+					double rand = Math.random();
+					if (rand <= getCrit(p)) {
+						if (getCritDamage(p) > 0) {
+							e.setDamage(e.getDamage() * (1 + getCritDamage(p)));
+							e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
+							e.getEntity().getWorld().spawnParticle(Particle.CRIT, e.getEntity().getLocation(), 30);
+							BlockData blood = Material.BARRIER.createBlockData();
+							e.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, e.getEntity().getLocation(), 100, 0.5, 1, 0.5, blood);
 						}
 					}
 				}
@@ -659,10 +651,10 @@ public class Weapons  implements Listener {
 					ex.printStackTrace();
 				}*/
 				if (ratio <= 0.8 && ratio > 0.5) {
+					ratio = Math.pow(ratio, 1.5);
+				} else if (ratio <= 0.5 && ratio > 0.1) {
 					ratio = Math.pow(ratio, 2);
-				} else if (ratio <= 0.5 && ratio > 0.2) {
-					ratio = Math.pow(ratio, 3);
-				} else if (ratio <= 0.2) {
+				} else if (ratio <= 0.1) {
 					ratio = Math.pow(ratio, 5);
 				}
 				e.setDamage(e.getDamage() * sweep * ratio);
@@ -699,26 +691,19 @@ public class Weapons  implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void dmgHolo (EntityDamageEvent e) {
-		/*if (e.getEntity() instanceof Player) {
-			Player p = (Player) e.getEntity();
-			if (main.getGodMode().get(p.getUniqueId())) {
-				e.setCancelled(true);
-				return;
-			}
-		}*/
 		if (e.getDamage() > 0.25) {
-			if (e.getEntityType() == EntityType.ARMOR_STAND || e.getEntityType() == EntityType.PRIMED_TNT) {
+			if (e.getEntityType() == EntityType.ARMOR_STAND) {
 				return;
 			}
 			if (e.getEntity() instanceof LivingEntity) {
-				Hologram damageHolo = HologramsAPI.createHologram(main, new Location(e.getEntity().getWorld(), e.getEntity().getLocation().getX(), e.getEntity().getLocation().getY() + e.getEntity().getHeight() + 0.3, e.getEntity().getLocation().getZ()));
+				/*Hologram damageHolo = HologramsAPI.createHologram(main, new Location(e.getEntity().getWorld(), e.getEntity().getLocation().getX(), e.getEntity().getLocation().getY() + e.getEntity().getHeight() + 0.3, e.getEntity().getLocation().getZ()));
 				DecimalFormat df = new DecimalFormat("#.##");
 				damageHolo.appendTextLine(Main.color("&c&l-" + df.format(e.getDamage())));
 				new BukkitRunnable() {
 					public void run() {
 						damageHolo.delete();
 					}
-				}.runTaskLater(main, 20L);
+				}.runTaskLater(main, 20L);*/
 			}
 		}
 	}

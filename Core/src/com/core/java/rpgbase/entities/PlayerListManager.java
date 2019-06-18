@@ -23,5 +23,19 @@ public class PlayerListManager {
 	public Map<Entity, PlayerList> getPList() {
 		return plist;
 	}
+
+	public void cleanPlayerList() {
+		int index = 0;
+		int remove = -1;
+		for (Entity e : plist.keySet()) {
+			if (e.isDead()) {
+				remove = index;
+			}
+			index++;
+		}
+		if (remove != -1) {
+			plist.remove(plist.keySet().toArray()[remove]);
+		}
+	}
 	
 }

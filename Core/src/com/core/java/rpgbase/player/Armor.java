@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -51,7 +52,7 @@ import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class Armor implements Listener {
 	
-	public static final double basehp = 200;
+	public static final double basehp = Constants.BaseHP;
 	public static final double leatherA = 75;
 	public static final double goldenA = 100;
 	public static final double chainmailA = 125;
@@ -119,7 +120,7 @@ public class Armor implements Listener {
 		if ((s.contains("helmet") || 
 				s.contains("chestplate") || s.contains("leggings") ||
 				s.contains("boots") || s.contains("cap") || 
-				s.contains("tunic") || s.contains("pants"))) {
+				s.contains("tunic") || s.contains("pants") || s.contains("shield"))) {
 			e.setDamage(1);
 		}
 	}

@@ -3,7 +3,7 @@ package com.core.java;
 public class Numbers {
 
     public double getMobProjectileDmg(int level, double dmg) {
-        return (150 + 0.00025 * dmg * Math.pow(level+35, 3));
+        return (220 + 0.00025 * dmg * Math.pow(level+35, 3));
     }
 
     public double getMobHp(int level) {

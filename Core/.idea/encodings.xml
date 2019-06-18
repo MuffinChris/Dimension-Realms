@@ -4,10 +4,11 @@
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/Main.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ExpCommand.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/GUICommand.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/KdrCommand.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/LagCommand.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/ResetCommand.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/StatsCommand.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />

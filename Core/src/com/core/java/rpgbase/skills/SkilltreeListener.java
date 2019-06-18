@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -28,19 +29,19 @@ public class SkilltreeListener implements Listener {
 	private Main main = Main.getInstance();
 	
 	public double getAdUpgrade(Player p) {
-		return 0.05;
+		return Constants.ADPerSP;
 	}
 	
 	public double getManaUpgrade(Player p) {
-		return 0.1;
+		return Constants.ManaPerSP;
 	}
 	
 	public int getManaRegenUpgrade(Player p) {
-		return 5;
+		return Constants.ManaRegenPerSP;
 	}
 	
 	public double getHPUpgrade(Player p) {
-		return 0.05;
+		return Constants.HPPerSP;
 	}
 	
 	public void sendAssassinInv(Player p) {
@@ -114,6 +115,7 @@ public class SkilltreeListener implements Listener {
 			swordMeta.setDisplayName(Main.color("&cAttack Damage Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
+			lore.add(Main.color("&fCurrent SP: &e" + main.getSPMap().get(p.getUniqueId())));
 			lore.add(Main.color("&fCurrent &8(&f" + SPAD + " SP&8) &f: &4" + ad + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &4" + getAdUpgrade(p) * 100 + "%"));
 			lore.add(Main.color("&fRight-Click to apply 5 points."));
@@ -158,6 +160,7 @@ public class SkilltreeListener implements Listener {
 			chestMeta.setDisplayName(Main.color("&cHealth Bonus Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
+		lore.add(Main.color("&fCurrent SP: &e" + main.getSPMap().get(p.getUniqueId())));
 			lore.add(Main.color("&fCurrent &8(&f" + SPHP + " SP&8) &f: &c" + hp + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &c" + getHPUpgrade(p) * 100 + "%"));
 			lore.add(Main.color("&fRight-Click to apply 5 points."));
@@ -188,6 +191,7 @@ public class SkilltreeListener implements Listener {
 			hsMeta.setDisplayName(Main.color("&9Max Mana Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
+		lore.add(Main.color("&fCurrent SP: &e" + main.getSPMap().get(p.getUniqueId())));
 			lore.add(Main.color("&fCurrent &8(&f" + SPM + " SP&8) &f: &9" + maxmana + "%"));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &9" + getManaUpgrade(p) * 100 + "%"));
 			lore.add(Main.color("&fRight-Click to apply 5 points."));
@@ -216,6 +220,7 @@ public class SkilltreeListener implements Listener {
 			mrMeta.setDisplayName(Main.color("&bMana Regen Upgrade"));
 			lore = new ArrayList<>();
 			lore.add(Main.color(""));
+		lore.add(Main.color("&fCurrent SP: &e" + main.getSPMap().get(p.getUniqueId())));
 			lore.add(Main.color("&fCurrent &8(&f" + SPMR + " SP&8) &f: &b" + manaregen));
 			lore.add(Main.color("&fUpgrade &8(&f1 SP&8)&f: &b" + getManaRegenUpgrade(p)));
 			lore.add(Main.color("&fRight-Click to apply 5 points."));
@@ -224,6 +229,29 @@ public class SkilltreeListener implements Listener {
 			mr.setItemMeta(mrMeta);
 			playerInv.setItem(15, mr);
 		//}
+
+		ItemStack reset = new ItemStack(Material.BARRIER);
+		ItemMeta resetMeta = reset.getItemMeta();
+		resetMeta.setDisplayName(Main.color("&cReset Skillpoints"));
+		lore = new ArrayList<>();
+		lore.add(Main.color(""));
+		lore.add(Main.color("&fReset your current point allocations."));
+		lore.add(Main.color("&4WARNING: &fThere is no going back!"));
+		lore.add(Main.color(""));
+		resetMeta.setLore(lore);
+		reset.setItemMeta(resetMeta);
+		playerInv.setItem(22, reset);
+
+		ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
+		ItemMeta glassMeta = glass.getItemMeta();
+		glassMeta.setDisplayName(Main.color(" "));
+		glass.setItemMeta(glassMeta);
+		for (int i = 0; i < 27; i++) {
+			if (playerInv.getContents()[i] == null) {
+				playerInv.setItem(i, glass);
+			}
+		}
+
 		p.openInventory(playerInv);
 	}
 	
@@ -301,6 +329,10 @@ public class SkilltreeListener implements Listener {
 								int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
 								int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
 								if (e.getClick().isLeftClick()) {
+									if (e.getCurrentItem().getType() == Material.BARRIER) {
+										main.resetSP(p);
+										Main.msg(p, "&8» &e&lYou have reset your skillpoint allocations.");
+									}
 									if (e.getCurrentItem().getType() == Material.IRON_SWORD) {
 										int sp = main.getSPMap().get(p.getUniqueId());
 										if (sp >= 1) {
@@ -395,7 +427,7 @@ public class SkilltreeListener implements Listener {
 											SPMR++;
 											// BROKEN AS OF UPDATE
 											main.setIntValue(p, "SPMR", SPMR);
-											int newmanar = (SPMR * getManaRegenUpgrade(p) + 20);
+											int newmanar = (SPMR * getManaRegenUpgrade(p) + Constants.BaseManaRegen);
 											main.setIntValue(p, "ManaRegen", newmanar);
 
 											int newsp = sp - 1;
@@ -511,7 +543,7 @@ public class SkilltreeListener implements Listener {
 											//if (getManaRegenUpgrade(p) * SPMR * 20 < 5000) {
 											SPMR+=5;
 											main.setIntValue(p, "SPMR", SPMR);
-											int newmanar = (SPMR * getManaRegenUpgrade(p) + 20);
+											int newmanar = (SPMR * getManaRegenUpgrade(p) + Constants.BaseManaRegen);
 											main.setIntValue(p, "ManaRegen", newmanar);
 
 											int newsp = sp - 5;

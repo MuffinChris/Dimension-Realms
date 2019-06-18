@@ -154,7 +154,18 @@ public class ArmorSkills implements Listener {
 			if (en instanceof LivingEntity) {
 				LivingEntity ent = (LivingEntity) en;
 				if (ent.getType() != EntityType.ARMOR_STAND && ent.getType() != EntityType.BOAT) {
-					ents.add(ent);
+					boolean go = true;
+					if (ent.getType() == EntityType.PLAYER) {
+						Player d = (Player) ent;
+						if (main.getPM().hasParty(p) && main.getPM().hasParty(d)) {
+							if (main.getPM().getParty(p).getPlayers().contains(d) && !main.getPM().getParty(p).getPvp()) {
+								go = false;
+							}
+						}
+					}
+					if (go) {
+						ents.add(ent);
+					}
 				}
 			}
 		}

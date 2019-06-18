@@ -21,6 +21,7 @@ public class HealCommand implements CommandExecutor {
 				if (args.length == 0) {
 					p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 					p.setFoodLevel(20);
+					p.setSaturation(10.0F);
 					for (PotionEffect pot : p.getActivePotionEffects()) {
 						p.removePotionEffect(pot.getType());
 					}
@@ -31,6 +32,7 @@ public class HealCommand implements CommandExecutor {
 						Player t = Bukkit.getPlayer(args[0]);
 						t.setHealth(t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 						t.setFoodLevel(20);
+						t.setSaturation(10.0F);
 						for (PotionEffect pot : t.getActivePotionEffects()) {
 							t.removePotionEffect(pot.getType());
 						}
@@ -51,6 +53,7 @@ public class HealCommand implements CommandExecutor {
 					Player t = Bukkit.getPlayer(args[0]);
 					t.setHealth(t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 					t.setFoodLevel(20);
+					t.setSaturation(10.0F);
 					for (PotionEffect pot : t.getActivePotionEffects()) {
 						t.removePotionEffect(pot.getType());
 					}

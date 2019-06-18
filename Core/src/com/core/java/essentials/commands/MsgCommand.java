@@ -28,8 +28,8 @@ public class MsgCommand implements CommandExecutor {
 							output+=s;
 							output+=" ";
 						}
-						Main.msg(p, "&7[&bYou &8\u00BB &b" + t.getName() + "&7] &f" + output);
-						Main.msg(t, "&7[&b" + p.getName() + " &8\u00BB &bYou&7] &f" + output);
+						Main.msg(p, "&7[&eYou &8\u00BB &e" + t.getName() + "&7] &f" + output);
+						Main.msg(t, "&7[&e" + p.getName() + " &8\u00BB &eYou&7] &f" + output);
 						main.getpinf().getPinf(p).setReply(t);
 						main.getpinf().getPinf(t).setReply(p);
 					}
@@ -52,8 +52,8 @@ public class MsgCommand implements CommandExecutor {
 							}
 							index++;
 						}
-						Main.msg(p, "&7[&bYou &8\u00BB &b" + t.getName() + "&7] &f" + output);
-						Main.msg(t, "&7[&b" + p.getName() + " &8\u00BB &bYou&7] &f" + output);
+						Main.msg(p, "&7[&eYou &8\u00BB &e" + t.getName() + "&7] &f" + output);
+						Main.msg(t, "&7[&e" + p.getName() + " &8\u00BB &eYou&7] &f" + output);
 						main.getpinf().getPinf(p).setReply(t);
 						main.getpinf().getPinf(t).setReply(p);
 					} else {
@@ -77,8 +77,8 @@ public class MsgCommand implements CommandExecutor {
 						}
 						index++;
 					}
-					Main.so("&7[&bYou &8\u00BB &b" + t.getName() + "&7] &f" + output);
-					Main.msg(t, "&7[&bCONSOLE" + " &8\u00BB &bYou&7] &f" + output);
+					Main.so("&7[&eYou &8\u00BB &e" + t.getName() + "&7] &f" + output);
+					Main.msg(t, "&7[&eCONSOLE" + " &8\u00BB &eYou&7] &f" + output);
 				} else {
 					Main.so("&cInvalid Player.");
 				}

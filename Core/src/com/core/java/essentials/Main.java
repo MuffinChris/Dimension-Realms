@@ -15,8 +15,13 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.core.java.Constants;
 import com.core.java.Numbers;
 import com.core.java.essentials.commands.*;
+import com.core.java.rpgbase.HorseCommand;
+import com.core.java.rpgbase.player.*;
+import com.core.java.rpgbase.player.professions.PlayerProf;
+import com.core.java.rpgbase.player.professions.ProfCommand;
 import com.destroystokyo.paper.Title;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -33,7 +38,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -44,12 +54,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.core.java.rpgbase.player.Armor;
 import com.core.java.rpgbase.skills.ArmorSkills;
 import com.core.java.rpgbase.skills.SkilltreeCommand;
 import com.core.java.rpgbase.skills.SkilltreeListener;
-import com.core.java.rpgbase.player.EXP;
-import com.core.java.rpgbase.player.Weapons;
 import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
 import com.core.java.rpgbase.bossbars.BossBarManager;
@@ -70,25 +77,43 @@ public class Main extends JavaPlugin {
 	//TODO LIST:
 	
 	/*
+
+	Make INFO CMD A GUI!!!
+
+	Possible Name: The Rift
+	or... The Rift MC
+	Rift Dimensions? eh.
+
+
+
+	Create Ability Class with cast method and stuff, and polarity.
+	Abilities of different polarity increase cost by 50% up to 100% based on how many conflicting there are.
+	Select item to use for casting, base item is sword, axe, shovel, pick.
+	Passives are underneath ability selected for item, 2 passive slots.
+
+
+	Auction with glass block housing
+	Upgreadeable Mount
+	Anti Fly kick when using ability by cancelling kick event
 	Soulbound Enchantment.
 	Item combining so you don't have to choosebetween items.
-	Party command
-	Make enchant dmg work for nonplayers
 	Make explosion regen?
-	Test out fixed death messages by mobs
-	 * Debug kill info (weird dmg levels, also second ] is red, make it white
 	 * Info command overriden by WorldEdit
-	 * Add command to disable level factor into mobs for players
 	 * Update /armor command
 	 * Spells do not register kills when used raw
-	 * Wither bar fix (only packet)
-	 * Enderdragon bar fix (only packet)
 	 * Custom Enchanting GUI or Way to make axes and stuff get ench
 	 * Make Skilltrees
 	 */
 	
 	//TODO FUTURE:
-	/* 
+	/*
+	* Town System Stuff:
+	* Resource collectors, depending on biome. They build worldedit schematic and cannot be touched within scehm
+	* radius so that it can be removed correctly. Have hologram over base block with options.
+	* Winner of war gets % resources and tributes.
+	*
+	*
+	*
 	 * Remember to set world to hard difficulty
 	 * Different ranks to uh rankup to
 	 * Add referrals for invintg
@@ -144,6 +169,21 @@ public class Main extends JavaPlugin {
 
 	public static Main getInstance() {
 		return JavaPlugin.getPlugin(Main.class);
+	}
+
+	public Map<Player, Party> invite = new HashMap<Player, Party>();
+	public Map<Player, Party> getInvites() {
+		return invite;
+	}
+
+	public Map<Player, Boolean> pchat = new HashMap<Player, Boolean>();
+	public Map<Player, Boolean> getPChat() {
+		return pchat;
+	}
+
+	private PartyManager pm;
+	public PartyManager getPM() {
+		return pm;
 	}
 	
 	public rutils rlib = new rutils();
@@ -273,8 +313,8 @@ public class Main extends JavaPlugin {
 		return level;
 	}
 	
-	public Map<UUID, Integer> exp = new HashMap<UUID, Integer>();
-	public Map<UUID, Integer> getExpMap() {
+	public Map<UUID, Double> exp = new HashMap<UUID, Double>();
+	public Map<UUID, Double> getExpMap() {
 		return exp;
 	}
 	
@@ -282,24 +322,34 @@ public class Main extends JavaPlugin {
 	public Map<UUID, Integer> getSPMap() {
 		return sp;
 	}
+
+	public Map<UUID, Boolean> fall = new HashMap<UUID, Boolean>();
+	public Map<UUID, Boolean> getFall() {
+		return fall;
+	}
+
+	public Map<UUID, PlayerProf> profs = new HashMap<UUID, PlayerProf>();
+	public Map<UUID, PlayerProf> getProf() {
+		return profs;
+	}
 	
 	/*public int getManaRegen (Player p) {
 		return Integer.valueOf(String.valueOf(Math.round((Math.sqrt((mana.get(p.getUniqueId()) * 0.0005D))))));
 	}*/
 	
-	public int getExp(Player p) {
+	public double getExp(Player p) {
 		if (getExpMap().get(p.getUniqueId()) != null) {
 			return getExpMap().get(p.getUniqueId());
 		}
-		return 0;
+		return 0.0;
 	}
 	
 	public int getLevel(Player p) {
 		return getLevelMap().get(p.getUniqueId());
 	}
 	
-	public int getExpMax(Player p) {
-		return (int) ((Math.pow(getLevel(p), 3) * 77) + 500);
+	public double getExpMax(Player p) {
+		return ((Math.pow(getLevel(p), 3) * 77) + 500);
 	}
 
 	private ProtocolManager protocolManager;
@@ -361,8 +411,8 @@ public class Main extends JavaPlugin {
 		getCommand("setexp").setExecutor(new ExpCommand());
 		getCommand("addexp").setExecutor(new ExpCommand());
 		getCommand("information").setExecutor(new InfoCommand());
-		getCommand("stats").setExecutor(new StatsCommand());
-		getCommand("sp").setExecutor(new SkilltreeCommand());
+		getCommand("kdr").setExecutor(new KdrCommand());
+		getCommand("stats").setExecutor(new SkilltreeCommand());
 		getCommand("heal").setExecutor(new HealCommand());
 		getCommand("mana").setExecutor(new ManaCommand());
 		getCommand("speed").setExecutor(new SpeedCommand());
@@ -376,6 +426,12 @@ public class Main extends JavaPlugin {
 		getCommand("killall").setExecutor(new KillAllCommand());
 		getCommand("god").setExecutor(new GodCommand());
 		getCommand("invsee").setExecutor(new InvseeCommand());
+		getCommand("addlore").setExecutor(new LoreCommand());
+		getCommand("party").setExecutor(new PartyCommand());
+		getCommand("horse").setExecutor(new HorseCommand());
+		getCommand("list").setExecutor(new ListCommand());
+		getCommand("rtp").setExecutor(new RTPCommand());
+		getCommand("prof").setExecutor(new ProfCommand());
 		so("&cCORE&7: &fCommands Enabled!");
 		
 		Bukkit.getPluginManager().registerEvents(new infoListeners(), this);
@@ -391,7 +447,14 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new Weapons(), this);
 		Bukkit.getPluginManager().registerEvents(new KDRListener(), this);
 		Bukkit.getPluginManager().registerEvents(new SkilltreeListener(), this);
+		Bukkit.getPluginManager().registerEvents(new BottleCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new PartyCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new HorseCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new RTPCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new ProfCommand(), this);
 		so("&cCORE&7: &fListeners Enabled!");
+
+		pm = new PartyManager();
 		
 		GUICommand.createArmorInv();
 		HelpCommand.createHelpGui();
@@ -405,6 +468,7 @@ public class Main extends JavaPlugin {
 		absorption();
 		//acPeriodic();
 		midPeriodic();
+		midPeriodicSync();
 		so("&cCORE&7: &fPeriodics Enabled!");
 		
 		Serration.register();
@@ -412,9 +476,11 @@ public class Main extends JavaPlugin {
 		
 		int count = 0;
 		for (World w : Bukkit.getWorlds()) {
-			for (org.bukkit.entity.Entity e : w.getEntities()) {
-				getPManager().setPlayerList(e, new PlayerList());
-				count++;
+			for (Entity e : w.getEntities()) {
+				if (e.getType() != EntityType.ARMOR_STAND) {
+					getPManager().setPlayerList(e, new PlayerList());
+					count++;
+				}
 			}
 		}
 		so("&cCORE&7: &fEntities Updated with PlayerLists! &8(&f" + count + "&8)");
@@ -450,16 +516,35 @@ public class Main extends JavaPlugin {
 			public void run() {
 				for (Player  p : Bukkit.getOnlinePlayers()) {
 					ChatFunctions.updateName(p);
-					levelup(p);
 				}
 			}
 		}.runTaskTimerAsynchronously(this, 10L, 80L);
+	}
+
+	public void midPeriodicSync() {
+		new BukkitRunnable() {
+			public void run() {
+				for (Player  p : Bukkit.getOnlinePlayers()) {
+					levelup(p);
+				}
+			}
+		}.runTaskTimer(this, 10L, 80L);
+	}
+
+	public void partyStartup() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				getPM().cleanParties();
+			}
+		}.runTaskTimerAsynchronously(this, 1L, 200L);
 	}
 
 	public void updatePeriodic() {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
+				getPManager().cleanPlayerList();
 				if (Bukkit.getServer().getOnlinePlayers().size() >= 1) {
 					updateFunc();
 				}
@@ -549,20 +634,45 @@ public class Main extends JavaPlugin {
 		}.runTaskTimer(this, 20L, 20L);
 	}
 
+	public void resetSP(Player p) {
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+		try {
+			pData.set("Username", p.getName());
+			pData.set("SP", getLevel(p) * Constants.SPPerLevel);
+			pData.set("SPAD", 0);
+			pData.set("SPHP", 0);
+			pData.set("SPM", 0);
+			pData.set("SPMR", 0);
+			pData.set("BaseHP", Constants.BaseHP + Constants.HPPerLevel * getLevel(p));
+			pData.set("Mana", Constants.BaseMana + Constants.ManaPerLevel * getLevel(p));
+			pData.set("ManaRegen", Constants.BaseManaRegen);
+			pData.set("Cmana", 0);
+			pData.set("AD", 0.0);
+			pData.set("HP", 0.0);
+			getCManaMap().replace(p.getUniqueId(), 0);
+			pData.save(pFile);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		hashmapUpdate(p);
+	}
+
 	public void resetPlayer(Player p) {
 		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
 		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 		try {
 			pData.set("Username", p.getName());
+			pData.set("Class", "None");
 			pData.set("Level", 0);
-			pData.set("Exp", 0);
+			pData.set("Exp", 0.0);
 			pData.set("SP", 0);
-			pData.set("Mana", 5000);
-			pData.set("ManaRegen", 20);
+			pData.set("Mana", Constants.BaseMana);
+			pData.set("ManaRegen", Constants.BaseManaRegen);
 			pData.set("Cmana", 0);
 			getCManaMap().replace(p.getUniqueId(), 0);
-			pData.set("BaseHP", 2000.0);
-			pData.set("BaseMana", 5000);
+			pData.set("BaseHP", Constants.BaseHP);
+			pData.set("BaseMana", Constants.BaseMana);
 			pData.set("AD", 0.0);
 			pData.set("HP", 0.0);
 			pData.set("AttackSpeed", 4.0);
@@ -581,6 +691,8 @@ public class Main extends JavaPlugin {
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}
+		p.setFoodLevel(20);
+		p.setSaturation(10.0F);
 	}
 
 	public void presetPlayer(Player p) {
@@ -588,29 +700,32 @@ public class Main extends JavaPlugin {
 		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 		try {
 			pData.set("Username", p.getName());
+			if (!pData.isSet("Class")) {
+				pData.set("Class", "None");
+			}
 			if (!pData.isSet("Level")) {
 				pData.set("Level", 0);
 			}
 			if (!pData.isSet("Exp")) {
-				pData.set("Exp", 0);
+				pData.set("Exp", 0.0);
 			}
 			if (!pData.isSet("SP")) {
 				pData.set("SP", 0);
 			}
 			if (!pData.isSet("Mana")) {
-				pData.set("Mana", 5000);
+				pData.set("Mana", Constants.BaseMana);
 			}
 			if (!pData.isSet("ManaRegen")) {
-				pData.set("ManaRegen", 20);
+				pData.set("ManaRegen", Constants.BaseManaRegen);
 			}
 			if (!pData.isSet("Cmana")) {
 				pData.set("Cmana", 0);
 			}
 			if (!pData.isSet("BaseHP")) {
-				pData.set("BaseHP", 2000.0);
+				pData.set("BaseHP", Constants.BaseHP);
 			}
 			if (!pData.isSet("BaseMana")) {
-				pData.set("BaseMana", 5000);
+				pData.set("BaseMana", Constants.BaseMana);
 			}
 			if (!pData.isSet("AD")) {
 				pData.set("AD", 0.0);
@@ -668,7 +783,7 @@ public class Main extends JavaPlugin {
 		getManaRegenMap().put(uuid, pData.getInt("ManaRegen"));
 		getAdMap().put(uuid, pData.getDouble("AD"));
 		getLevelMap().put(uuid, pData.getInt("Level"));
-		getExpMap().put(uuid, pData.getInt("Exp"));
+		getExpMap().put(uuid, pData.getDouble("Exp"));
 		getSPMap().put(uuid, pData.getInt("SP"));
 		if (!getCManaMap().containsKey(uuid)) {
 			getCManaMap().put(uuid, pData.getInt("Cmana"));
@@ -679,39 +794,75 @@ public class Main extends JavaPlugin {
 		abs.add(pData.getString("AbilityThree"));
 		abs.add(pData.getString("AbilityFour"));
 		getAbilities().put(uuid, abs);
+		if (getProf().containsKey(uuid)) {
+			getProf().get(uuid).pullFiles();
+		}
+
         updateAttackSpeed(p);
         Armor.updateSet(p);
         Weapons.updateInventory(p);
 	}
 
+	public void setupStats(Player p) {
+		int SPAD = Integer.valueOf(Main.getValue(p, "SPAD"));
+		int SPHP = Integer.valueOf(Main.getValue(p, "SPHP"));
+		int SPM = Integer.valueOf(Main.getValue(p, "SPM"));
+		int SPMR = Integer.valueOf(Main.getValue(p, "SPMR"));
+		int SP = getLevel(p) * Constants.SPPerLevel;
+		SP = SP - SPAD - SPHP - SPM - SPMR;
+		getSPMap().replace(p.getUniqueId(), SP);
+		setIntValue(p, "SP", SP);
+		int level = getLevel(p);
+		File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
+		FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+		try {
+			pData.set("BaseHP", Constants.BaseHP + (Constants.HPPerLevel * level));
+			pData.set("BaseMana", Constants.BaseMana + (Constants.ManaPerLevel * level));
+			pData.save(pFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		SPM = pData.getInt("SPM");
+		double manaUpgrade = Constants.ManaPerSP;
+		int newmana = pData.getInt("BaseMana") + (int) (SPM * (manaUpgrade * pData.getInt("BaseMana")));
+		setIntValue(p, "Mana", newmana);
+		getManaMap().replace(p.getUniqueId(), newmana);
+		Armor.updateSet(p);
+		Weapons.updateInventory(p);
+	}
+
 	public void levelup(Player p, boolean silent) {
 		if (silent) {
+			int times = 0;
 			while (getExpMax(p) <= getExp(p) && getLevel(p) < 100) {
-				int maxlevel = getExpMax(p);
-				int newexp = (getExp(p) - maxlevel);
+				times++;
+				double maxlevel = getExpMax(p);
+				double newexp = (getExp(p) - maxlevel);
 				int newlevel = getLevel(p) + 1;
 				getLevelMap().replace(p.getUniqueId(), newlevel);
 				setIntValue(p, "Level", newlevel);
 				maxlevel = getExpMax(p);
 				getExpMap().replace(p.getUniqueId(), newexp);
-				setIntValue(p, "Exp", newexp);
-				int newsp = getSPMap().get(p.getUniqueId()) + 5;
+				setDoubleValue(p, "Exp", newexp);
+				int newsp = getSPMap().get(p.getUniqueId()) + Constants.SPPerLevel;
 				getSPMap().replace(p.getUniqueId(), newsp);
 				setIntValue(p, "SP", newsp);
 				File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
 				FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 				try {
-					pData.set("BaseHP", pData.getDouble("BaseHP") + 100);
-					pData.set("BaseMana", pData.getDouble("BaseMana") + 50);
+					pData.set("BaseHP", pData.getDouble("BaseHP") + Constants.HPPerLevel);
+					pData.set("BaseMana", pData.getInt("BaseMana") + Constants.ManaPerLevel);
 					pData.save(pFile);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				int SPM = pData.getInt("SPM");
-				double manaUpgrade = 0.1;
+				double manaUpgrade = Constants.ManaPerSP;
 				int newmana = pData.getInt("BaseMana") + (int) (SPM * (manaUpgrade * pData.getInt("BaseMana")));
 				setIntValue(p, "Mana", newmana);
 				getManaMap().replace(p.getUniqueId(), newmana);
+			}
+			if (times >= 1) {
 				Armor.updateSet(p);
 				Weapons.updateInventory(p);
 			}
@@ -719,50 +870,62 @@ public class Main extends JavaPlugin {
 	}
 
 	public void levelup (Player p) {
+
+		if (getExp(p) < 0) {
+			setDoubleValue(p, "Exp", 0.0);
+			getExpMap().replace(p.getUniqueId(), 0.0);
+		}
+		int times = 0;
+		int level = getLevel(p);
 		while (getExpMax(p) <= getExp(p) && getLevel(p) < 100) {
-			int maxlevel = getExpMax(p);
-			int newexp = (getExp(p) - maxlevel);
+			times++;
+			double maxlevel = getExpMax(p);
+			double newexp = (getExp(p) - maxlevel);
 			int newlevel = getLevel(p) + 1;
 			getLevelMap().replace(p.getUniqueId(), newlevel);
 			setIntValue(p, "Level", newlevel);
 			maxlevel = getExpMax(p);
 			getExpMap().replace(p.getUniqueId(), newexp);
-			setIntValue(p, "Exp", newexp);
-			int newsp = getSPMap().get(p.getUniqueId()) + 5;
+			setDoubleValue(p, "Exp", newexp);
+			int newsp = getSPMap().get(p.getUniqueId()) + Constants.SPPerLevel;
 			getSPMap().replace(p.getUniqueId(), newsp);
 			setIntValue(p, "SP", newsp);
-			Main.msg(p, "");
-			Main.msg(p, "&7» &e&lLEVEL UP: &6" + (newlevel - 1) + " &f-> &6" + newlevel);
-			Main.msg(p, "&7» &e&lSP INCREASE: &f+5");
-			Main.msg(p, "&7» &4&lAD INCREASE: &f+5");
-			Main.msg(p, "&7» &c&lHP INCREASE: &f+100");
-			Main.msg(p, "&7» &b&lMANA INCREASE: &f+50");
-			Main.msg(p, "");
-			p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - 1) + " &f-> &6" + newlevel), 5, 20, 5));
 			File pFile = new File("plugins/Core/data/" + p.getUniqueId() + ".yml");
 	        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
 	        try {
-	            pData.set("BaseHP", pData.getDouble("BaseHP") + 100);
-	            pData.set("BaseMana", pData.getDouble("BaseMana") + 50);
+	            pData.set("BaseHP", pData.getDouble("BaseHP") + Constants.HPPerLevel);
+	            pData.set("BaseMana", pData.getInt("BaseMana") + Constants.ManaPerLevel);
 	            pData.save(pFile);
 	        } catch (Exception e) {
 	        	e.printStackTrace();
 	        }
 	        int SPM = pData.getInt("SPM");
-	        double manaUpgrade = 0.1;
+	        double manaUpgrade = Constants.ManaPerSP;
 	        int newmana = pData.getInt("BaseMana") + (int) (SPM * (manaUpgrade * pData.getInt("BaseMana")));
 			setIntValue(p, "Mana", newmana);
 			getManaMap().replace(p.getUniqueId(), newmana);
-	        Armor.updateSet(p);
-	        Weapons.updateInventory(p);
+		}
+		int newlevel = times + level;
+		if (times >= 1) {
+			Main.msg(p, "");
+			Main.msg(p, "&7» &e&lLEVEL UP: &6" + (newlevel - times) + " &f-> &6" + newlevel);
+			Main.msg(p, "&7» &e&lSP INCREASE: &f+" + (Constants.SPPerLevel * times));
+			Main.msg(p, "&7» &4&lAD INCREASE: &f+" + (Constants.ADPerLevel * times));
+			Main.msg(p, "&7» &c&lHP INCREASE: &f+" + (Constants.HPPerLevel * times));
+			Main.msg(p, "&7» &b&lMANA INCREASE: &f+" + (Constants.ManaPerLevel * times));
+			Main.msg(p, "");
+			p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - times) + " &f-> &6" + newlevel), 5, 20, 5));
 			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 2));
+			Armor.updateSet(p);
+			Weapons.updateInventory(p);
 		}
 	}
 	
 	public static void sendHp(Player p) {
 		DecimalFormat dF = new DecimalFormat("#.##");
-		int max = getInstance().getExpMax(p);
-		int exp = getInstance().getExp(p);
+		double max = getInstance().getExpMax(p);
+		double exp = getInstance().getExp(p);
 		double exppercent = ((1.0 * exp) / (1.0 * max)) * 100;
 		int mana = getInstance().getMana(p);
 		//TextComponent bar = new TextComponent(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---"));

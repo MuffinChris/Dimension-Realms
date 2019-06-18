@@ -14,18 +14,38 @@ public class Party {
     private boolean pvp;
     private boolean share;
 
+    private Main main = Main.getInstance();
+
     public Party(Player p) {
         leader = p;
         players = new ArrayList<Player>();
+        players.add(p);
         pvp = false;
         share = true;
     }
 
     public void addPlayer(Player p) {
+        if (players.size() > 34) {
+            sendMessage("&8» &e&l" + p.getName() + " &ftried to join the party, but the party is full.");
+            return;
+        }
         players.add(p);
+        sendMessage("&8» &e&l" + p.getName() + " &fhas joined the party!");
     }
 
     public void removePlayer(Player p) {
+        sendMessage("&8» &e&l" + p.getName() + " &fhas left the party!");
+        if (p.equals(leader)) {
+            disband();
+        }
+        players.remove(p);
+    }
+
+    public void kickPlayer(Player p) {
+        sendMessage("&8» &e&l" + p.getName() + " &fhas been kicked from the party!");
+        if (p.equals(leader)) {
+            disband();
+        }
         players.remove(p);
     }
 
@@ -50,17 +70,26 @@ public class Party {
     }
 
     public void disband() {
-        sendMessage(leader, "&e&l" + leader.getName() + " &fhas disbanded the party!");
+        sendMessage("&8» &e&l" + leader.getName() + " &fhas disbanded the party!");
+        for (Player p : players) {
+            if (main.getPChat().containsKey(p)) {
+                main.getPChat().replace(p, false);
+            } else {
+                main.getPChat().put(p, false);
+            }
+        }
         leader = null;
         players = null;
     }
 
-    public void sendMessage(Player pl, String s) {
+    public void sendMessage(String s) {
         for (Player p : players) {
-            if (!pl.getName().equals(p.getName())) {
-                p.sendMessage(Main.color(s));
-            }
+            p.sendMessage(Main.color(s));
         }
+    }
+
+    public boolean hasPlayer(Player p) {
+        return players.contains(p);
     }
 
     public Player getLeader() {

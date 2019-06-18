@@ -59,6 +59,12 @@ public class ChatFunctions implements Listener {
 	
 	@EventHandler
 	public void onChat (AsyncPlayerChatEvent e) {
+		boolean partychat = false;
+		if (main.getPChat().containsKey(e.getPlayer())) {
+			if (main.getPChat().get(e.getPlayer()) && main.getPM().hasParty(e.getPlayer())) {
+				partychat = true;
+			}
+		}
 		Chat chat = main.getChat();
 		if (e.getPlayer().hasPermission("core.chatcolor")) {
 			e.setMessage(Main.color(e.getMessage()));
@@ -68,13 +74,18 @@ public class ChatFunctions implements Listener {
 		if (prefix.length() > 2) {
 			prefix+=" ";
 		}
-		String format = e.getFormat();
-		format = Main.color(prefix + "%s " + chat.getPlayerSuffix(e.getPlayer()) + " &8\u00BB" + "&f %s");
-		e.setFormat(format);
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (e.getMessage().contains(p.getName()) || e.getMessage().contains(p.getDisplayName())) {
-				p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+		if (!partychat) {
+			String format = e.getFormat();
+			format = Main.color(prefix + "%s " + chat.getPlayerSuffix(e.getPlayer()) + " &8\u00BB" + "&f %s");
+			e.setFormat(format);
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (e.getMessage().contains(p.getName()) || e.getMessage().contains(p.getDisplayName())) {
+					p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+				}
 			}
+		} else {
+			e.setCancelled(true);
+			main.getPM().getParty(e.getPlayer()).sendMessage( "&a&l[PARTY] &7" + (e.getPlayer().getName() + " " + chat.getPlayerSuffix(e.getPlayer()) + " &8\u00BB" + "&f " + e.getMessage()));
 		}
 	}
 

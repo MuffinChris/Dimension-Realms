@@ -22,7 +22,7 @@ public class Serration extends Enchantment{
 
 	@Override
 	public boolean canEnchantItem(ItemStack item) {
-	   if(item.getType().toString().toLowerCase().contains("AXE")) {
+	   if(item.getType().toString().toLowerCase().contains("axe")) {
 		   return true;
 	   }
 	   return false;
