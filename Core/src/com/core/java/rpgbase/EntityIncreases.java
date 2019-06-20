@@ -165,10 +165,10 @@ public class EntityIncreases implements Listener {
 			Main.so("&c&lException when parsing number for Entity Bonus Damage for Golems and Slimes");
 		}
 		if (e.getDamager() instanceof IronGolem) {
-			e.setDamage(300 + 20 * level);
+			e.setDamage(300 + 40 * level);
 		}
 		if (e.getDamager() instanceof Slime || e.getDamager() instanceof MagmaCube) {
-			e.setDamage(50 + 10 * level);
+			e.setDamage(50 + 20 * level);
 		}
 	}
 	/*

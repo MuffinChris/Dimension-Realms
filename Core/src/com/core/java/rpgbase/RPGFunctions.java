@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -16,6 +18,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -126,16 +129,50 @@ public class RPGFunctions implements Listener {
 				if (e.getEntity().getKiller().getInventory() != null && e.getEntity().getKiller().getInventory().getItemInMainHand() != null) {
 					ItemStack i = e.getEntity().getKiller().getInventory().getItemInMainHand();
 					String name = "";
-					if (i.getType() == Material.AIR) {
-						name = "fists";
-					}
 					if (i.hasItemMeta() && i.getItemMeta().getLore() instanceof List) {
 						infodmg+="\n";
 						infodmg+="\n";
 						if (i.hasItemMeta() && i.getItemMeta().getDisplayName() instanceof String && i.getItemMeta().getDisplayName() != "") {
 							infodmg+=Main.color(i.getItemMeta().getDisplayName() + "&f\n");
 						} else {
-							infodmg+=Main.color("&f" + i.getType().toString() + "&f\n");
+							infodmg+=Main.color("&7" + i.getType().toString() + "&f\n");
+						}
+						if (i.hasItemMeta() && i.getItemMeta().hasEnchants()) {
+							for (Enchantment ench : i.getItemMeta().getEnchants().keySet()) {
+								int lvl = i.getItemMeta().getEnchants().get(ench);
+								String roman = "I";
+								if (lvl == 1) {
+									roman = "I";
+								}
+								if (lvl == 2) {
+									roman = "II";
+								}
+								if (lvl == 3) {
+									roman = "III";
+								}
+								if (lvl == 4) {
+									roman = "IV";
+								}
+								if (lvl == 5) {
+									roman = "V";
+								}
+								if (lvl == 6) {
+									roman = "VI";
+								}
+								if (lvl == 7) {
+									roman = "VII";
+								}
+								if (lvl == 8) {
+									roman = "VIII";
+								}
+								if (lvl == 9) {
+									roman = "IX";
+								}
+								if (lvl == 10) {
+									roman = "X";
+								}
+								infodmg+=ench.toString() + " " + roman;
+							}
 						}
 						infodmg+="";
 						for (String s : i.getItemMeta().getLore()) {
@@ -147,6 +184,9 @@ public class RPGFunctions implements Listener {
 						info = new TextComponent(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &fusing &c" + name + " &8<&cINFO&8>"));
 					} else {
 						name = "a " + i.getType().toString();
+						if (i.getType() == Material.AIR) {
+							name = "fists";
+						}
 						info = new TextComponent(Main.color("&8[&4X&8] &c" + p.getName() + " &fwas slain by &c" + p.getKiller().getName() + " &fusing &c" + name + " &8<&cINFO&8>"));
 					}
 				} else {
@@ -191,7 +231,7 @@ public class RPGFunctions implements Listener {
 									if (i.hasItemMeta() && i.getItemMeta().getDisplayName() instanceof String && i.getItemMeta().getDisplayName() != "") {
 										infodmg+=Main.color(i.getItemMeta().getDisplayName() + "&f\n");
 									} else {
-										infodmg+=Main.color("&f" + i.getType().toString() + "&f\n");
+										infodmg+=Main.color("&7" + i.getType().toString() + "&f\n");
 									}
 									infodmg+="";
 									for (String s : i.getItemMeta().getLore()) {
@@ -244,7 +284,7 @@ public class RPGFunctions implements Listener {
 									if (i.hasItemMeta() && i.getItemMeta().getDisplayName() instanceof String && i.getItemMeta().getDisplayName() != "") {
 										infodmg+=Main.color(i.getItemMeta().getDisplayName() + "&f\n");
 									} else {
-										infodmg+=Main.color("&f" + i.getType().toString() + "&f\n");
+										infodmg+=Main.color("&7" + i.getType().toString() + "&f\n");
 									}
 									infodmg+="";
 									for (String s : i.getItemMeta().getLore()) {
@@ -607,7 +647,7 @@ public class RPGFunctions implements Listener {
 			e.getPlayer().setHealth(hp);
 		}
 		
-		e.getPlayer().setHealthScale(40);
+		e.getPlayer().setHealthScale(Constants.HealthScale);
 		
 		if (!plugin.getPManager().getPList().containsKey(e.getPlayer())) {
 			plugin.getPManager().getPList().put(e.getPlayer(), new PlayerList());

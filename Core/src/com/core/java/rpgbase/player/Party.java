@@ -13,8 +13,13 @@ public class Party {
     private List<Player> players;
     private boolean pvp;
     private boolean share;
+    private int shareradius = 100;
 
     private Main main = Main.getInstance();
+
+    public int getShareRadius() {
+        return shareradius;
+    }
 
     public Party(Player p) {
         leader = p;
@@ -22,6 +27,18 @@ public class Party {
         players.add(p);
         pvp = false;
         share = true;
+    }
+
+    public int getNearbyPlayersSize(Player p) {
+        int total = 1;
+        for (Player pp : getPlayers()) {
+            if (p.getLocation().distance(pp.getLocation()) <= shareradius) {
+                if (!pp.equals(p)) {
+                    total++;
+                }
+            }
+        }
+        return total;
     }
 
     public void addPlayer(Player p) {

@@ -114,8 +114,9 @@ public class EXP implements Listener {
 			DecimalFormat df = new DecimalFormat("#");
 			if (exp >= 0) {
 				Main.msg(p, "&7[+" + df.format(exp) + "&7 XP]");
-				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				double before = plugin.getExp(p);
+				plugin.getExpMap().replace(p.getUniqueId(), exp + before);
+				plugin.setDoubleValue(p, "Exp", exp + before);
 				plugin.levelup(p);
 			} else {
 				Main.msg(p, "&7[-" + df.format(Math.abs(exp)) + "&7 XP]");
@@ -132,8 +133,9 @@ public class EXP implements Listener {
 			DecimalFormat df = new DecimalFormat("#");
 			Main.msg(p, "&7[+" + df.format(exp) + " &7(&a+" + df.format(exp * (Constants.PartyXPMult-1)) + "&7)" + "&7 XP]");
 			exp = (exp * Constants.PartyXPMult);
-			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-			plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+			double before = plugin.getExp(p);
+			plugin.getExpMap().replace(p.getUniqueId(), exp + before);
+			plugin.setDoubleValue(p, "Exp", exp + before);
 			plugin.levelup(p);
 		}
 	}
@@ -146,8 +148,9 @@ public class EXP implements Listener {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				Main.msg(p, "&7[+" + df.format(exp) + " &7(&a+" + df.format(exp * (Constants.PartyXPMult - 1)) + "&7)" + " &7(" + dF.format(percent * 100) + "%) XP]");
 				exp = (exp * Constants.PartyXPMult);
-				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				double before = plugin.getExp(p);
+				plugin.getExpMap().replace(p.getUniqueId(), exp + before);
+				plugin.setDoubleValue(p, "Exp", exp + before);
 				plugin.levelup(p);
 			}
 		}
@@ -160,8 +163,9 @@ public class EXP implements Listener {
 				DecimalFormat dF = new DecimalFormat("#.##");
 				DecimalFormat df = new DecimalFormat("#");
 				Main.msg(p, "&7[+" + df.format(exp) + " &7(" + dF.format(percent * 100) + "%) XP]");
-				plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-				plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+				double before = plugin.getExp(p);
+				plugin.getExpMap().replace(p.getUniqueId(), exp + before);
+				plugin.setDoubleValue(p, "Exp", exp + before);
 				plugin.levelup(p);
 			}
 		}
@@ -300,9 +304,9 @@ public class EXP implements Listener {
 							Party party = plugin.getPM().getParty(pl);
 							if (party.getPlayers().size() > 1 && party.getShare()) {
 								go = false;
-								int size = party.getPlayers().size();
+								int size = party.getNearbyPlayersSize(pl);
 								for (Player pp : party.getPlayers()) {
-									if (pl.getLocation().distance(pp.getLocation()) <= 100) {
+									if (pl.getLocation().distance(pp.getLocation()) <= party.getShareRadius()) {
 										if (!pp.equals(pl)) {
 											giveExp(pp, ((exp * (dmg / fulldmg)) / size), true);
 										}
@@ -320,9 +324,9 @@ public class EXP implements Listener {
 							Party party = plugin.getPM().getParty(pl);
 							if (party.getPlayers().size() > 1 && party.getShare()) {
 								go = false;
-								int size = party.getPlayers().size();
+								int size = party.getNearbyPlayersSize(pl);
 								for (Player pp : party.getPlayers()) {
-									if (pl.getLocation().distance(pp.getLocation()) <= 100) {
+									if (pl.getLocation().distance(pp.getLocation()) <= party.getShareRadius()) {
 										if (!pp.equals(pl)) {
 											giveExp(pp, ((exp * (dmg / fulldmg)) / size), (dmg / fulldmg), true);
 										}
@@ -350,9 +354,9 @@ public class EXP implements Listener {
 					Party party = plugin.getPM().getParty(p);
 					if (party.getPlayers().size() > 1 && party.getShare()) {
 						go = false;
-						int size = party.getPlayers().size();
+						int size = party.getNearbyPlayersSize(pl);
 						for (Player pp : party.getPlayers()) {
-							if (p.getLocation().distance(pp.getLocation()) <= 100) {
+							if (p.getLocation().distance(pp.getLocation()) <= party.getShareRadius()) {
 								if (!p.equals(pp)) {
 									giveExp(pp, ((exp) / size), true);
 								}

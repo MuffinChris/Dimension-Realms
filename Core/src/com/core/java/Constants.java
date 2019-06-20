@@ -11,6 +11,9 @@ public class Constants {
     public static int ManaPerLevel = 50;
     public static int ADPerLevel = 5;
     public static int HPPerLevel = 100;
+    public static int maxLevel = 100;
+
+    public static int HealthScale = 20;
 
     public static double BaseHP = 2000;
     public static int BaseMana = 5000;

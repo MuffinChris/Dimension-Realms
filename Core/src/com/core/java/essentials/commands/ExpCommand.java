@@ -256,8 +256,9 @@ public class ExpCommand implements CommandExecutor {
 		DecimalFormat df = new DecimalFormat("#");
 		if (Double.valueOf(exp) instanceof Double) {
 			Main.msg(p, "&7[+" + df.format(exp) + " XP]");
-			plugin.getExpMap().replace(p.getUniqueId(), exp + plugin.getExp(p));
-			plugin.setDoubleValue(p, "Exp", exp + plugin.getExp(p));
+			double before = plugin.getExp(p);
+			plugin.getExpMap().replace(p.getUniqueId(), exp + before);
+			plugin.setDoubleValue(p, "Exp", exp + before);
 			plugin.levelup(p);
 		}
 	}

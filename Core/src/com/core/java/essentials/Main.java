@@ -26,36 +26,25 @@ import com.destroystokyo.paper.Title;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.core.java.rpgbase.skills.ArmorSkills;
-import com.core.java.rpgbase.skills.SkilltreeCommand;
 import com.core.java.rpgbase.skills.SkilltreeListener;
 import com.core.java.rpgbase.EntityIncreases;
 import com.core.java.rpgbase.RPGFunctions;
@@ -77,7 +66,8 @@ public class Main extends JavaPlugin {
 	//TODO LIST:
 	
 	/*
-
+	Add Ench info to death
+	Mute cmd
 	Make INFO CMD A GUI!!!
 
 	Possible Name: The Rift
@@ -121,7 +111,7 @@ public class Main extends JavaPlugin {
 	 * https://www.youtube.com/watch?v=BcKzswBhjQM
 	 * https://www.youtube.com/watch?v=Y1BFOzXwVu0 for builds
 	 * Professions
-	 * - Toolsmith (make and repair tools)
+	 * - Toolsmith (make and repair tools) - have all player access thru shops
 	 * - Armorer (make and repair armor)
 	 * - Farmer (create custom food and grow faster food)
 	 * - Enchanter (custom enchants)
@@ -410,9 +400,9 @@ public class Main extends JavaPlugin {
 		getCommand("addlevel").setExecutor(new ExpCommand());
 		getCommand("setexp").setExecutor(new ExpCommand());
 		getCommand("addexp").setExecutor(new ExpCommand());
-		getCommand("information").setExecutor(new InfoCommand());
+		getCommand("info").setExecutor(new InfoCommand());
 		getCommand("kdr").setExecutor(new KdrCommand());
-		getCommand("stats").setExecutor(new SkilltreeCommand());
+		getCommand("stats").setExecutor(new SkilltreeListener());
 		getCommand("heal").setExecutor(new HealCommand());
 		getCommand("mana").setExecutor(new ManaCommand());
 		getCommand("speed").setExecutor(new SpeedCommand());
@@ -452,6 +442,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new HorseCommand(), this);
 		Bukkit.getPluginManager().registerEvents(new RTPCommand(), this);
 		Bukkit.getPluginManager().registerEvents(new ProfCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new InfoCommand(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 
 		pm = new PartyManager();
@@ -687,6 +678,9 @@ public class Main extends JavaPlugin {
 			pData.set("SPM", 0);
 			pData.set("SPMR", 0);
 			pData.set("Skills", new ArrayList<String>());
+			if (getProf().containsKey(p.getUniqueId())) {
+				getProf().get(p.getUniqueId()).resetProfs();
+			}
 			pData.save(pFile);
 		} catch (IOException exception) {
 			exception.printStackTrace();
@@ -914,7 +908,7 @@ public class Main extends JavaPlugin {
 			Main.msg(p, "&7» &c&lHP INCREASE: &f+" + (Constants.HPPerLevel * times));
 			Main.msg(p, "&7» &b&lMANA INCREASE: &f+" + (Constants.ManaPerLevel * times));
 			Main.msg(p, "");
-			p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - times) + " &f-> &6" + newlevel), 5, 20, 5));
+			p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (newlevel - times) + " &f-> &6" + newlevel), 5, 40, 5));
 			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 2));
 			Armor.updateSet(p);

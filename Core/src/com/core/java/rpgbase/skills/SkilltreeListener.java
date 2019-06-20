@@ -9,6 +9,9 @@ import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -24,10 +27,22 @@ import com.core.java.essentials.Main;
 import com.core.java.essentials.commands.GUICommand;
 import com.core.java.rpgbase.player.Armor;
 
-public class SkilltreeListener implements Listener {
+public class SkilltreeListener implements CommandExecutor, Listener {
 
 	private Main main = Main.getInstance();
-	
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (sender instanceof Player) {
+			Player p = (Player) sender;
+			sendPlayerInv(p);
+		} else {
+			Main.so("&cNon-Console Command");
+		}
+		return false;
+
+	}
+
 	public double getAdUpgrade(Player p) {
 		return Constants.ADPerSP;
 	}

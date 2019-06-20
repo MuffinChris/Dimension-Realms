@@ -3,6 +3,7 @@ package com.core.java.essentials.commands;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import com.core.java.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,6 +25,14 @@ public class BottleCommand implements CommandExecutor, Listener {
 	
 	private Main main = Main.getInstance();
 
+	public double getExpCost(Player p) {
+		if (main.getProf().containsKey(p.getUniqueId())) {
+			double percent = Math.min(((1.0D * main.getProf().get(p.getUniqueId()).getLevel("Enchanting")) / (1.0D * Constants.maxLevelProf)), 0.8);
+			return 1 - percent;
+		}
+		return 1;
+	}
+
 	@EventHandler
 	public void onClick (InventoryClickEvent e) {
 		if (e.getView().getTitle().contains("EXP BOTTLER")) {
@@ -33,7 +42,7 @@ public class BottleCommand implements CommandExecutor, Listener {
 					if (e.getCurrentItem().getType() == Material.LIME_DYE) {
 						double exp = main.getExp(p);
 						double maxexp = main.getExpMax(p);
-						double expperlevel = maxexp * 0.1;
+						double expperlevel = maxexp * 0.1 * getExpCost(p);
 						DecimalFormat df = new DecimalFormat("#.##");
 						if (1 * expperlevel > exp) {
 							Main.msg(p, "&cYou don't have enough RPG EXP! &8(&e" + df.format(1 * expperlevel) + "&8)");
@@ -72,7 +81,11 @@ public class BottleCommand implements CommandExecutor, Listener {
 	}
 
 	public void sendInventory(Player p, boolean bottle, int amount) {
-		Inventory inv = Bukkit.createInventory(null, 9, Main.color("&a&lEXP BOTTLER"));
+
+		DecimalFormat dF = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#");
+
+		Inventory inv = Bukkit.createInventory(null, 27, Main.color("&a&lEXP BOTTLER"));
 		ItemStack pane = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 		ItemMeta paneMeta = pane.getItemMeta();
 		paneMeta.setDisplayName(Main.color(" "));
@@ -80,12 +93,17 @@ public class BottleCommand implements CommandExecutor, Listener {
 		lore.add(Main.color(""));
 		paneMeta.setLore(lore);
 		pane.setItemMeta(paneMeta);
-		inv.setItem(0, pane);
-		inv.setItem(1, pane);
-		inv.setItem(2, pane);
-		inv.setItem(3, pane);
-		inv.setItem(7, pane);
-		inv.setItem(8, pane);
+		//inv.setItem(0, pane);
+		for (int i = 0; i < 27; i++) {
+			if (i != 4 && i != 13 && i != 22 && i != 12 && i != 14) {
+				inv.setItem(i, pane);
+			}
+		}
+		//inv.setItem(1, pane);
+		//inv.setItem(2, pane);
+		//inv.setItem(3, pane);
+		//inv.setItem(7, pane);
+		//inv.setItem(8, pane);
 		ItemStack star = new ItemStack(Material.LIME_DYE);
 		ItemMeta starMeta = star.getItemMeta();
 		starMeta.setDisplayName(Main.color("&a&lConvert Experience"));
@@ -93,30 +111,28 @@ public class BottleCommand implements CommandExecutor, Listener {
 		lore.add(Main.color(""));
 		lore.add(Main.color("&8» &fConvert some of your RPG EXP &8(&f/exp&8)"));
 		lore.add(Main.color("&8» &finto Vanilla EXP Bottles!"));
-		lore.add(Main.color("&8» &fConversion: &8(&a10% RPG EXP &8: &a1 Level&8)"));
+		lore.add(Main.color("&8» &fConversion: &8(&a" + dF.format(getExpCost(p) * 10) + "% RPG EXP &8: &a1 Level&8)"));
 		lore.add(Main.color(""));
 		starMeta.setLore(lore);
 		star.setItemMeta(starMeta);
-		inv.setItem(6, star);
+		inv.setItem(22, star);
 
 		star = new ItemStack(Material.NETHER_STAR);
 		starMeta = star.getItemMeta();
 		starMeta.setDisplayName(Main.color("&e&lEXP Info"));
 		lore = new ArrayList<>();
 		lore.add(Main.color(""));
-		DecimalFormat df = new DecimalFormat("#");
 		lore.add(Main.color("&8» &fCurrent Exp: &e" + df.format(main.getExp(p))));
-		DecimalFormat dF = new DecimalFormat("#.##");
 		lore.add(Main.color("&8» &fExp Percentage: &e" + dF.format(100F * main.getExp(p) / main.getExpMax(p)) + "%"));
 		lore.add(Main.color(""));
 		starMeta.setLore(lore);
 		star.setItemMeta(starMeta);
-		inv.setItem(5, star);
+		inv.setItem(4, star);
 
 		if (bottle) {
 			star = new ItemStack(Material.EXPERIENCE_BOTTLE);
 			star.setAmount(amount);
-			inv.setItem(4, star);
+			inv.setItem(13, star);
 		}
 
 		p.openInventory(inv);
@@ -135,7 +151,7 @@ public class BottleCommand implements CommandExecutor, Listener {
 					if (lvl > 0 && lvl <= 64) {
 						double exp = main.getExp(p);
 						double maxexp = main.getExpMax(p);
-						double expperlevel = maxexp * 0.1;
+						double expperlevel = maxexp * 0.1 * getExpCost(p);
 						DecimalFormat df = new DecimalFormat("#.##");
 						if (lvl * expperlevel > exp) {
 							Main.msg(p, "&cYou don't have enough RPG EXP! &8(&e" + df.format(lvl * expperlevel) + "&8)");
