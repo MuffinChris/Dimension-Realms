@@ -129,7 +129,7 @@ public class Armor implements Listener {
     public void armorDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            Main.sendHp(p);
+            plugin.getBarManager().getBS(p).update();
             //String set = getSet(p);
             double armor = plugin.getArmorMap().get(p.getUniqueId());
             double mr = plugin.getMRMap().get(p.getUniqueId());

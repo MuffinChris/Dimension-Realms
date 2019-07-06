@@ -59,9 +59,9 @@ commands:
   kdr:
     description: Check stats of a player
     aliases: [kills, kd, kda, deaths]
-  information:
+  info:
     description: Check info of a player
-    aliases: [whois, info]
+    aliases: [whois, information]
   stats:
     description: Base Skill Menu
     aliases: [sp, skillpoint, skillpoints, attributes, attribute]

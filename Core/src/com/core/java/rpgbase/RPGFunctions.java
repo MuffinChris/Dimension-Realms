@@ -109,7 +109,7 @@ public class RPGFunctions implements Listener {
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void sendHpRegain (EntityRegainHealthEvent e) {
 		if (e.getEntity() instanceof Player) {
-			Main.sendHp((Player) e.getEntity());
+			plugin.getBarManager().getBS((Player) e.getEntity()).update();
 		}
 	}
 
@@ -509,7 +509,7 @@ public class RPGFunctions implements Listener {
 		}.runTaskLater(plugin, 5L);
 	}
 	
-	@EventHandler (priority = EventPriority.HIGHEST)
+	/*@EventHandler (priority = EventPriority.HIGHEST)
 	public void onHeal (EntityRegainHealthEvent e) {
 		if (e.getEntity() instanceof LivingEntity) {
 			if (plugin.getPManager().getPList(e.getEntity()) != null && plugin.getPManager().getPList(e.getEntity()).getPlayers() != null) {
@@ -535,12 +535,12 @@ public class RPGFunctions implements Listener {
 				}
 			}
 		}
-	}
+	}*/
 	
-	@EventHandler (priority = EventPriority.HIGH)
+	/*@EventHandler (priority = EventPriority.HIGH)
 	public void bossbarDmgAgain (EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
-			Main.sendHp((Player) e.getEntity());
+			plugin.getBarManager().getBS((Player) e.getEntity()).update();
 		}
 		if (e.getEntity() instanceof LivingEntity) {
 			if (plugin.getPManager().getPList(e.getEntity()) != null && plugin.getPManager().getPList(e.getEntity()).getPlayers() != null) {
@@ -562,9 +562,9 @@ public class RPGFunctions implements Listener {
 				}
 			}
 		}
-	}
+	}*/
 	
-	public void cleanOnDeath(Player p, Entity e) {
+	/*public void cleanOnDeath(Player p, Entity e) {
 		new BukkitRunnable() {
         	public void run() {
         		if (p.isOnline()) {
@@ -574,9 +574,9 @@ public class RPGFunctions implements Listener {
 				}
         	}
         }.runTaskLater(plugin, 40L);
-	}
+	}*/
 	
-	@EventHandler
+	/*@EventHandler
 	public void bossbarHPInit (EntityDamageByEntityEvent e) {
 		if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
 			if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && e.getEntity().getType() != EntityType.ARMOR_STAND) {
@@ -635,7 +635,7 @@ public class RPGFunctions implements Listener {
 				}.runTaskLater(plugin, 2L);
 			}
 		}
-	}
+	}*/
 
 	@EventHandler (priority = EventPriority.LOWEST)
 	public void onJoinRPG (PlayerJoinEvent e) {
@@ -652,7 +652,6 @@ public class RPGFunctions implements Listener {
 		if (!plugin.getPManager().getPList().containsKey(e.getPlayer())) {
 			plugin.getPManager().getPList().put(e.getPlayer(), new PlayerList());
 		}
-		plugin.getBarManager().setBossBars(e.getPlayer(), new BS(e.getPlayer()));
 		Armor.updateSet(e.getPlayer());
 		Weapons.updateInventory(e.getPlayer());
 		plugin.getGodMode().put(e.getPlayer().getUniqueId(), false);

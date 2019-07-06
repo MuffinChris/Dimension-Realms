@@ -474,10 +474,10 @@ public class EntityIncreases implements Listener {
 					public void run() {
 						damageHolo.delete();
 					}
-				}.runTaskLater(main, 20L);
+				}.runTaskLater(main, 20L);*/
 				if (e.getEntity() instanceof Player) {
 					Main.sendHp((Player) e.getEntity());
-				}*/
+				}
 			}
 		}
 	}

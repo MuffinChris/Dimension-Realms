@@ -6,6 +6,8 @@ Rogue:
 
 Warrior:
 
+ILLIIIII
+
 - Knight Path (Damage and Group Rally)
 - Paladin Path (Heals and Tanky)
 - Brute Path (Tanky and CC)

@@ -1,8 +1,10 @@
 package com.core.java.rpgbase.bossbars;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -15,37 +17,60 @@ import com.core.java.essentials.Main;
 public class BS {
 
 	private UUID uuid;
-	private Player p;
 	private BossBar bossbar;
-	private int timer = 0;
+	//private int timer = 0;
 	private Main main = Main.getInstance();
-	private boolean playerinf;
-	private Entity target;
+	//private boolean playerinf;
+	//private Entity target;
 	
 	
 	public BS(Player p) {
-		this.p = p;
 		createBossBar(p, "");
 	}
 	
 	public void createBossBar(Player p, String s) {
-		playerinf = true;
-		bossbar = Bukkit.getServer().createBossBar(s, BarColor.RED, BarStyle.SOLID);
+		//playerinf = true;
+		bossbar = Bukkit.getServer().createBossBar(s, BarColor.YELLOW, BarStyle.SOLID);
 		uuid = p.getUniqueId();
+		bossbar.addPlayer(p);
+		update();
+		bossbar.setVisible(true);
 	}
 	
 	public String getTitle() {
 		return bossbar.getTitle();
 	}
 	
-	public boolean getPlayerInf() {
+	/*public boolean getPlayerInf() {
 		return playerinf;
-	}
+	}*/
 	
-	public Entity getTarget() {
+	/*public Entity getTarget() {
 		return target;
+	}*/
+
+	public void update() {
+		Player p = Bukkit.getPlayer(uuid);
+		DecimalFormat dF = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#");
+		double max = main.getExpMax(p);
+		double exp = main.getExp(p);
+		double exppercent = ((1.0 * exp) / (1.0 * max));
+		//int mana = main.getMana(p);
+		//String hp = "&c" + df.format(p.getHealth()) /*+ "/" + df.format(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())*/ + " HP";
+		//String manastr = "&b" + mana + /*"/" + main.getManaMap().get(uuid) +*/ " MANA";
+		String expstr = "&e" + dF.format(exppercent * 100.0) + "% XP";
+		String lvlstr = "&6LVL: " + main.getLevel(p);
+
+		//bossbar.setTitle(Main.color(hp + "  " + manastr + "  " + expstr + "  " + lvlstr));
+
+		//double manaprogress = Math.max((1.0D * mana) / (1.0D * main.getManaMap().get(uuid)), 0.0);
+		//bossbar.setProgress(Math.min(manaprogress, 1.0));
+		bossbar.setTitle(Main.color(lvlstr + "  " + expstr));
+		bossbar.setProgress(Math.min(exppercent, 1.0));
 	}
-	
+
+	/*
 	public void setInfo(Entity e, String s, BarColor bc, BarStyle bs, double progress, boolean b, boolean pinf) {
 		playerinf = pinf;
 		target = e;
@@ -80,6 +105,6 @@ public class BS {
 			}.runTaskLater(main, 100L);
 		}
 		
-	}
+	}*/
 	
 }

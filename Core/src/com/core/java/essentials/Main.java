@@ -19,6 +19,7 @@ import com.core.java.Constants;
 import com.core.java.Numbers;
 import com.core.java.essentials.commands.*;
 import com.core.java.rpgbase.HorseCommand;
+import com.core.java.rpgbase.bossbars.BS;
 import com.core.java.rpgbase.player.*;
 import com.core.java.rpgbase.player.professions.PlayerProf;
 import com.core.java.rpgbase.player.professions.ProfCommand;
@@ -37,6 +38,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -66,6 +71,19 @@ public class Main extends JavaPlugin {
 	//TODO LIST:
 	
 	/*
+
+	Stop liquids flowing into town
+	Make bag to hold gold that drops percentage of gold on death. Can open bag to reveal chest full of gold items->
+	-> can be upgraded to have pages and stuff
+	BOSSBAR: XP Gain and mainly show class xp, show prof on gain.
+	ACTIONBAR: General Info (standard sendhp)
+	XP BAR: Skill Cooldown. On cast, each skill has a set delay, and the delay increases during rapid spellcasts.
+	Holograms: Damage, Healthbars
+	Names: Healthbars
+
+
+	Slimes not having levels (cubes prolly 2)
+	EXP not given across world. For nearby distance check world for parties.
 	Add Ench info to death
 	Mute cmd
 	Make INFO CMD A GUI!!!
@@ -188,7 +206,7 @@ public class Main extends JavaPlugin {
 		return vapi;
 	}
 	
-	public BossBarManager barManager = new BossBarManager();
+	public BossBarManager barManager = new BossBarManager(this);
 	public BossBarManager getBarManager() {
 		return barManager;
 	}
@@ -443,6 +461,8 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new RTPCommand(), this);
 		Bukkit.getPluginManager().registerEvents(new ProfCommand(), this);
 		Bukkit.getPluginManager().registerEvents(new InfoCommand(), this);
+		Bukkit.getPluginManager().registerEvents(new BossBarManager(this), this);
+		Bukkit.getPluginManager().registerEvents(new Healthbar(), this);
 		so("&cCORE&7: &fListeners Enabled!");
 
 		pm = new PartyManager();
@@ -556,10 +576,15 @@ public class Main extends JavaPlugin {
 			@Override
 			public void run() {
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+					updateBar(p);
 					sendHp(p);
 				}
 			}
 		}.runTaskTimer(this, 20L, 4L);
+	}
+
+	public void updateBar(Player p) {
+		barManager.getBS(p).update();
 	}
 	
 	/*public void acPeriodic() {
@@ -589,6 +614,7 @@ public class Main extends JavaPlugin {
 									setMana(p, Math.min(getMana(p) + manaGain, mana.get(p.getUniqueId())));
 								}
 								updateExpBar(p);
+								updateBar(p);
 								sendHp(p);
 							} else {
 								setMana(p, 0);
@@ -597,7 +623,7 @@ public class Main extends JavaPlugin {
 					}
 				}
 			}
-		}.runTaskTimerAsynchronously(this, 20L, 4L);
+		}.runTaskTimerAsynchronously(this, 1L, 4L);
 	}
 	
 	public void absorption() {
@@ -923,7 +949,9 @@ public class Main extends JavaPlugin {
 		double exppercent = ((1.0 * exp) / (1.0 * max)) * 100;
 		int mana = getInstance().getMana(p);
 		//TextComponent bar = new TextComponent(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---"));
-		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
+		//p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
+		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&c" + dF.format(p.getHealth()) + " HP   &b" + mana + " M   &a" + dF.format(exppercent) + "% XP   &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "")));
+
 	}
 	
 	public void setStringValue(Player p, String text, String value) {

@@ -20,6 +20,10 @@ public class SpeedCommand implements CommandExecutor {
 					Main.msg(p, "Usage: /speed <fly/walk> <1-10> <player>");
 				}
 				if (args.length == 2) {
+					if (args[1].contains(".")) {
+						Main.msg(p, "&cNo decimals allowed!");
+						return false;
+					}
 					if (args[0].equalsIgnoreCase("walk")) {
 						if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
 							p.setWalkSpeed(Float.parseFloat(args[1]) / 10);
@@ -40,6 +44,10 @@ public class SpeedCommand implements CommandExecutor {
 				if (args.length >= 3) {
 					if (Bukkit.getPlayer(args[2]) instanceof Player) {
 						Player t = Bukkit.getPlayer(args[2]);
+						if (args[1].contains(".")) {
+							Main.msg(p, "&cNo decimals allowed!");
+							return false;
+						}
 						if (args[0].equalsIgnoreCase("walk")) {
 							if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
 								t.setWalkSpeed(Float.parseFloat(args[1]) / 10);

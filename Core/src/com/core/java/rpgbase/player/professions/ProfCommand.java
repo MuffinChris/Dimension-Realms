@@ -773,9 +773,9 @@ public class ProfCommand implements CommandExecutor, Listener {
 
             }
             if (prof.getName().equals("Enchanting")) {
-                perkMeta.setDisplayName(Main.color("&eEfficiency"));
+                perkMeta.setDisplayName(Main.color("&eLevel Return"));
                 
-                lore.add(Main.color("&fBottle conversion cost reduced by &a" + dF.format((prof.getLevel() * 100.0F) / (prof.getMaxLevel() * 1.0F)) + "% &8(&f/bottle&8)"));
+                lore.add(Main.color("&fChance of &a" + prof.getProgress() + " &fto return half of the levels spent when enchanting."));
 
             }
             if (prof.getName().equals("Fishing")) {
