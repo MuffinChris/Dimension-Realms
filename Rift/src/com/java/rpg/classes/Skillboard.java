@@ -3,10 +3,14 @@ package com.java.rpg.classes;
 import com.java.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,53 +19,88 @@ public class Skillboard {
     private Main main = Main.getInstance();
 
     private UUID uuid;
-    private Scoreboard board;
-    private Objective obj;
-    private List<Team> teams;
-    private int i;
+    private BossBar bossbar;
+    List<Integer> prefixes = new ArrayList<>();
 
-    public Skillboard(Player p) {
-        uuid = p.getUniqueId();
-        board = Bukkit.getScoreboardManager().getNewScoreboard();
+    private Objective obj;
+
+    public void setScoreBoard(Player player) {
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
         obj = board.registerNewObjective("ServerName", "dummy", Main.color("&e&lSkill Cooldowns"));
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        teams = new ArrayList<>();
-        p.setScoreboard(board);
-        Score cds = obj.getScore(Main.color("&f<> ----- <>"));
+        Score cds = obj.getScore(Main.color(""));
         cds.setScore(15);
-        i = 0;
+        prefixes = new ArrayList<>();
+        prefixes.add(9);
+        prefixes.add(8);
+        prefixes.add(7);
+        prefixes.add(6);
+        prefixes.add(5);
+        prefixes.add(4);
+        for (int i : prefixes) {
+            Team skillOne = board.registerNewTeam("skill" + i);
+            skillOne.addEntry(Main.color("&" + i));
+            skillOne.setPrefix(Main.color(""));
+            obj.getScore(Main.color("&" + i)).setScore(i);
+        }
+
+        player.setScoreboard(board);
     }
 
     public void updateScoreboard(Player p) {
-        if (main.getPC().containsKey(p) && main.getPC().get(p).getCooldowns() != null) {
-            for (String name : main.getPC().get(p).getCooldowns().keySet()) {
-                if (i == 15) {
-                    i = 0;
-                }
-                if (!teams.contains(board.getTeam(name))) {
-                    teams.add(board.registerNewTeam(name));
-                    if (board.getTeam(name).getEntries() == null) {
-                        board.getTeam(name).addEntry(Main.color("&" + i + "a"));
-                        //board.getTeam(name).addEntry(ChatColor.YELLOW + name);
-                    }
-                    board.getTeam(name).setPrefix(Main.color("&6" + name + "&e: &f" + main.getPC().get(p).getCooldown(main.getPC().get(p).getSkillFromName(name)).replace("CD:", "") + "s" ));
-                    obj.getScore(Main.color("&" + i + "a")).setScore(i);
-                    //obj.getScore(Main.color(ChatColor.YELLOW + name)).setScore(i);
-                    if (!main.getPC().get(p).getCooldown(main.getPC().get(p).getSkillFromName(name)).contains("CD")) {
-                        String rm = "";
-                        for (String e : board.getTeam(name).getEntries()) {
-                            rm = e;
-                        }
-                        if (rm != "") {
-                            board.getTeam(name).removeEntry(rm);
-                        }
-                        teams.remove(board.getTeam(name));
-                    }
-                }
-                i++;
-            }
+        Scoreboard board = p.getScoreboard();
+        for (int i = 9; i > 9 - main.getPC().get(p.getUniqueId()).getCooldowns().size(); i--) {
+            int index = 9 - i;
+            String name = main.getPC().get(p.getUniqueId()).getCooldowns().keySet().toArray()[index].toString();
+            String output = "";
+            output += "&e" + name + ": &f" + main.getPC().get(p.getUniqueId()).getCooldown(main.getPC().get(p.getUniqueId()).getSkillFromName(name)).replace("CD:", "") + "s";
+            board.getTeam("skill" + i).setPrefix(Main.color(output));
+            obj.getScore(Main.color("&" + i)).setScore(i);
         }
-        p.setScoreboard(board);
+        for (int i = 9 - main.getPC().get(p.getUniqueId()).getCooldowns().size(); i >= 4; i--) {
+            board.getTeam("skill" + i).setPrefix("");
+        }
     }
+
+    public Skillboard(Player p) {
+        uuid = p.getUniqueId();
+        bossbar = Bukkit.getServer().createBossBar("", BarColor.BLUE, BarStyle.SOLID);
+        uuid = p.getUniqueId();
+        bossbar.addPlayer(p);
+        setScoreBoard(p);
+        update();
+        bossbar.setVisible(true);
+    }
+
+    public void update() {
+        Player p = Bukkit.getPlayer(uuid);
+        if (main.getPC().get(uuid) instanceof RPGPlayer && main.getPC().get(uuid).getPClass() instanceof PlayerClass) {
+            /*double mana = main.getMana(p);
+            double maxmana = main.getPC().get(uuid).getPClass().getCalcMana(main.getPC().get(uuid).getLevel());
+            double manaprogress = Math.max((1.0D * mana) / (1.0D * maxmana), 0.0);
+            bossbar.setProgress(Math.min(manaprogress, 1.0));
+            String title = "";
+            for (int i = main.getPC().get(uuid).getCooldowns().keySet().size() - 1; i >= 0; i--) {
+                String name = main.getPC().get(uuid).getCooldowns().keySet().toArray()[i].toString();
+                if (main.getPC().get(uuid).getCooldown(main.getPC().get(uuid).getSkillFromName(name)).contains("CD:")) {
+                    if (title != "") {
+                        title += "  ";
+                    }
+                    title += Main.color("&e" + name + ": &f" + main.getPC().get(uuid).getCooldown(main.getPC().get(uuid).getSkillFromName(name)).replace("CD:", "") + "s");
+                }
+            }
+            bossbar.setTitle(title);*/
+            updateScoreboard(p);
+        }
+    }
+
+    public void updateWarmup(Skill s) {
+
+    }
+
+    public void updateCast() {
+
+    }
+
 
 }

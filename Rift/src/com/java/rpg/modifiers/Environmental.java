@@ -46,7 +46,7 @@ public class Environmental implements Listener {
             LivingEntity p = (LivingEntity) e.getEntity();
             double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                e.setDamage(e.getDamage() * (hp / 20.0));
+                e.setDamage(e.getDamage() * (hp / 40.0));
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
                 e.setDamage(e.getDamage() / 4.0 * hp / 20.0);
@@ -71,10 +71,10 @@ public class Environmental implements Listener {
                 e.setDamage(hp / 30.0);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
-                e.setDamage(20);
+                e.setDamage(10);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.FIRE) {
-                e.setDamage(20);
+                e.setDamage(10);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.LAVA) {
                 e.setDamage(hp * 0.1);
@@ -89,16 +89,16 @@ public class Environmental implements Listener {
                 e.setDamage((e.getDamage() / 20) * hp);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.CONTACT) {
-                e.setDamage(hp / 40.0);
+                e.setDamage(e.getDamage() * (hp / 40.0));
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.MELTING) {
-                e.setDamage(hp / 20.0);
+                e.setDamage(e.getDamage() * (hp / 20.0));
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK) {
-                e.setDamage(hp / 20.0);
+                e.setDamage(e.getDamage() * (hp / 20.0));
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.HOT_FLOOR) {
-                e.setDamage(hp / 20.0);
+                e.setDamage(hp / 40.0);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.DRYOUT) {
                 e.setDamage(hp / 10.0);
@@ -135,19 +135,19 @@ public class Environmental implements Listener {
                 LivingEntity ent = (LivingEntity) e.getEntity();
                 double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                 if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN || e.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) {
-                    e.setAmount(hp * 0.05);
+                    e.setAmount(hp * 0.01);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.MAGIC_REGEN) {
-                    e.setAmount((e.getAmount() / 1) * hp * 0.04);
+                    e.setAmount((e.getAmount() * (hp/40)));
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.MAGIC) {
                     e.setAmount((e.getAmount() / 30) * hp);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.EATING) {
-                    e.setAmount(e.getAmount() * 5 + hp * 0.025);
+                    e.setAmount(hp * 0.01);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
                     e.setAmount(hp * 0.005);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.WITHER) {
                     e.setAmount(hp * 0.005);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.WITHER_SPAWN) {
-                    e.setAmount(5);
+                    e.setAmount(2);
                 }
                 if (e.getEntity() instanceof Player) {
                     Main.sendHp((Player) e.getEntity());

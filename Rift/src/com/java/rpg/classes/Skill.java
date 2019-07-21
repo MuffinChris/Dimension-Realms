@@ -6,20 +6,27 @@ public class Skill {
 
     private int manaCost;
     private double cooldown;
-    private double warmup;
+    private int warmup;
     private int level;
 
     private String name;
     private String flavor;
     private String description;
 
-    public Skill(String name, int manaCost, double cooldown, double warmup, int level, String flavor) {
+    private String type;
+
+    public Skill(String name, int manaCost, double cooldown, int warmup, int level, String flavor, String type) {
         this.name = name;
         this.manaCost = manaCost;
         this.cooldown = cooldown;
         this.warmup = warmup;
         this.level = level;
         this.flavor = flavor;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setDescription(String desc) {
@@ -42,7 +49,7 @@ public class Skill {
         return cooldown;
     }
 
-    public double getWarmup() {
+    public int getWarmup() {
         return warmup;
     }
 
@@ -55,6 +62,10 @@ public class Skill {
     }
 
     public void cast(Player p) {
+
+    }
+
+    public void warmup(Player p) {
 
     }
 

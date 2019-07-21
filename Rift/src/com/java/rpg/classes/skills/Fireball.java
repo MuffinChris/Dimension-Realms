@@ -3,9 +3,12 @@ package com.java.rpg.classes.skills;
 import com.java.Main;
 import com.java.rpg.classes.Skill;
 import com.java.rpg.party.Party;
+import net.minecraft.server.v1_14_R1.DataWatcherObject;
+import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -21,11 +24,11 @@ public class Fireball extends Skill implements Listener {
     private Main main = Main.getInstance();
 
     private double damage = 200;
-    private int range = 3;
+    private int range = 2;
 
     public Fireball() {
-        super("Fireball", 75, 4 * 20, 0, 0, "%player% has shot a fireball!");
-        setDescription("Shoot a flaming projectile that travels for " + range + " seconds,\ndealing " + damage + " damage and igniting them for 3 seconds.");
+        super("Fireball", 75, 4 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
+        setDescription("Shoot a flaming projectile that travels for " + range + " seconds,\ndealing " + damage + " damage and igniting nearby enemies for 3 seconds.");
     }
 
     public void cast(Player p) {
@@ -42,7 +45,7 @@ public class Fireball extends Skill implements Listener {
             PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(arrow.getEntityId());
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             arrow.setShooter(p);
-            arrow.setVelocity(p.getEyeLocation().getDirection().multiply(2));
+            arrow.setVelocity(p.getEyeLocation().getDirection().multiply(4));
             arrow.setBounce(false);
             arrow.setGravity(false);
             arrow.setKnockbackStrength(0);
@@ -62,6 +65,10 @@ public class Fireball extends Skill implements Listener {
                                     }
                                 }.runTaskLater(main, 1L);
                             }*/
+                            if (arrow.isOnGround() || arrow.isDead()) {
+                                arrow.remove();
+                                arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
+                            }
                         }
                     }
                 }
@@ -80,7 +87,7 @@ public class Fireball extends Skill implements Listener {
                                     }
                                 }.runTaskLater(main, 1L);
                             }*/
-                            if (arrow.isOnGround()) {
+                            if (arrow.isOnGround() || arrow.isDead()) {
                                 arrow.remove();
                                 arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                             }
@@ -105,39 +112,65 @@ public class Fireball extends Skill implements Listener {
     public void onHit (EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Arrow) {
             Arrow a = (Arrow) e.getDamager();
-            if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:")) {
+            if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:") && a.getShooter() instanceof Player) {
+                Player shooter = (Player) a.getShooter();
                 if (e.getEntity() instanceof Player) {
                     Player p = (Player) e.getEntity();
-                    if (main.getPM().getParty(p) instanceof Party) {
+                    if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
                         if (main.getPM().getParty(p).getPlayers().contains(a.getShooter())) {
                             e.setDamage(0);
+                            a.remove();
+                            e.setCancelled(true);
                             return;
                         }
                     }
-                    if (p.equals(a.getShooter())) {
+                    if (p.equals(shooter)) {
+                        a.remove();
+                        e.setDamage(0);
+                        e.setCancelled(true);
                         return;
                     }
+                    //((CraftPlayer)p).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),0);
                 }
-                e.setDamage(Double.valueOf(a.getCustomName().replace("Fireball:", "")));
-                e.getEntity().setFireTicks(60);
-                e.getEntity().getWorld().spawnParticle(Particle.LAVA, a.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
+                if (e.getEntity() instanceof LivingEntity) {
+                    LivingEntity ent = (LivingEntity) e.getEntity();
+                    ent.setKiller(shooter);
+                    lightEntities(e.getEntity(), shooter);
+                    ent.damage(Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                    ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
+                }
+                e.setDamage(0);
+                a.remove();
+                e.setCancelled(true);
             }
         }
     }
 
-    @EventHandler
-    public void dissapear (ProjectileHitEvent e) {
-        if (e.getEntity() instanceof Arrow) {
-            if (e.getEntity().getCustomName() instanceof String && e.getEntity().getCustomName().contains("FIREBALL:")) {
-                e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getEntity().getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-                e.getEntity().remove();
+    public void lightEntities(Entity e, Player caster) {
+        for (LivingEntity ent : e.getLocation().getNearbyLivingEntities(1)) {
+            if (ent instanceof ArmorStand) {
+                continue;
             }
+            if (ent instanceof Player) {
+                Player p = (Player) ent;
+                if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
+                    if (main.getPM().getParty(p).getPlayers().contains(caster)) {
+                        continue;
+                    }
+                }
+                if (p.equals(caster)) {
+                    return;
+                }
+            }
+            ent.setFireTicks(60);
         }
+        e.setFireTicks(60);
     }
 
-    public boolean damageEntities(Location loc, Player caster) {
-        Main.so("Ran dmg entities");
-        for (LivingEntity ent : loc.getNearbyLivingEntities(0.25)) {
+    /*public boolean damageEntities(Location loc, Player caster, Entity e) {
+        Main.so("de");
+        for (LivingEntity ent : loc.getNearbyLivingEntities(0.5)) {
+            Main.so("pp");
             if (ent instanceof Player) {
                 Player p = (Player) ent;
                 if (main.getPM().getParty(p) instanceof Party) {
@@ -146,15 +179,17 @@ public class Fireball extends Skill implements Listener {
                     }
                 }
                 if (p.equals(caster)) {
-                    continue;
+                    return false;
                 }
             }
             ent.setKiller(caster);
-            ent.damage(damage);
+            ent.damage(Double.valueOf(e.getCustomName().replace("Fireball:", "")));
+            Main.so("" + Double.valueOf(e.getCustomName().replace("Fireball:", "")));
             ent.setFireTicks(60);
-            Main.so("true");
+            e.remove();
+            ent.getWorld().spawnParticle(Particle.LAVA, e.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
             return true;
         }
         return false;
-    }
+    }*/
 }

@@ -18,6 +18,7 @@ public class PlayerinfoListener implements Listener {
     @EventHandler
     public void pInfoLeave(PlayerQuitEvent e) {
         if (main.getMsg().getPinfs().containsKey(e.getPlayer().getUniqueId())) {
+            main.getMsg().getPinfs().get(e.getPlayer().getUniqueId()).scrub();
             main.getMsg().getPinfs().remove(e.getPlayer().getUniqueId());
         }
     }

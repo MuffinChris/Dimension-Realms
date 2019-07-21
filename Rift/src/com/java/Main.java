@@ -13,6 +13,8 @@ import com.java.communication.playerinfoManager;
 import com.java.essentials.*;
 import com.java.rpg.classes.*;
 import com.java.rpg.classes.skills.Fireball;
+import com.java.rpg.classes.skills.MeteorShower;
+import com.java.rpg.classes.skills.WorldOnFire;
 import com.java.rpg.modifiers.Environmental;
 import com.java.rpg.player.PlayerListener;
 import net.md_5.bungee.api.ChatMessageType;
@@ -20,6 +22,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,10 +33,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.java.rpg.party.Party;
 import com.java.rpg.party.PartyCommand;
 import com.java.rpg.party.PartyManager;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.text.DecimalFormat;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Main extends JavaPlugin {
 
@@ -43,11 +51,15 @@ public class Main extends JavaPlugin {
     * Blood moons
     * Skills have tiers
     * unlock all by 10, upgrade them
-    * Skillboard in bossbar
     *
     * Class specific magic resist and armor, and per level resistances
     * Wearing armor adds to those resistances
     * Armor weight for classes?
+    *
+    * BETTER WAY TO MANAGE CDS: just put all skills in and dont print if 0. This will remove conc modi excep.
+    * Make Bossbar warmup and skill cast messages.
+    * Make scoreboard cooldowns.
+    * Need to implement toggleable abilities
     *
     */
 
@@ -56,7 +68,6 @@ public class Main extends JavaPlugin {
     public static Main getInstance() {
         return JavaPlugin.getPlugin(Main.class);
     }
-
     /*
     *
     * PARTY VARIABLES
@@ -89,12 +100,13 @@ public class Main extends JavaPlugin {
         return cm;
     }
 
-    private Map<Player, RPGPlayer> pc = new HashMap<>();
-    public Map<Player, RPGPlayer> getPC() {
+    private Map<UUID, RPGPlayer> pc = new HashMap<>();
+    public Map<UUID, RPGPlayer> getPC() {
         return pc;
     }
 
-    public double getMana(Player p) {
+    public double getMana(Player pl) {
+        UUID p = pl.getUniqueId();
         if (getPC().get(p) != null) {
             if (getPC().get(p).getPClass() instanceof PlayerClass) {
                 return getPC().get(p).getCMana();
@@ -104,7 +116,8 @@ public class Main extends JavaPlugin {
         return 0;
     }
 
-    public void setMana(Player p, double m) {
+    public void setMana(Player pl, double m) {
+        UUID p = pl.getUniqueId();
         if (getPC().get(p) != null) {
             if (getPC().get(p).getPClass() instanceof PlayerClass) {
                 getPC().get(p).setMana(m);
@@ -112,13 +125,14 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public static void sendHp(Player p) {
+    public static void sendHp(Player pl) {
+        UUID p = pl.getUniqueId();
         if (getInstance().getPC().get(p) != null) {
             RPGPlayer player = getInstance().getPC().get(p);
             DecimalFormat dF = new DecimalFormat("#.##");
             //TextComponent bar = new TextComponent(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---"));
             //p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&c" + dF.format(p.getHealth()) + " HP   &b" + player.getPrettyCMana() + " M   &a" + player.getPrettyPercent() + "% XP   &e" + player.getLevel() + " LVL " + "")));
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&c" + dF.format(pl.getHealth()) + " HP   &b" + player.getPrettyCMana() + " M   &a" + player.getPrettyPercent() + "% XP   &e" + player.getLevel() + " LVL " + "")));
         }
     }
 
@@ -137,18 +151,19 @@ public class Main extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+                    UUID p = pl.getUniqueId();
                     if (getPC().get(p) != null && getPC().get(p).getPClass() instanceof PlayerClass) {
                         int level = getPC().get(p).getLevel();
-                        double mana = getMana(p);
+                        double mana = getMana(pl);
                         double maxmana = getPC().get(p).getPClass().getCalcMana(level);
                         if (mana < maxmana) {
-                            if (!p.isDead()) {
+                            if (!pl.isDead()) {
                                 double manaGain = getPC().get(p).getPClass().getCalcManaRegen(level);
-                                setMana(p, Math.min(getMana(p) + manaGain, maxmana));
-                                sendHp(p);
+                                setMana(pl, Math.min(getMana(pl) + manaGain, maxmana));
+                                sendHp(pl);
                             } else {
-                                setMana(p, 0);
+                                setMana(pl, 0);
                             }
                         }
                     }
@@ -157,24 +172,22 @@ public class Main extends JavaPlugin {
         }.runTaskTimerAsynchronously(this, 1L, 20L);
     }
 
-    public void cleanCooldownsPeriodic() {
-        new BukkitRunnable() {
-            public void run() {
-                for (Player  p : Bukkit.getOnlinePlayers()) {
-                    getPC().get(p).refreshCooldowns();
-                }
-            }
-        }.runTaskTimerAsynchronously(this, 10L, 100L);
-    }
-
     public void cooldownsPeriodic() {
         new BukkitRunnable() {
             public void run() {
-                for (Player  p : Bukkit.getOnlinePlayers()) {
-                    getPC().get(p).getBoard().updateScoreboard(p);
+                for (Player  pl : Bukkit.getOnlinePlayers()) {
+                    UUID p = pl.getUniqueId();
+                    if (getPC().get(p) != null && getPC().get(p).getBoard() != null) {
+                        //try {
+                            getPC().get(p).refreshCooldowns();
+                            getPC().get(p).getBoard().update();
+                        //} catch (ConcurrentModificationException ex) {
+
+                        //}
+                    }
                 }
             }
-        }.runTaskTimerAsynchronously(this, 1L, 5L);
+        }.runTaskTimerAsynchronously(this, 1L, 1L);
     }
 
     public void chatPeriodic() {
@@ -224,9 +237,13 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ClassManager(), this);
         Bukkit.getPluginManager().registerEvents(new ChatFunctions(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerinfoListener(), this);
-        Bukkit.getPluginManager().registerEvents(new Fireball(), this);
         Bukkit.getPluginManager().registerEvents(new Environmental(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+
+        //Skills
+        Bukkit.getPluginManager().registerEvents(new Fireball(), this);
+        Bukkit.getPluginManager().registerEvents(new MeteorShower(), this);
+        Bukkit.getPluginManager().registerEvents(new WorldOnFire(), this);
         so("&bRIFT: &fRegistered events!");
 
         pm = new PartyManager();
@@ -234,13 +251,23 @@ public class Main extends JavaPlugin {
         hpPeriodic();
         manaRegen();
         chatPeriodic();
-        cleanCooldownsPeriodic();
         cooldownsPeriodic();
         so("&bRIFT: &fSetup complete!");
 
     }
 
     public void onDisable() {
+
+        final BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.cancelTasks(this);
+
+        for (World w : Bukkit.getWorlds()) {
+            for (Entity e : w.getEntities()) {
+                if (e.getCustomName() instanceof String && e.getCustomName().contains("Fireball") || e.getCustomName().contains("Meteor")) {
+                    e.remove();
+                }
+            }
+        }
 
         so("&bRIFT: &fDisabling Plugin!");
 

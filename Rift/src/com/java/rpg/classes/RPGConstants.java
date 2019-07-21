@@ -9,4 +9,6 @@ public class RPGConstants {
     public static double defaultHP = 1000;
     public static double baseDmg = 10;
 
+    public static double defenseDiv = 300.0;
+
 }

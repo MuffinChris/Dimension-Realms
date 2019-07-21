@@ -21,12 +21,18 @@ public class PlayerClass {
     private String weapon;
     private double baseDmg;
 
+    private double armor;
+    private double magicresist;
+
+    private double armorPerLevel;
+    private double magicResistPerLevel;
+
     private String resourceName = "Mana";
     private String fancyResourceName = "&bMana";
 
     private List<Skill> skills;
 
-    public PlayerClass(String name, String fancyname, double basehp, double hpPerLevel, double mana, double manaPerlevel, double manaRegen, double manaRegenPerLevel, String weapon, double baseDmg, List<Skill> skills) {
+    public PlayerClass(String name, String fancyname, double basehp, double hpPerLevel, double mana, double manaPerlevel, double manaRegen, double manaRegenPerLevel, String weapon, double baseDmg, double armor, double magicresist, double armorPerLevel, double magicResistPerLevel, List<Skill> skills) {
         this.name = name;
         this.fancyname = fancyname;
         this.basehp = basehp;
@@ -38,6 +44,18 @@ public class PlayerClass {
         this.skills = skills;
         this.weapon = weapon;
         this.baseDmg = baseDmg;
+        this.armor = armor;
+        this.magicresist = magicresist;
+        this.armorPerLevel = armorPerLevel;
+        this.magicResistPerLevel = magicResistPerLevel;
+    }
+
+    public double getCalcArmor(int level) {
+        return armor + level * armorPerLevel;
+    }
+
+    public double getCalcMR(int level) {
+        return magicresist + level * magicResistPerLevel;
     }
 
     public List<Skill> getSkills() {
