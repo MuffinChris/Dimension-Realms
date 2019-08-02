@@ -135,7 +135,7 @@ public class Environmental implements Listener {
                 LivingEntity ent = (LivingEntity) e.getEntity();
                 double hp = ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                 if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.REGEN || e.getRegainReason() == EntityRegainHealthEvent.RegainReason.SATIATED) {
-                    e.setAmount(hp * 0.01);
+                    e.setAmount(hp * 0.015);
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.MAGIC_REGEN) {
                     e.setAmount((e.getAmount() * (hp/40)));
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.MAGIC) {

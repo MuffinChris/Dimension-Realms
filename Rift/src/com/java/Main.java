@@ -12,9 +12,9 @@ import com.java.communication.PlayerinfoListener;
 import com.java.communication.playerinfoManager;
 import com.java.essentials.*;
 import com.java.rpg.classes.*;
-import com.java.rpg.classes.skills.Fireball;
-import com.java.rpg.classes.skills.MeteorShower;
-import com.java.rpg.classes.skills.WorldOnFire;
+import com.java.rpg.classes.skills.Pyromancer.Fireball;
+import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
+import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import com.java.rpg.modifiers.Environmental;
 import com.java.rpg.player.PlayerListener;
 import net.md_5.bungee.api.ChatMessageType;
@@ -23,7 +23,6 @@ import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -36,10 +35,7 @@ import com.java.rpg.party.PartyManager;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.text.DecimalFormat;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Main extends JavaPlugin {
 
@@ -190,6 +186,16 @@ public class Main extends JavaPlugin {
         }.runTaskTimerAsynchronously(this, 1L, 1L);
     }
 
+    public void passivesPeriodic() {
+        new BukkitRunnable() {
+            public void run() {
+                for (Player  pl : Bukkit.getOnlinePlayers()) {
+                    getCM().passives(pl);
+                }
+            }
+        }.runTaskTimer(this, 1L, 1L);
+    }
+
     public void chatPeriodic() {
         new BukkitRunnable() {
             public void run() {
@@ -251,6 +257,7 @@ public class Main extends JavaPlugin {
         hpPeriodic();
         manaRegen();
         chatPeriodic();
+        passivesPeriodic();
         cooldownsPeriodic();
         so("&bRIFT: &fSetup complete!");
 
@@ -261,9 +268,13 @@ public class Main extends JavaPlugin {
         final BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.cancelTasks(this);
 
+        List<String> projectiles = new ArrayList<>();
+        projectiles.add("Fireball");
+        projectiles.add("Meteor");
+
         for (World w : Bukkit.getWorlds()) {
             for (Entity e : w.getEntities()) {
-                if (e.getCustomName() instanceof String && e.getCustomName().contains("Fireball") || e.getCustomName().contains("Meteor")) {
+                if (e != null && e.getCustomName() != null && e.getCustomName() instanceof String && projectiles.contains(e.getCustomName())) {
                     e.remove();
                 }
             }

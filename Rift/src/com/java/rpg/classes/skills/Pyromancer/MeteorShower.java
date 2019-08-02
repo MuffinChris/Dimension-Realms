@@ -1,4 +1,4 @@
-package com.java.rpg.classes.skills;
+package com.java.rpg.classes.skills.Pyromancer;
 
 import com.java.Main;
 import com.java.rpg.classes.Skill;
@@ -31,11 +31,13 @@ public class MeteorShower extends Skill implements Listener {
     }
 
     public void warmup(Player p) {
+        super.warmup(p);
         p.getWorld().spawnParticle(Particle.FLAME, p.getLocation(), 5, 0.1, 0.1, 0.1);
         p.getWorld().spawnParticle(Particle.LAVA, p.getLocation(), 5, 0.3, 0.3, 0.3);
     }
 
     public void cast(Player p) {
+        super.cast(p);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1.0F, 1.0F);
         new BukkitRunnable() {
             int count = 0;

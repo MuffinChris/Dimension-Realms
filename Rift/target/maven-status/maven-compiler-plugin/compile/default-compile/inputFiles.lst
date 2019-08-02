@@ -1,5 +1,6 @@
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\FlyCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\PlayerClass.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\Fireball.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\party\PartyManager.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\GamemodeCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\player\PlayerListener.java
@@ -9,10 +10,11 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\part
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\Leveleable.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\Main.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\SpeedCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\WorldOnFire.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\SkillCommand.java
-C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Fireball.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\LagCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\ListCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\MeteorShower.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\KillAllCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\InvseeCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\MsgCommand.java
@@ -20,10 +22,9 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\clas
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\ChatFunctions.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\ClassManager.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\playerinfo.java
-C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Flameburst.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\party\Party.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\HealCommand.java
-C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\MeteorShower.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\InfernoVault.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\Skill.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\RPGPlayer.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\playerinfoManager.java

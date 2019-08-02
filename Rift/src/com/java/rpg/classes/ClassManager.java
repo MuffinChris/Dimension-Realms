@@ -2,10 +2,11 @@ package com.java.rpg.classes;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.java.Main;
-import com.java.rpg.classes.skills.Fireball;
-import com.java.rpg.classes.skills.MeteorShower;
-import com.java.rpg.classes.skills.WorldOnFire;
+import com.java.rpg.classes.skills.Pyromancer.Fireball;
+import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
+import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import net.minecraft.server.v1_14_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,13 +14,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,6 +171,106 @@ public class ClassManager implements Listener {
             }
         }
         return null;
+    }
+
+    // CLEAN TOGGLES DOES NOT WORK, YOU NEED TO MANUALLY REMOVE ON TOGGLEEND
+    // UPDATE CLEAN TOGGLES INSIDE SCRUB
+
+    public void cleanToggle(Player p, Skill s) {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        RPGPlayer rp = main.getPC().get(p.getUniqueId());
+        rp.getToggles().remove(s.getName());
+        List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
+        for (Map<Integer, String> map : rp.getToggleTasks()) {
+            if (map.containsValue(s.getName())) {
+                tasksToRemove.add(map);
+            }
+        }
+
+        for (Map<Integer, String> map : tasksToRemove) {
+            scheduler.cancelTask((int) map.keySet().toArray()[0]);
+            rp.getToggleTasks().remove(map);
+        }
+        tasksToRemove = new ArrayList<>();
+    }
+
+    /*
+    public void cleanToggles(Player p) {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        RPGPlayer rp = main.getPC().get(p.getUniqueId());
+        List<String> skillsToRemove = new ArrayList<>();
+        if (rp.getPClass() instanceof PlayerClass) {
+            rp.getToggles().clear();
+            List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
+            for (Map<Integer, String> map : rp.getToggleTasks()) {
+                tasksToRemove.add(map);
+            }
+            for (Map<Integer, String> map : tasksToRemove) {
+                scheduler.cancelTask((int) map.keySet().toArray()[0]);
+                rp.getToggleTasks().remove(map);
+            }
+        }
+        skillsToRemove = new ArrayList<>();
+    }*/
+
+    public void passives(Player p) {
+        RPGPlayer rp = main.getPC().get(p.getUniqueId());
+        if (rp.getPClass() instanceof PlayerClass) {
+            List<Skill> skillsToAdd = new ArrayList<>();
+            for (Skill s : rp.getPClass().getSkills()) {
+                if (s.getType().contains("PASSIVE") && s.getLevel() <= rp.getLevel()) {
+                    if (!rp.getPassives().contains(s.getName())) {
+                        skillsToAdd.add(s);
+                    }
+                }
+            }
+            for (Skill s : skillsToAdd) {
+                rp.getPassives().add(s.getName());
+                int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+                    public void run() {
+                        s.passive(p);
+                    }
+                }, 0L, s.getPassiveTicks());
+                Map<Integer, String> taskSkill = new HashMap<>();
+                taskSkill.put(task, s.getName());
+                rp.getPassiveTasks().add(taskSkill);
+            }
+            cleanPassives(p);
+            skillsToAdd = new ArrayList<>();
+        } else {
+            cleanPassives(p);
+        }
+    }
+
+    public void cleanPassives(Player p) {
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        RPGPlayer rp = main.getPC().get(p.getUniqueId());
+        List<String> skillsToRemove = new ArrayList<>();
+        for (String s : rp.getPassives()) {
+            if (!(rp.getSkillFromName(s) instanceof Skill)) {
+                skillsToRemove.add(s);
+                continue;
+            }
+            if (rp.getPClass() == null || (!rp.getPClass().getSkills().contains(rp.getSkillFromName(s)) || rp.getSkillFromName(s).getLevel() > rp.getLevel())) {
+                skillsToRemove.add(s);
+            }
+        }
+        for (String s : skillsToRemove) {
+            rp.getPassives().remove(s);
+            List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
+            for (Map<Integer, String> map : rp.getPassiveTasks()) {
+                if (map.containsValue(s)) {
+                    tasksToRemove.add(map);
+                }
+            }
+
+            for (Map<Integer, String> map : tasksToRemove) {
+                scheduler.cancelTask((int) map.keySet().toArray()[0]);
+                rp.getPassiveTasks().remove(map);
+            }
+            tasksToRemove = new ArrayList<>();
+        }
+        skillsToRemove = new ArrayList<>();
     }
 
 }

@@ -23,6 +23,8 @@ public class RPGPlayer extends Leveleable {
 
     private Main main = Main.getInstance();
 
+    private double pstrength;
+
     private Player player;
     private PlayerClass pclass;
 
@@ -31,6 +33,10 @@ public class RPGPlayer extends Leveleable {
     private Skillboard board;
 
     public void setMana(double m) {
+        currentMana = Math.min(m, pclass.getCalcMana(getLevel()));
+    }
+
+    public void setManaOverflow(double m) {
         currentMana = m;
     }
 
@@ -40,6 +46,10 @@ public class RPGPlayer extends Leveleable {
     }
 
     List<String> statuses;
+    List<String> passives;
+    List<String> toggles;
+    List<Map<Integer, String>> toggleTasks;
+    List<Map<Integer, String>> passiveTasks;
     private Map<String, Long> cooldowns;
 
     public RPGPlayer(Player p) {
@@ -47,9 +57,22 @@ public class RPGPlayer extends Leveleable {
         player = p;
         currentMana = 0;
         statuses = new ArrayList<>();
+        passives = new ArrayList<>();
         cooldowns = new HashMap<>();
+        passiveTasks = new ArrayList<>();
+        toggleTasks = new ArrayList<>();
+        toggles = new ArrayList<>();
         pullFiles();
         board = new Skillboard(p);
+        pstrength = 1.0;
+    }
+
+    public void setPStrength(double d) {
+        pstrength = d;
+    }
+
+    public double getPStrength() {
+        return pstrength;
     }
 
     public Skillboard getBoard() {
@@ -129,6 +152,24 @@ public class RPGPlayer extends Leveleable {
         }
     }
 
+    public void noneClass() {
+        double hp = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+        pushFiles();
+        pclass = null;
+        File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
+        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+        try {
+            pData.set("Current Class", "None");
+            pData.save(pFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        pullFiles();
+        currentMana = 0;
+        player.setHealth(hp * RPGConstants.defaultHP);
+        updateStats();
+    }
+
     public boolean changeClass(PlayerClass pc) {
         double hp = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         pushFiles();
@@ -163,19 +204,33 @@ public class RPGPlayer extends Leveleable {
             player.setHealth(Math.min(player.getHealth(), hp));
             player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pclass.getBaseDmg());
         } else {
+            double hpprev = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             double hp = RPGConstants.defaultHP;
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
-            player.setHealth(Math.min(player.getHealth(), hp));
+            player.setHealth(Math.min(hp, hp * hpprev));
             player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(RPGConstants.baseDmg);
         }
     }
 
     public String castSkill(String name) {
+        Main.msg(player, pstrength + "");
         if (pclass instanceof PlayerClass) {
             for (Skill s : pclass.getSkills()) {
                 if (name.equalsIgnoreCase(s.getName())) {
                     if (s.getLevel() <= getLevel()) {
                         if (s.getManaCost() <= currentMana) {
+
+                            if (s.getType().contains("TOGGLE")) {
+                                if (getToggles().contains(s.getName())) {
+                                    s.toggleEnd(player);
+                                } else {
+                                    getToggles().add(s.getName());
+                                    Map<Integer, String> map = new HashMap<>();
+                                    map.put(s.toggleInit(player), s.getName());
+                                    getToggleTasks().add(map);
+                                }
+                            }
+
                             String cd = getCooldown(s);
                             final BukkitScheduler scheduler = Bukkit.getScheduler();
                             if (cd.equalsIgnoreCase("Warmup")) {
@@ -244,7 +299,13 @@ public class RPGPlayer extends Leveleable {
                                 if (indexesToRemove != null && indexesToRemove.size() > 0) {
                                     return "Interrupted";
                                 }
-                                return s.getFlavor();
+
+                                if (!s.getType().contains("CAST")) {
+                                    return "CannotCast";
+                                }
+
+                                return "CastedSkill";
+                                //return s.getFlavor();
                             }
                             if (cd.equalsIgnoreCase("Invalid")) {
                                 return "Failure";
@@ -322,10 +383,61 @@ public class RPGPlayer extends Leveleable {
         return statuses;
     }
 
+    public List<String> getToggles() {
+        return toggles;
+    }
+
+    public List<Map<Integer, String>> getToggleTasks() {
+        return toggleTasks;
+    }
+
+    public List<String> getPassives() {
+        return passives;
+    }
+
+    public List<Map<Integer, String>> getPassiveTasks() {
+        return passiveTasks;
+    }
+
     public void scrub() {
         board = null;
         cooldowns = new HashMap<>();
         statuses = new ArrayList<>();
+        passives = new ArrayList<>();
+
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        List<String> skillsToRemove = new ArrayList<>();
+        for (String s : getToggles()) {
+            skillsToRemove.add(s);
+        }
+        for (String s : skillsToRemove) {
+            getSkillFromName(s).toggleEnd(player);
+        }
+        skillsToRemove = new ArrayList<>();
+
+        for (String s : getPassives()) {
+            skillsToRemove.add(s);
+        }
+        for (String s : skillsToRemove) {
+            getPassives().remove(s);
+            List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
+            for (Map<Integer, String> map : getPassiveTasks()) {
+                if (map.containsValue(s)) {
+                    tasksToRemove.add(map);
+                }
+            }
+
+            for (Map<Integer, String> map : tasksToRemove) {
+                scheduler.cancelTask((int) map.keySet().toArray()[0]);
+                getPassiveTasks().remove(map);
+            }
+            tasksToRemove = new ArrayList<>();
+        }
+        skillsToRemove = new ArrayList<>();
+
+        passiveTasks = new ArrayList<>();
+        toggleTasks = new ArrayList<>();
+        toggles = new ArrayList<>();
         player = null;
         pclass = null;
     }

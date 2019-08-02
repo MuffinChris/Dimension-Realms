@@ -52,6 +52,8 @@ public class SkillCommand implements CommandExecutor {
                     Main.msg(p, "&cAlready casting!");
                 } else if (flavor.contains("Interrupt")) {
                     p.removePotionEffect(PotionEffectType.SLOW);
+                } else if (flavor.contains("CannotCast")) {
+                    Main.msg(p, "&cYou cannot cast this skill.");
                 }
             } else {
                 Main.msg(p, "&fUsage: /skill <skill>");

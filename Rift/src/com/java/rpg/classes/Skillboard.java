@@ -7,6 +7,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
@@ -95,11 +96,30 @@ public class Skillboard {
     }
 
     public void updateWarmup(Skill s) {
-
+        bossbar.setTitle(Main.color("&bChanneling ") + s.getName() + "...");
     }
 
-    public void updateCast() {
+    public void updateCast(Skill s) {
+        bossbar.setTitle(Main.color("&bCasting ") + s.getName() + "...");
+        new BukkitRunnable() {
+            public void run() {
+                if (bossbar.getTitle().equalsIgnoreCase(Main.color("&bCasting ") + s.getName() + "...")) {
+                    bossbar.setTitle("");
+                }
+            }
+        }.runTaskLater(Main.getInstance(), 20L);
+    }
 
+    public void updateToggle(Skill s) {
+        if (bossbar.getTitle().equals("")) {
+            bossbar.setTitle(Main.color("&bEnabled ") + s.getName() + "");
+        }
+    }
+
+    public void endToggle(Skill s) {
+        if (bossbar.getTitle().contains("Enabled")) {
+            bossbar.setTitle("");
+        }
     }
 
 

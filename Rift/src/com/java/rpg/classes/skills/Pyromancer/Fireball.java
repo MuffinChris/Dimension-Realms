@@ -1,4 +1,4 @@
-package com.java.rpg.classes.skills;
+package com.java.rpg.classes.skills.Pyromancer;
 
 import com.java.Main;
 import com.java.rpg.classes.Skill;
@@ -23,7 +23,7 @@ public class Fireball extends Skill implements Listener {
 
     private Main main = Main.getInstance();
 
-    private double damage = 200;
+    private double damage = 175;
     private int range = 2;
 
     public Fireball() {
@@ -32,6 +32,7 @@ public class Fireball extends Skill implements Listener {
     }
 
     public void cast(Player p) {
+        super.cast(p);
         /*Location loc = p.getLocation();
         Vector vec = p.getLocation().getDirection();
         for (int i = 0; i < 200; i++) {
