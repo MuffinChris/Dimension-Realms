@@ -4,16 +4,22 @@ import com.java.Main;
 import com.java.rpg.classes.Skill;
 import com.java.rpg.party.Party;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityDestroy;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class InfernoVault extends Skill implements Listener {
 
@@ -30,55 +36,64 @@ public class InfernoVault extends Skill implements Listener {
 
     public void cast(Player p) {
         super.cast(p);
-        /*Location loc = p.getLocation();
-        Vector vec = p.getLocation().getDirection();
-        for (int i = 0; i < 200; i++) {
-            loc.setX(loc.getX() + i);
-            p.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 1);
-        }*/
+        vaultDamage(p);
+        Vector v = new Vector(p.getLocation().getDirection().getX() * 1.5, 1.5, p.getLocation().getDirection().getZ() * 1.5);
+        p.setVelocity(v);
+        p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
+        p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 1.0F, 1.0F);
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_TNT_PRIMED, 1.0F, 1.0F);
 
+        BukkitScheduler sched = Bukkit.getScheduler();
+        if (!main.getCM().getFallMap().containsKey(p.getUniqueId())) {
+            main.getCM().getFallMap().put(p.getUniqueId(), sched.scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+                public void run() {
+                    p.getWorld().spawnParticle(Particle.LAVA, p.getLocation(), 15, 0, 0.1, 0.1, 0.1);
+                }
+            }, 0L, 1L));
+        }
+        new BukkitRunnable() {
+            public void run() {
+                if (!main.getCM().getFall().contains(p.getUniqueId())) {
+                    main.getCM().getFall().add(p.getUniqueId());
+                }
+            }
+        }.runTaskLater(Main.getInstance(), 10L);
+        new BukkitRunnable() {
+            public void run() {
+                if (main.getCM().getFall().contains(p.getUniqueId())) {
+                    main.getCM().getFall().remove(p.getUniqueId());
+                }
+                if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
+                    Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
+                    main.getCM().getFallMap().remove(p.getUniqueId());
+                }
+            }
+        }.runTaskLater(Main.getInstance(), 200L);
     }
 
-    @EventHandler
-    public void onHit (EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Arrow) {
-            Arrow a = (Arrow) e.getDamager();
-            if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:") && a.getShooter() instanceof Player) {
-                Player shooter = (Player) a.getShooter();
-                if (e.getEntity() instanceof Player) {
-                    Player p = (Player) e.getEntity();
-                    if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
-                        if (main.getPM().getParty(p).getPlayers().contains(a.getShooter())) {
-                            e.setDamage(0);
-                            a.remove();
-                            e.setCancelled(true);
-                            return;
-                        }
-                    }
-                    if (p.equals(shooter)) {
-                        a.remove();
-                        e.setDamage(0);
-                        e.setCancelled(true);
-                        return;
-                    }
-                    //((CraftPlayer)p).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),0);
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void fallDamage (PlayerMoveEvent e) {
+        Player p = e.getPlayer();
+        if (p.getLocation().subtract(new Vector(0, 1, 0)).getBlock() != null && p.getLocation().subtract(new Vector(0, 1, 0)).getBlock().getType() != Material.AIR) {
+            if (main.getCM().getFall().contains(p.getUniqueId())) {
+                p.setFallDistance(0);
+                main.getCM().getFall().remove(p.getUniqueId());
+                if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
+                    Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
+                    main.getCM().getFallMap().remove(p.getUniqueId());
                 }
-                if (e.getEntity() instanceof LivingEntity) {
-                    LivingEntity ent = (LivingEntity) e.getEntity();
-                    ent.setKiller(shooter);
-                    lightEntities(e.getEntity(), shooter);
-                    ent.damage(Double.valueOf(a.getCustomName().replace("Fireball:", "")));
-                    ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-                }
-                e.setDamage(0);
-                a.remove();
-                e.setCancelled(true);
+                landDamage(p);
+                p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
+                p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_SHOOT, 1.0F, 1.0F);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
             }
         }
     }
 
-    public void lightEntities(Entity e, Player caster) {
-        for (LivingEntity ent : e.getLocation().getNearbyLivingEntities(1)) {
+    public void landDamage(Player caster) {
+        for (LivingEntity ent : caster.getLocation().getNearbyLivingEntities(range)) {
             if (ent instanceof ArmorStand) {
                 continue;
             }
@@ -90,37 +105,32 @@ public class InfernoVault extends Skill implements Listener {
                     }
                 }
                 if (p.equals(caster)) {
-                    return;
+                    continue;
                 }
             }
             ent.setFireTicks(60);
+            spellDamage(caster, ent, landdamage);
         }
-        e.setFireTicks(60);
     }
 
-    /*public boolean damageEntities(Location loc, Player caster, Entity e) {
-        Main.so("de");
-        for (LivingEntity ent : loc.getNearbyLivingEntities(0.5)) {
-            Main.so("pp");
+    public void vaultDamage(Player caster) {
+        for (LivingEntity ent : caster.getLocation().getNearbyLivingEntities(range)) {
+            if (ent instanceof ArmorStand) {
+                continue;
+            }
             if (ent instanceof Player) {
                 Player p = (Player) ent;
-                if (main.getPM().getParty(p) instanceof Party) {
+                if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
                     if (main.getPM().getParty(p).getPlayers().contains(caster)) {
                         continue;
                     }
                 }
                 if (p.equals(caster)) {
-                    return false;
+                    continue;
                 }
             }
-            ent.setKiller(caster);
-            ent.damage(Double.valueOf(e.getCustomName().replace("Fireball:", "")));
-            Main.so("" + Double.valueOf(e.getCustomName().replace("Fireball:", "")));
             ent.setFireTicks(60);
-            e.remove();
-            ent.getWorld().spawnParticle(Particle.LAVA, e.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-            return true;
+            spellDamage(caster, ent, vaultdamage);
         }
-        return false;
-    }*/
+    }
 }

@@ -102,15 +102,16 @@ public class MeteorShower extends Skill implements Listener {
             @Override
             public void run() {
                 if (!fireball.isDead()) {
-                    for (Player player : fireball.getLocation().getNearbyPlayers(48)) {
-                        player.spawnParticle(Particle.LAVA, fireball.getLocation(), 5, 0.5, 0.5, 0.5, 0.5);
-                    }
+                    p.getWorld().spawnParticle(Particle.LAVA, fireball.getLocation(), 5, 0.5, 0.5, 0.5, 0.5);
+                } else {
+                    damageEntities(fireball.getLocation(), p, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
                 }
             }
         }, 1, 1);
         scheduler.scheduleSyncDelayedTask(main, new Runnable(){
             @Override
             public void run(){
+                damageEntities(fireball.getLocation(), p, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
                 scheduler.cancelTask(task);
                 fireball.remove();
             }
@@ -122,11 +123,11 @@ public class MeteorShower extends Skill implements Listener {
         if (e.getEntity() instanceof CraftLargeFireball) {
             CraftLargeFireball fireball = (CraftLargeFireball) e.getEntity();
             if (fireball.getCustomName() instanceof String && fireball.getCustomName().contains("Meteor:") && fireball.getShooter() instanceof Player) {
-                fireball.getWorld().playSound(fireball.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
-                fireball.getWorld().spawnParticle(Particle.LAVA, fireball.getLocation(), 10, 0.75, 0.75, 0.75);
-                fireball.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireball.getLocation(), 3, 0.5, 0.5, 0.5);
+                fireball.getWorld().playSound(fireball.getLocation().subtract(new Vector(0, 1, 0)), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
+                fireball.getWorld().spawnParticle(Particle.LAVA, fireball.getLocation().subtract(new Vector(0, 1, 0)), 10, 0.75, 0.75, 0.75);
+                fireball.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireball.getLocation().subtract(new Vector(0, 1, 0)), 3, 0.5, 0.5, 0.5);
                 Player caster = (Player) fireball.getShooter();
-                damageEntities(fireball.getLocation(), caster, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
+                damageEntities(fireball.getLocation().subtract(new Vector(0, 1, 0)), caster, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
                 fireball.remove();
                 e.setCancelled(true);
             }
@@ -138,11 +139,11 @@ public class MeteorShower extends Skill implements Listener {
         if (e.getEntity() instanceof CraftLargeFireball) {
             CraftLargeFireball fireball = (CraftLargeFireball) e.getEntity();
             if (fireball.getCustomName() instanceof String && fireball.getCustomName().contains("Meteor:") && fireball.getShooter() instanceof Player) {
-                fireball.getWorld().playSound(fireball.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
-                fireball.getWorld().spawnParticle(Particle.LAVA, fireball.getLocation(), 10, 0.75, 0.75, 0.75);
-                fireball.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireball.getLocation(), 3, 0.5, 0.5, 0.5);
+                fireball.getWorld().playSound(fireball.getLocation().subtract(new Vector(0, 1, 0)), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1.0F, 1.0F);
+                fireball.getWorld().spawnParticle(Particle.LAVA, fireball.getLocation().subtract(new Vector(0, 1, 0)), 10, 0.75, 0.75, 0.75);
+                fireball.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, fireball.getLocation().subtract(new Vector(0, 1, 0)), 3, 0.5, 0.5, 0.5);
                 Player caster = (Player) fireball.getShooter();
-                damageEntities(fireball.getLocation(), caster, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
+                damageEntities(fireball.getLocation().subtract(new Vector(0, 1, 0)), caster, Double.valueOf(fireball.getCustomName().replace("Meteor:", "")));
                 fireball.remove();
             }
         }
@@ -166,7 +167,7 @@ public class MeteorShower extends Skill implements Listener {
     }
 
     public void damageEntities(Location l, Player caster, double dmg) {
-        for (LivingEntity ent : l.getNearbyLivingEntities(2)) {
+        for (LivingEntity ent : l.getNearbyLivingEntities(3)) {
             if (ent instanceof Player) {
                 Player p = (Player) ent;
                 if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
@@ -179,7 +180,7 @@ public class MeteorShower extends Skill implements Listener {
                 }
             }
             ent.setKiller(caster);
-            ent.damage(dmg);
+            spellDamage(caster, ent, dmg);
             ent.setFireTicks(100);
         }
     }

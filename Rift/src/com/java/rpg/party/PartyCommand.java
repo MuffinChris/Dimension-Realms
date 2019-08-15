@@ -27,31 +27,6 @@ import java.util.ArrayList;
 
 public class PartyCommand implements CommandExecutor, Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onDamage (EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            if (e.getDamager() instanceof Player) {
-                Player d = (Player) e.getDamager();
-                if (main.getPM().hasParty(p) && main.getPM().hasParty(d)) {
-                    if (main.getPM().getParty(p).getPlayers().contains(d) && !main.getPM().getParty(p).getPvp()) {
-                        e.setCancelled(true);
-                    }
-                }
-            }
-            if (e.getDamager() instanceof Projectile) {
-                if (((Projectile)e.getDamager()).getShooter() instanceof Player) {
-                    Player d = (Player) ((Projectile)e.getDamager()).getShooter();
-                    if (main.getPM().hasParty(p) && main.getPM().hasParty(d)) {
-                        if (main.getPM().getParty(p).getPlayers().contains(d) && !main.getPM().getParty(p).getPvp()) {
-                            e.setCancelled(true);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @EventHandler
     public void onJoinParty(PlayerJoinEvent e) {
         main.getPChat().put(e.getPlayer(), false);

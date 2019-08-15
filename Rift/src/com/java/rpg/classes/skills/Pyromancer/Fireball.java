@@ -21,10 +21,13 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 public class Fireball extends Skill implements Listener {
 
+
+    // FIREBALL ISSUE: Damage is inconsistent with event setup, perhaps lightEnts should do all damage;
+
     private Main main = Main.getInstance();
 
     private double damage = 175;
-    private int range = 2;
+    private int range = 4;
 
     public Fireball() {
         super("Fireball", 75, 4 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
@@ -56,20 +59,11 @@ public class Fireball extends Skill implements Listener {
                 @Override
                 public void run() {
                     if (!arrow.isDead()) {
-                        for (Player player : arrow.getLocation().getNearbyPlayers(48)) {
-                            player.spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
-                            //player.spawnParticle(Particle.FLAME, snowball.getLocation(), 200, 0.1, 0.1, 0.1, 0.1);
-                            /*if (damageEntities(arrow.getLocation(), p)) {
-                                new BukkitRunnable() {
-                                    public void run() {
-                                        arrow.remove();
-                                    }
-                                }.runTaskLater(main, 1L);
-                            }*/
-                            if (arrow.isOnGround() || arrow.isDead()) {
-                                arrow.remove();
-                                arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-                            }
+                        player.getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
+                        if (arrow.isOnGround() || arrow.isDead()) {
+                            lightEntities(arrow, p, arrow.getLocation());
+                            arrow.remove();
+                            arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                         }
                     }
                 }
@@ -78,28 +72,23 @@ public class Fireball extends Skill implements Listener {
                 @Override
                 public void run() {
                     if (!arrow.isDead()) {
-                        for (Player player : arrow.getLocation().getNearbyPlayers(48)) {
-                            player.spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
-                            //player.spawnParticle(Particle.FLAME, snowball.getLocation(), 200, 0.1, 0.1, 0.1, 0.1);
-                            /*if (damageEntities(arrow.getLocation(), p)) {
-                                new BukkitRunnable() {
-                                    public void run() {
-                                        arrow.remove();
-                                    }
-                                }.runTaskLater(main, 1L);
-                            }*/
-                            if (arrow.isOnGround() || arrow.isDead()) {
-                                arrow.remove();
-                                arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-                            }
+                        player.getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
+                        if (arrow.isOnGround() || arrow.isDead()) {
+                            lightEntities(arrow, p, arrow.getLocation());
+                            arrow.remove();
+                            arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                         }
                     }
                 }
             }, 0, 1);
 
-            scheduler.scheduleSyncDelayedTask(main, new Runnable(){
+            scheduler.scheduleSyncDelayedTask(main, new Runnable() {
                 @Override
                 public void run(){
+                    if (!(arrow.isOnGround() || arrow.isDead())) {
+                        lightEntities(arrow, p, arrow.getLocation());
+                        arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
+                    }
                     scheduler.cancelTask(task);
                     scheduler.cancelTask(task2);
                     arrow.remove();
@@ -133,22 +122,22 @@ public class Fireball extends Skill implements Listener {
                     }
                     //((CraftPlayer)p).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),0);
                 }
+                e.setDamage(0);
                 if (e.getEntity() instanceof LivingEntity) {
                     LivingEntity ent = (LivingEntity) e.getEntity();
                     ent.setKiller(shooter);
-                    lightEntities(e.getEntity(), shooter);
-                    ent.damage(Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                    lightEntities(e.getEntity(), shooter, e.getEntity().getLocation());
+                    spellDamage(shooter, ent, Double.valueOf(a.getCustomName().replace("Fireball:", "")));
                     ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                 }
-                e.setDamage(0);
                 a.remove();
                 e.setCancelled(true);
             }
         }
     }
 
-    public void lightEntities(Entity e, Player caster) {
-        for (LivingEntity ent : e.getLocation().getNearbyLivingEntities(1)) {
+    public void lightEntities(Entity e, Player caster, Location loc) {
+        for (LivingEntity ent : loc.getNearbyLivingEntities(1)) {
             if (ent instanceof ArmorStand) {
                 continue;
             }
@@ -160,7 +149,7 @@ public class Fireball extends Skill implements Listener {
                     }
                 }
                 if (p.equals(caster)) {
-                    return;
+                    continue;
                 }
             }
             ent.setFireTicks(60);

@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,21 +26,23 @@ public class WorldOnFire extends Skill implements Listener {
     private Main main = Main.getInstance();
 
     private int range = 12;
-    private int duration = 15;
-    private int hp = 10;
+    private int hp = 5;
     private int mana = 5;
-    private double ramp = 0.01;
-    private double initRamp = 0.25;
-    private Map<Player, Double> amp;
+    private int ramp = 1;
+    private int initRamp = 10;
+    private Map<Player, Integer> amp;
 
     public void toggleEnd(Player p) {
         super.toggleEnd(p);
-        main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() - initRamp - amp.get(p));
+        main.getPC().get(p.getUniqueId()).setPStrength((main.getPC().get(p.getUniqueId()).getPStrength() - initRamp - amp.get(p)));
         amp.remove(p);
     }
 
-    public void toggleCont(Player p) {
-        super.toggleCont(p);
+    public boolean toggleCont(Player p) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        if (!super.toggleCont(p)) {
+            return false;
+        }
         if (p.getFireTicks() > 0) {
             amp.replace(p, amp.get(p) + ramp);
             main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
@@ -64,21 +67,32 @@ public class WorldOnFire extends Skill implements Listener {
                 main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
             }
         }
+        for (double alpha = 0; alpha < Math.PI; alpha+= Math.PI/64) {
+            Location loc = p.getLocation();
+            Location firstLocation = loc.clone().add( range * Math.cos( alpha ), 0.1, range * Math.sin( alpha ) );
+            Location secondLocation = loc.clone().add( range * Math.cos( alpha + Math.PI ), 0.1, range * Math.sin( alpha + Math.PI ) );
+            //Location firstLocation = loc.clone().add( Math.cos( alpha ), Math.sin( alpha ) + 1, Math.sin( alpha ) );
+            //Location secondLocation = loc.clone().add( Math.cos( alpha + Math.PI ), Math.sin( alpha ) + 1, Math.sin( alpha + Math.PI ) );
+            p.getWorld().spawnParticle( Particle.FLAME, firstLocation, 1, 0, 0.01, 0.01, 0.01 );
+            p.getWorld().spawnParticle( Particle.FLAME, secondLocation, 1, 0, 0.01, 0.01, 0.01 );
+        }
+        return false;
     }
 
     public int toggleInit(Player p) {
-        amp.put(p, 0.0);
+        DecimalFormat df = new DecimalFormat("#.##");
+        amp.put(p, 0);
         p.setFireTicks(100);
         main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + initRamp);
         return super.toggleInit(p);
     }
 
     public WorldOnFire() {
-        super("WorldOnFire", 50, 15 * 20, 0, 0, "%player% has conjured a burst of Flame!", "TOGGLE-PASSIVE");
-        setDescription("&bPassive\nCasting WorldOnFire ignites you for 5 seconds.\nPlayers within " + range + " blocks are ignited when you are on fire.\nFor each nearby player on fire, regain" + hp + " health and " + mana + " mana every half a second.\n&bActive\nSurround yourself in a fiery aura for " + duration + " seconds, granting you " + initRamp * 100.0 + "% power strength.\nWhile you are on fire and nearby enemies are on fire, gain " + ramp * 100.0 + "% power strength every half a second.");
+        super("WorldOnFire", 50, 3 * 20, 0, 0, "%player% has conjured a burst of Flame!", "TOGGLE-PASSIVE-CAST");
+        setDescription("&bPassive\nCasting WorldOnFire ignites you for 5 seconds.\nPlayers within " + range + " blocks are ignited when you are on fire.\nFor each nearby player on fire, regain" + hp + " health and " + mana + " mana every half a second.\n&bActive\nSurround yourself in a fiery aura, granting you " + initRamp * 100.0 + "% power strength.\nWhile you are on fire and nearby enemies are on fire, gain " + ramp * 100.0 + "% power strength every half a second.");
         setPassiveTicks(1);
         setToggleTicks(10);
-        setToggleMana(20);
+        setToggleMana(10);
         amp = new HashMap<>();
     }
 
@@ -133,36 +147,6 @@ public class WorldOnFire extends Skill implements Listener {
         p.getLineOfSight(null, range).forEach(block -> damageEntities(block, p));*/
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 1.0F, 1.0F);
         p.setFireTicks(5 * 20);
-        new BukkitRunnable() {
-            int i = 0;
-            public void run() {
-                i++;
-                if (i * 0.5 >= duration) {
-                    cancel();
-                }
-                igniteEntities(p);
-                p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 15, 0.04, 0.04, 0.04, 0.04);
-            }
-        }.runTaskTimer(Main.getInstance(), 0L, 10L);
-
-        new BukkitRunnable() {
-            int i = 0;
-            public void run() {
-                i++;
-                if (i * (5.0/20.0) >= duration) {
-                    cancel();
-                }
-                for (double alpha = 0; alpha < Math.PI; alpha+= Math.PI/64) {
-                    Location loc = p.getLocation();
-                    Location firstLocation = loc.clone().add( range * Math.cos( alpha ), 0.1, range * Math.sin( alpha ) );
-                    Location secondLocation = loc.clone().add( range * Math.cos( alpha + Math.PI ), 0.1, range * Math.sin( alpha + Math.PI ) );
-                    //Location firstLocation = loc.clone().add( Math.cos( alpha ), Math.sin( alpha ) + 1, Math.sin( alpha ) );
-                    //Location secondLocation = loc.clone().add( Math.cos( alpha + Math.PI ), Math.sin( alpha ) + 1, Math.sin( alpha + Math.PI ) );
-                    p.spawnParticle( Particle.FLAME, firstLocation, 1, 0, 0.01, 0.01, 0.01 );
-                    p.spawnParticle( Particle.FLAME, secondLocation, 1, 0, 0.01, 0.01, 0.01 );
-                }
-            }
-        }.runTaskTimer(Main.getInstance(), 0L, 5L);
     }
 
     public void igniteEntities(Player caster) {
@@ -206,7 +190,6 @@ public class WorldOnFire extends Skill implements Listener {
                 }
             }
             if (ent.getFireTicks() > 0) {
-
                 if (!caster.isDead() && !ent.isDead()) {
                     ent.getWorld().spawnParticle(Particle.FLAME, ent.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
                     ent.getWorld().playSound(ent.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5F, 1.0F);
@@ -234,7 +217,7 @@ public class WorldOnFire extends Skill implements Listener {
         double length = 0;
         for (; length < distance; p1.add(vector)) {
             caster.getWorld().spawnParticle(Particle.FLAME, p1.getX(), p1.getY(), p1.getZ(), 1, 0.01, 0.01, 0.01, 0.01);
-            length += 0.3;
+            length += 0.1;
         }
     }
 

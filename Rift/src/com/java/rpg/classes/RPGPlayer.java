@@ -23,7 +23,7 @@ public class RPGPlayer extends Leveleable {
 
     private Main main = Main.getInstance();
 
-    private double pstrength;
+    private int pstrength;
 
     private Player player;
     private PlayerClass pclass;
@@ -64,14 +64,14 @@ public class RPGPlayer extends Leveleable {
         toggles = new ArrayList<>();
         pullFiles();
         board = new Skillboard(p);
-        pstrength = 1.0;
+        pstrength = 100;
     }
 
-    public void setPStrength(double d) {
+    public void setPStrength(int d) {
         pstrength = d;
     }
 
-    public double getPStrength() {
+    public int getPStrength() {
         return pstrength;
     }
 
@@ -153,9 +153,10 @@ public class RPGPlayer extends Leveleable {
     }
 
     public void noneClass() {
+        cooldowns.clear();
         double hp = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         pushFiles();
-        pclass = null;
+        pclass = main.getCM().getPClassFromString("None");
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
@@ -199,16 +200,11 @@ public class RPGPlayer extends Leveleable {
     public void updateStats() {
         player.setHealthScale(20);
         if (pclass instanceof PlayerClass) {
+            double hpprev = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             double hp = getPClass().getCalcHP(getLevel());
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
-            player.setHealth(Math.min(player.getHealth(), hp));
-            player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pclass.getBaseDmg());
-        } else {
-            double hpprev = player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-            double hp = RPGConstants.defaultHP;
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
             player.setHealth(Math.min(hp, hp * hpprev));
-            player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(RPGConstants.baseDmg);
+            player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pclass.getBaseDmg());
         }
     }
 
@@ -218,19 +214,7 @@ public class RPGPlayer extends Leveleable {
             for (Skill s : pclass.getSkills()) {
                 if (name.equalsIgnoreCase(s.getName())) {
                     if (s.getLevel() <= getLevel()) {
-                        if (s.getManaCost() <= currentMana) {
-
-                            if (s.getType().contains("TOGGLE")) {
-                                if (getToggles().contains(s.getName())) {
-                                    s.toggleEnd(player);
-                                } else {
-                                    getToggles().add(s.getName());
-                                    Map<Integer, String> map = new HashMap<>();
-                                    map.put(s.toggleInit(player), s.getName());
-                                    getToggleTasks().add(map);
-                                }
-                            }
-
+                        if (s.getManaCost() <= currentMana || (s.getType().contains("TOGGLE") && getToggles().contains(s.getName()))) {
                             String cd = getCooldown(s);
                             final BukkitScheduler scheduler = Bukkit.getScheduler();
                             if (cd.equalsIgnoreCase("Warmup")) {
@@ -275,6 +259,42 @@ public class RPGPlayer extends Leveleable {
                                 }, 0, 1);
                                 return "Warmup:" + s.getWarmup();
                             }
+                            if (cd.equalsIgnoreCase("Invalid")) {
+                                return "Failure";
+                            }
+                            if (cd.contains("CD:")) {
+                                return cd;
+                            }
+                            if (s.getType().contains("TOGGLE")) {
+                                if (getToggles().contains(s.getName())) {
+                                    s.toggleEnd(player);
+                                } else {
+                                    getToggles().add(s.getName());
+                                    Map<Integer, String> map = new HashMap<>();
+                                    map.put(s.toggleInit(player), s.getName());
+                                    getToggleTasks().add(map);
+                                    currentMana -= s.getManaCost();
+                                    List<Integer> indexesToRemove = new ArrayList<>();
+                                    int index = 0;
+                                    for (String status : statuses) {
+                                        if (status.contains("Warmup")) {
+                                            if (!status.contains(s.getName())) {
+                                                indexesToRemove.add(index);
+                                            }
+                                            index++;
+                                        }
+                                    }
+                                    for (int ind : indexesToRemove) {
+                                        statuses.remove(ind);
+                                    }
+                                    if (cooldowns.containsKey(s.getName())) {
+                                        cooldowns.replace(s.getName(), System.currentTimeMillis());
+                                    } else {
+                                        cooldowns.put(s.getName(), System.currentTimeMillis());
+                                    }
+                                }
+                                return "CastedSkill";
+                            }
                             if (cd.equalsIgnoreCase("Casted")) {
                                 List<Integer> indexesToRemove = new ArrayList<>();
                                 int index = 0;
@@ -306,12 +326,6 @@ public class RPGPlayer extends Leveleable {
 
                                 return "CastedSkill";
                                 //return s.getFlavor();
-                            }
-                            if (cd.equalsIgnoreCase("Invalid")) {
-                                return "Failure";
-                            }
-                            if (cd.contains("CD:")) {
-                                return cd;
                             }
                         }
                         return "NoMana";
@@ -400,11 +414,13 @@ public class RPGPlayer extends Leveleable {
     }
 
     public void scrub() {
-        board = null;
-        cooldowns = new HashMap<>();
-        statuses = new ArrayList<>();
-        passives = new ArrayList<>();
-
+        if (main.getCM().getFall().contains(player.getUniqueId())) {
+            main.getCM().getFall().remove(player.getUniqueId());
+        }
+        if (main.getCM().getFallMap().containsKey(player.getUniqueId())) {
+            Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(player.getUniqueId()));
+            main.getCM().getFallMap().remove(player.getUniqueId());
+        }
         BukkitScheduler scheduler = Bukkit.getScheduler();
         List<String> skillsToRemove = new ArrayList<>();
         for (String s : getToggles()) {
@@ -434,7 +450,10 @@ public class RPGPlayer extends Leveleable {
             tasksToRemove = new ArrayList<>();
         }
         skillsToRemove = new ArrayList<>();
-
+        board = null;
+        cooldowns = new HashMap<>();
+        statuses = new ArrayList<>();
+        passives = new ArrayList<>();
         passiveTasks = new ArrayList<>();
         toggleTasks = new ArrayList<>();
         toggles = new ArrayList<>();

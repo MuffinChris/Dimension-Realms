@@ -11,8 +11,12 @@ import com.java.communication.MsgCommand;
 import com.java.communication.PlayerinfoListener;
 import com.java.communication.playerinfoManager;
 import com.java.essentials.*;
+import com.java.rpg.Damage;
+import com.java.rpg.DamageListener;
+import com.java.rpg.DamageTypes;
 import com.java.rpg.classes.*;
 import com.java.rpg.classes.skills.Pyromancer.Fireball;
+import com.java.rpg.classes.skills.Pyromancer.InfernoVault;
 import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
 import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import com.java.rpg.modifiers.Environmental;
@@ -40,6 +44,9 @@ import java.util.*;
 public class Main extends JavaPlugin {
 
     /*
+        Code logic:
+            For armor and mr removal, as well as pstrength, make a single RPGPlayer list to hold all info
+
     * Class ideas:
     * Build out of components for certain classes, like Warframe. Unlock em!
     * Alternate Resource Systems, like Rage, Shadow, etc, thematic!
@@ -47,6 +54,9 @@ public class Main extends JavaPlugin {
     * Blood moons
     * Skills have tiers
     * unlock all by 10, upgrade them
+    *
+    *
+    * SKILLS MUST HAVE TIERS!
     *
     * Class specific magic resist and armor, and per level resistances
     * Wearing armor adds to those resistances
@@ -64,6 +74,19 @@ public class Main extends JavaPlugin {
     public static Main getInstance() {
         return JavaPlugin.getPlugin(Main.class);
     }
+
+    /*
+
+    Damage Variables
+
+     */
+
+    public DamageTypes dmg = new DamageTypes();
+
+    public List<Damage> getDmg() {
+        return dmg.getDamages();
+    }
+
     /*
     *
     * PARTY VARIABLES
@@ -126,9 +149,11 @@ public class Main extends JavaPlugin {
         if (getInstance().getPC().get(p) != null) {
             RPGPlayer player = getInstance().getPC().get(p);
             DecimalFormat dF = new DecimalFormat("#.##");
-            //TextComponent bar = new TextComponent(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---"));
-            //p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&8---&r&8« &c" + dF.format(p.getHealth()) + " HP &8|| &b" + mana + " M &8|| &a" + dF.format(exppercent) + "% XP &8|| &e" + getInstance().level.get(p.getUniqueId()) + " LVL " + "&8»---")));
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&c" + dF.format(pl.getHealth()) + " HP   &b" + player.getPrettyCMana() + " M   &a" + player.getPrettyPercent() + "% XP   &e" + player.getLevel() + " LVL " + "")));
+            double mr = player.getPClass().getCalcMR(player.getLevel());
+            double armor = player.getPClass().getCalcArmor(player.getLevel());
+            String mrper = Main.color("&b" + dF.format(100.0 * (1-(300.0/(300.0+mr)))) + "% MR");
+            String amper = Main.color("&c" + dF.format(100.0 * (1-(300.0/(300.0+armor)))) + "% AM");
+            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(color("&c" + dF.format(pl.getHealth()) + " HP   &b" + player.getPrettyCMana() + " M   &a" + player.getPrettyPercent() + "% XP   &e" + player.getLevel() + " LVL   " + amper + "   " + mrper)));
         }
     }
 
@@ -165,7 +190,7 @@ public class Main extends JavaPlugin {
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(this, 1L, 20L);
+        }.runTaskTimer(this, 1L, 20L);
     }
 
     public void cooldownsPeriodic() {
@@ -237,6 +262,9 @@ public class Main extends JavaPlugin {
         getCommand("reply").setExecutor(new MsgCommand());
         getCommand("list").setExecutor(new ListCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
+        getCommand("mana").setExecutor(new ManaCommand());
+
+        getCommand("dummy").setExecutor(new DummyCommand());
         so("&bRIFT: &fEnabled commands!");
 
         Bukkit.getPluginManager().registerEvents(new PartyCommand(), this);
@@ -245,11 +273,14 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerinfoListener(), this);
         Bukkit.getPluginManager().registerEvents(new Environmental(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DummyCommand(), this);
 
         //Skills
         Bukkit.getPluginManager().registerEvents(new Fireball(), this);
         Bukkit.getPluginManager().registerEvents(new MeteorShower(), this);
         Bukkit.getPluginManager().registerEvents(new WorldOnFire(), this);
+        Bukkit.getPluginManager().registerEvents(new InfernoVault(), this);
         so("&bRIFT: &fRegistered events!");
 
         pm = new PartyManager();

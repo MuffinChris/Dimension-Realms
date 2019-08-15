@@ -1,10 +1,25 @@
 package com.java.rpg.classes;
 
 import com.java.Main;
+import com.java.rpg.Damage;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Skill {
+
+    private Main main = Main.getInstance();
+
+    public void spellDamage(Player caster, LivingEntity target, double damage) {
+        target.setKiller(caster);
+        //caster.damage(0.25, target);
+        //target.damage(Math.max(damage - 0.25, 0.0));
+        main.getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
+        target.damage(damage, caster);
+    }
 
     private int manaCost;
     private double cooldown;
@@ -21,6 +36,8 @@ public class Skill {
 
     private String type;
 
+    private List<Integer> tasks;
+
     public Skill(String name, int manaCost, double cooldown, int warmup, int level, String flavor, String type) {
         this.name = name;
         this.manaCost = manaCost;
@@ -29,6 +46,11 @@ public class Skill {
         this.level = level;
         this.flavor = flavor;
         this.type = type;
+        tasks = new ArrayList<>();
+    }
+
+    public List<Integer> getTasks() {
+        return tasks;
     }
 
     public String getType() {
@@ -100,7 +122,7 @@ public class Skill {
             public void run() {
                 toggleCont(p);
             }
-        }, 0, toggleTicks);
+        }, 1, toggleTicks);
     }
 
     public void toggleEnd(Player p) {
@@ -108,12 +130,14 @@ public class Skill {
         Main.getInstance().getCM().cleanToggle(p, this);
     }
 
-    public void toggleCont(Player p) {
+    public boolean toggleCont(Player p) {
         if (Main.getInstance().getPC().get(p.getUniqueId()).getCMana() - getToggleMana() <= 0) {
             toggleEnd(p);
+            return false;
         }
         Main.getInstance().getPC().get(p.getUniqueId()).setMana(Main.getInstance().getPC().get(p.getUniqueId()).getCMana() - getToggleMana());
         Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateToggle(this);
+        return true;
     }
 
     public void passive(Player p) {
@@ -121,7 +145,7 @@ public class Skill {
     }
 
     public void warmup(Player p) {
-        Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateWarmup(this);
+        Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateWarmup(this, getWarmup());
     }
 
 }

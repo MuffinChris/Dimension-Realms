@@ -20,13 +20,4 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onDamageTwo (EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
-            e.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, e.getEntity().getLocation(), 100, 0.5, 1, 0.5, blood);
-            e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.BLOCK_GRASS_BREAK, 0.5F, 0.5F);
-        }
-    }
-
 }

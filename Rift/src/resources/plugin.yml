@@ -43,7 +43,7 @@ commands:
     permission: core.mod
   msg:
     description: Message fellow players
-    aliases: [message, tell]
+    aliases: [message, tell, w, whisper, dm, pm]
   r:
     description: Reply to messages
     aliases: [reply]
@@ -51,4 +51,10 @@ commands:
     description: View a player's inventory
     permission: core.mod
     aliases: [invsee]
+  dummy:
+    description: Spawn a dummy
+    permission: core.admin
+  mana:
+    description: Restore your mana
+    permission: core.admin
 depend: [ProtocolLib, Vault]

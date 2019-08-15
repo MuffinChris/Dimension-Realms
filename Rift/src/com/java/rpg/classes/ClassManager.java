@@ -2,9 +2,7 @@ package com.java.rpg.classes;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.java.Main;
-import com.java.rpg.classes.skills.Pyromancer.Fireball;
-import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
-import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
+import com.java.rpg.classes.skills.Pyromancer.*;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
@@ -20,18 +18,30 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ClassManager implements Listener {
 
     private Main main = Main.getInstance();
 
+    private List<UUID> fall;
+
+    private Map<UUID, Integer> fallMap;
+
+    public List<UUID> getFall() {
+        return fall;
+    }
+
+    public Map<UUID, Integer> getFallMap() {
+        return fallMap;
+    }
+
     public ClassManager() {
+        fall = new ArrayList<>();
+        fallMap = new HashMap<>();
         createClasses();
     }
 
@@ -131,10 +141,15 @@ public class ClassManager implements Listener {
         if (main.getPC().containsKey(e.getPlayer().getUniqueId())) {
             main.getPC().get(e.getPlayer().getUniqueId()).pushFiles();
             main.getPC().get(e.getPlayer().getUniqueId()).scrub();
-            main.getPC().remove(e.getPlayer().getUniqueId());
+            new BukkitRunnable() {
+                public void run() {
+                    main.getPC().remove(e.getPlayer().getUniqueId());
+                }
+            }.runTaskLater(Main.getInstance(), 10L);
         }
     }
 
+    /*
     @EventHandler (priority = EventPriority.HIGHEST)
     public void armorMR (EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
@@ -152,16 +167,22 @@ public class ClassManager implements Listener {
                 }
             }
         }
-    }
+    }*/
 
     public static Map<String, PlayerClass> classes = new HashMap<>();
 
     public static void createClasses() {
-        List<Skill> skills = new ArrayList<>();
-        skills.add(new Fireball());
-        skills.add(new WorldOnFire());
-        skills.add(new MeteorShower());
-        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 800.0, 5.0, 400, 5, 5, 0.1, "HOE", 10, 20, 22, 0.2, 0.1, skills));
+        List<Skill> skillsNone = new ArrayList<>();
+        classes.put("None", new PlayerClass("None", "&eNone", RPGConstants.defaultHP, 5.0, 100, 2, 3, 0.1, "SWORD", 10, 30, 32, 0.2, 0.2, skillsNone));
+
+
+        List<Skill> skillsPyro = new ArrayList<>();
+        skillsPyro.add(new Fireball());
+        skillsPyro.add(new WorldOnFire());
+        skillsPyro.add(new InfernoVault());
+        skillsPyro.add(new MeteorShower());
+        skillsPyro.add(new FlameTornado());
+        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 800.0, 5.0, 400, 10, 5, 0.1, "HOE", 10, 20, 22, 0.2, 0.1, skillsPyro));
     }
 
     public PlayerClass getPClassFromString(String s) {
@@ -173,13 +194,11 @@ public class ClassManager implements Listener {
         return null;
     }
 
-    // CLEAN TOGGLES DOES NOT WORK, YOU NEED TO MANUALLY REMOVE ON TOGGLEEND
-    // UPDATE CLEAN TOGGLES INSIDE SCRUB
-
     public void cleanToggle(Player p, Skill s) {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         RPGPlayer rp = main.getPC().get(p.getUniqueId());
         rp.getToggles().remove(s.getName());
+        rp.getBoard().endToggle(s);
         List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
         for (Map<Integer, String> map : rp.getToggleTasks()) {
             if (map.containsValue(s.getName())) {
@@ -215,7 +234,7 @@ public class ClassManager implements Listener {
 
     public void passives(Player p) {
         RPGPlayer rp = main.getPC().get(p.getUniqueId());
-        if (rp.getPClass() instanceof PlayerClass) {
+        if (rp instanceof RPGPlayer && rp.getPClass() instanceof PlayerClass) {
             List<Skill> skillsToAdd = new ArrayList<>();
             for (Skill s : rp.getPClass().getSkills()) {
                 if (s.getType().contains("PASSIVE") && s.getLevel() <= rp.getLevel()) {

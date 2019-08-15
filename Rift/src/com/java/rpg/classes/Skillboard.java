@@ -95,19 +95,30 @@ public class Skillboard {
         }
     }
 
-    public void updateWarmup(Skill s) {
+    public void updateWarmup(Skill s, int warmup) {
         bossbar.setTitle(Main.color("&bChanneling ") + s.getName() + "...");
+        new BukkitRunnable() {
+            public void run() {
+                if (bossbar.getTitle().equalsIgnoreCase(Main.color("&bChanneling ") + s.getName() + "...")) {
+                    bossbar.setTitle("");
+                }
+            }
+        }.runTaskLater(Main.getInstance(), warmup);
     }
 
     public void updateCast(Skill s) {
-        bossbar.setTitle(Main.color("&bCasting ") + s.getName() + "...");
+        bossbar.setTitle(Main.color("&bCasted ") + s.getName() + "...");
         new BukkitRunnable() {
             public void run() {
-                if (bossbar.getTitle().equalsIgnoreCase(Main.color("&bCasting ") + s.getName() + "...")) {
+                if (bossbar.getTitle().equalsIgnoreCase(Main.color("&bCasted ") + s.getName() + "...")) {
                     bossbar.setTitle("");
                 }
             }
         }.runTaskLater(Main.getInstance(), 20L);
+    }
+
+    public void clearBoard() {
+        bossbar.setTitle("");
     }
 
     public void updateToggle(Skill s) {
