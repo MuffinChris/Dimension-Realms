@@ -167,7 +167,7 @@ public class MeteorShower extends Skill implements Listener {
     }
 
     public void damageEntities(Location l, Player caster, double dmg) {
-        for (LivingEntity ent : l.getNearbyLivingEntities(3)) {
+        for (LivingEntity ent : l.getNearbyLivingEntities(2.4)) {
             if (ent instanceof Player) {
                 Player p = (Player) ent;
                 if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {

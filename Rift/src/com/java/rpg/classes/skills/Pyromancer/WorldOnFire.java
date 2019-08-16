@@ -25,7 +25,7 @@ public class WorldOnFire extends Skill implements Listener {
 
     private Main main = Main.getInstance();
 
-    private int range = 12;
+    private int range = 8;
     private int hp = 5;
     private int mana = 5;
     private int ramp = 1;
@@ -208,16 +208,16 @@ public class WorldOnFire extends Skill implements Listener {
     }
 
     public void drawLine(Player caster, LivingEntity ent) {
-        Location point1 = new Location(ent.getWorld(), ent.getEyeLocation().getX(), (ent.getEyeLocation().getY() - 0.5), ent.getEyeLocation().getZ());
-        Location point2 = new Location(caster.getWorld(), caster.getEyeLocation().getX(), (caster.getEyeLocation().getY() - 0.5), caster.getEyeLocation().getZ());
+        Location point1 = new Location(ent.getWorld(), ent.getEyeLocation().getX(), (ent.getEyeLocation().getY() - 0.7), ent.getEyeLocation().getZ());
+        Location point2 = new Location(caster.getWorld(), caster.getEyeLocation().getX(), (caster.getEyeLocation().getY() - 0.7), caster.getEyeLocation().getZ());
         double distance = point1.distance(point2);
         Vector p1 = point1.toVector();
         Vector p2 = point2.toVector();
-        Vector vector = p2.clone().subtract(p1).normalize().multiply(0.1);
+        Vector vector = p2.clone().subtract(p1).normalize().multiply(0.3);
         double length = 0;
         for (; length < distance; p1.add(vector)) {
             caster.getWorld().spawnParticle(Particle.FLAME, p1.getX(), p1.getY(), p1.getZ(), 1, 0.01, 0.01, 0.01, 0.01);
-            length += 0.1;
+            length += 0.3;
         }
     }
 

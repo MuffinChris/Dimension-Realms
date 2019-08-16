@@ -12,12 +12,17 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+
+//FIREBALLS ARE TREATED AS ATTACK - BECAUSE THE EVENTS! eSETDMG - fixed? (not rly doesnt make sense)
+//ALSO SPELLS ARE KNOCKING BACK, DISABLE THAT (set knockback resist whenever hitting spell) - fixed?
+//FLAMETORNADO TOO FAST.
 
 public class Fireball extends Skill implements Listener {
 
@@ -61,7 +66,7 @@ public class Fireball extends Skill implements Listener {
                     if (!arrow.isDead()) {
                         player.getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
                         if (arrow.isOnGround() || arrow.isDead()) {
-                            lightEntities(arrow, p, arrow.getLocation());
+                            lightEntities(arrow, p, arrow.getLocation(), damage);
                             arrow.remove();
                             arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                         }
@@ -74,7 +79,7 @@ public class Fireball extends Skill implements Listener {
                     if (!arrow.isDead()) {
                         player.getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
                         if (arrow.isOnGround() || arrow.isDead()) {
-                            lightEntities(arrow, p, arrow.getLocation());
+                            lightEntities(arrow, p, arrow.getLocation(), damage);
                             arrow.remove();
                             arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                         }
@@ -86,7 +91,7 @@ public class Fireball extends Skill implements Listener {
                 @Override
                 public void run(){
                     if (!(arrow.isOnGround() || arrow.isDead())) {
-                        lightEntities(arrow, p, arrow.getLocation());
+                        lightEntities(arrow, p, arrow.getLocation(), damage);
                         arrow.getWorld().spawnParticle(Particle.LAVA, arrow.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                     }
                     scheduler.cancelTask(task);
@@ -98,7 +103,7 @@ public class Fireball extends Skill implements Listener {
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
     public void onHit (EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Arrow) {
             Arrow a = (Arrow) e.getDamager();
@@ -108,7 +113,6 @@ public class Fireball extends Skill implements Listener {
                     Player p = (Player) e.getEntity();
                     if (main.getPM().getParty(p) instanceof Party && !main.getPM().getParty(p).getPvp()) {
                         if (main.getPM().getParty(p).getPlayers().contains(a.getShooter())) {
-                            e.setDamage(0);
                             a.remove();
                             e.setCancelled(true);
                             return;
@@ -116,18 +120,14 @@ public class Fireball extends Skill implements Listener {
                     }
                     if (p.equals(shooter)) {
                         a.remove();
-                        e.setDamage(0);
                         e.setCancelled(true);
                         return;
                     }
                     //((CraftPlayer)p).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),0);
                 }
-                e.setDamage(0);
                 if (e.getEntity() instanceof LivingEntity) {
                     LivingEntity ent = (LivingEntity) e.getEntity();
-                    ent.setKiller(shooter);
-                    lightEntities(e.getEntity(), shooter, e.getEntity().getLocation());
-                    spellDamage(shooter, ent, Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                    lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
                     ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                 }
                 a.remove();
@@ -136,7 +136,7 @@ public class Fireball extends Skill implements Listener {
         }
     }
 
-    public void lightEntities(Entity e, Player caster, Location loc) {
+    public void lightEntities(Entity e, Player caster, Location loc, double damage) {
         for (LivingEntity ent : loc.getNearbyLivingEntities(1)) {
             if (ent instanceof ArmorStand) {
                 continue;
@@ -152,9 +152,9 @@ public class Fireball extends Skill implements Listener {
                     continue;
                 }
             }
+            spellDamage(caster, ent, damage);
             ent.setFireTicks(60);
         }
-        e.setFireTicks(60);
     }
 
     /*public boolean damageEntities(Location loc, Player caster, Entity e) {

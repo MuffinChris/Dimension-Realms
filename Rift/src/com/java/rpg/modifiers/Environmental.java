@@ -1,6 +1,7 @@
 package com.java.rpg.modifiers;
 
 import com.java.Main;
+import com.java.holograms.Hologram;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AreaEffectCloud;
@@ -16,6 +17,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
+
+import java.text.DecimalFormat;
 
 public class Environmental implements Listener {
 
@@ -149,6 +152,9 @@ public class Environmental implements Listener {
                 } else if (e.getRegainReason() == EntityRegainHealthEvent.RegainReason.WITHER_SPAWN) {
                     e.setAmount(2);
                 }
+                DecimalFormat df = new DecimalFormat("#.##");
+                Hologram magic = new Hologram(ent.getLocation(), "&a&l❤" + df.format(e.getAmount()));
+                magic.rise();
                 if (e.getEntity() instanceof Player) {
                     Main.sendHp((Player) e.getEntity());
                 }

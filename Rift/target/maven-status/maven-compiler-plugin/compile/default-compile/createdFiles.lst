@@ -10,6 +10,7 @@ com\java\Main$4.class
 com\java\rpg\classes\ClassManager.class
 com\java\rpg\DamageTypes.class
 com\java\rpg\classes\skills\Pyromancer\MeteorShower.class
+com\java\holograms\Hologram.class
 com\java\rpg\classes\skills\Pyromancer\FlameTornado$1.class
 com\java\Main$7.class
 com\java\rpg\Leveleable.class
@@ -46,6 +47,7 @@ com\java\rpg\classes\RPGPlayer$2.class
 com\java\Main$5.class
 com\java\rpg\classes\RPGConstants.class
 com\java\rpg\classes\ClassManager$1.class
+com\java\holograms\Hologram$1.class
 com\java\essentials\FlyCommand.class
 com\java\essentials\DummyCommand$1.class
 com\java\Main.class

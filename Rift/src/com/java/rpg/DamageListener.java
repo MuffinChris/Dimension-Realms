@@ -1,6 +1,7 @@
 package com.java.rpg;
 
 import com.java.Main;
+import com.java.holograms.Hologram;
 import com.java.rpg.classes.RPGPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -45,7 +47,7 @@ public class DamageListener implements Listener {
 
     @EventHandler (priority = EventPriority.LOW)
     public void attack (EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
+        if ((e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) && !e.isCancelled()) {
             Player damager;
             if (e.getDamager() instanceof Projectile) {
                 Projectile p = (Projectile) e.getDamager();
@@ -58,22 +60,38 @@ public class DamageListener implements Listener {
                 damager = (Player) e.getDamager();
             }
             if (e.getEntity() instanceof LivingEntity) {
+                for (Damage d : main.getDmg()) {
+                    if (d.getCaster() == damager && d.getPlayer() == e.getEntity()) {
+                        return;
+                    }
+                }
                 main.getDmg().add(new Damage(damager, (LivingEntity) e.getEntity(), Damage.DamageType.ATTACK, e.getDamage()));
             }
         }
     }
 
+    public boolean sharePartyPvp(Player p1, Player p2) {
+        if (main.getPM().hasParty(p1) && main.getPM().hasParty(p2)) {
+            if (main.getPM().getParty(p1).getPlayers().contains(p2) && !main.getPM().getParty(p1).getPvp()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onDamage (EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
-            if (e.getEntity() instanceof Player) {
+        if ((e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) && e.getEntity() instanceof LivingEntity && !e.isCancelled()) {
+            LivingEntity ent = (LivingEntity) e.getEntity();
+            /*if (e.getEntity() instanceof Player) {
                 Player p = (Player) e.getEntity();
+                Player damager = null;
                 if (e.getDamager() instanceof Player) {
                     Player d = (Player) e.getDamager();
                     if (main.getPM().hasParty(p) && main.getPM().hasParty(d)) {
                         if (main.getPM().getParty(p).getPlayers().contains(d) && !main.getPM().getParty(p).getPvp()) {
                             e.setCancelled(true);
-                            return;
+                            damager = d;
                         }
                     }
                 }
@@ -83,12 +101,29 @@ public class DamageListener implements Listener {
                         if (main.getPM().hasParty(p) && main.getPM().hasParty(d)) {
                             if (main.getPM().getParty(p).getPlayers().contains(d) && !main.getPM().getParty(p).getPvp()) {
                                 e.setCancelled(true);
-                                return;
+                                damager = d;
                             }
                         }
                     }
                 }
-            }
+                if (e.isCancelled()) {
+                    int index = 0;
+                    boolean found = false;
+                    for (Damage d : main.getDmg()) {
+                        if (d.getPlayer() == e.getEntity()) {
+                            if (d.getCaster() == damager) {
+                                found = true;
+                            }
+                        }
+                        index++;
+                    }
+                    if (found) {
+                        main.getDmg().get(index).scrub();
+                        main.getDmg().remove(index);
+                    }
+                    return;
+                }
+            }*/
             int index = 0;
             boolean found = false;
             Player damager;
@@ -110,45 +145,70 @@ public class DamageListener implements Listener {
                         if (d.getCaster().isOnline()) {
                             pstrength = ((main.getPC().get(damager.getUniqueId()).getPStrength() * 1.0) / 100.0);
                         }
-                        if (d.getDamageType() == Damage.DamageType.SPELL_MAGIC) {
-                            double damage = d.getDamage() * pstrength;
-                            if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
-                                Player p = (Player) e.getEntity();
-                                RPGPlayer rp = main.getPC().get(p.getUniqueId());
-                                double mr = rp.getPClass().getCalcMR(rp.getLevel());
-                                damage = damage * (300.0 / (300 + mr));
+                        boolean party = false;
+                        if (d.getPlayer() instanceof Player) {
+                            if (sharePartyPvp(d.getCaster(), (Player) d.getPlayer())) {
+                                e.setCancelled(true);
+                                party = true;
                             }
-                            e.setDamage(damage);
-                            break;
                         }
-                        if (d.getDamageType() == Damage.DamageType.SPELL_PHYSICAL) {
-                            double damage = d.getDamage() * pstrength;
-                            if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
-                                Player p = (Player) e.getEntity();
-                                RPGPlayer rp = main.getPC().get(p.getUniqueId());
-                                double am = rp.getPClass().getCalcArmor(rp.getLevel());
-                                damage = damage * (300.0 / (300 + am));
+                        if (!party) {
+                            DecimalFormat df = new DecimalFormat("#.##");
+                            if (d.getDamageType() == Damage.DamageType.SPELL_MAGIC) {
+                                double damage = d.getDamage() * pstrength;
+                                if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
+                                    Player p = (Player) e.getEntity();
+                                    RPGPlayer rp = main.getPC().get(p.getUniqueId());
+                                    double mr = rp.getPClass().getCalcMR(rp.getLevel());
+                                    damage = damage * (300.0 / (300 + mr));
+                                }
+                                Hologram magic = new Hologram(ent.getLocation(), "&b&l⚡" + df.format(damage));
+                                magic.rise();
+                                ent.setKiller(damager);
+                                ent.damage(damage);
+                                e.setCancelled(true);
+                                //e.setDamage(damage);
+                                break;
                             }
-                            e.setDamage(damage);
-                            break;
-                        }
-                        if (d.getDamageType() == Damage.DamageType.ATTACK) {
-                            double damage = d.getDamage();
-                            BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
-                            e.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, e.getEntity().getLocation(), 100, 0.5, 1, 0.5, blood);
-                            double crit = Math.random();
-                            if (crit < 0.25) {
-                                e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.BLOCK_GRASS_BREAK, 0.5F, 0.5F);
-                                damage*=1.25;
+                            if (d.getDamageType() == Damage.DamageType.SPELL_PHYSICAL) {
+                                double damage = d.getDamage() * pstrength;
+                                if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
+                                    Player p = (Player) e.getEntity();
+                                    RPGPlayer rp = main.getPC().get(p.getUniqueId());
+                                    double am = rp.getPClass().getCalcArmor(rp.getLevel());
+                                    damage = damage * (300.0 / (300 + am));
+                                }
+                                Hologram magic = new Hologram(ent.getLocation(), "&b&l⚔" + df.format(damage));
+                                magic.rise();
+                                ent.setKiller(damager);
+                                ent.damage(damage);
+                                e.setCancelled(true);
+                                //e.setDamage(damage);
+                                break;
                             }
-                            if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
-                                Player p = (Player) e.getEntity();
-                                RPGPlayer rp = main.getPC().get(p.getUniqueId());
-                                double am = rp.getPClass().getCalcArmor(rp.getLevel());
-                                damage = damage * (300.0 / (300 + am));
+                            if (d.getDamageType() == Damage.DamageType.ATTACK) {
+                                double damage = d.getDamage();
+                                BlockData blood = Material.REDSTONE_BLOCK.createBlockData();
+                                e.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, e.getEntity().getLocation(), 100, 0.5, 1, 0.5, blood);
+                                double crit = Math.random();
+                                if (crit < 0.25) {
+                                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.BLOCK_GRASS_BREAK, 0.5F, 0.5F);
+                                    damage *= 1.25;
+                                }
+                                if (e.getEntity() instanceof Player && main.getPC().containsKey((Player) e.getEntity())) {
+                                    Player p = (Player) e.getEntity();
+                                    RPGPlayer rp = main.getPC().get(p.getUniqueId());
+                                    double am = rp.getPClass().getCalcArmor(rp.getLevel());
+                                    damage = damage * (300.0 / (300 + am));
+                                }
+                                Hologram magic = new Hologram(ent.getLocation(), "&c&l❤" + df.format(damage));
+                                magic.rise();
+                                ent.setKiller(damager);
+                                ent.damage(damage);
+                                e.setCancelled(true);
+                                //e.setDamage(damage);
+                                break;
                             }
-                            e.setDamage(damage);
-                            break;
                         }
                     }
                 }

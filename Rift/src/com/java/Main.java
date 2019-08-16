@@ -11,6 +11,7 @@ import com.java.communication.MsgCommand;
 import com.java.communication.PlayerinfoListener;
 import com.java.communication.playerinfoManager;
 import com.java.essentials.*;
+import com.java.holograms.Hologram;
 import com.java.rpg.Damage;
 import com.java.rpg.DamageListener;
 import com.java.rpg.DamageTypes;
@@ -275,6 +276,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new DummyCommand(), this);
+        Bukkit.getPluginManager().registerEvents(new Hologram(), this);
 
         //Skills
         Bukkit.getPluginManager().registerEvents(new Fireball(), this);

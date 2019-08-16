@@ -1,6 +1,7 @@
 package com.java.rpg.classes.skills.Pyromancer;
 
 import com.java.Main;
+import com.java.holograms.Hologram;
 import com.java.rpg.classes.Skill;
 import com.java.rpg.party.Party;
 import org.bukkit.Bukkit;
@@ -19,16 +20,16 @@ public class FlameTornado extends Skill {
 
     private double dps = 50;
     private double dpt = 3;
-    private double travelspeed = 1;
+    private double travelspeed = 2;
     private double height = 8;
     private int duration = 20 * 30;
     private int maxradius = 4; // actually diameter lol
     private Map<UUID, Location> tornados;
-    private Map<UUID, Map<UUID, Integer>> damage;
+    private Map<UUID, Map<LivingEntity, Long>> damage;
 
     public FlameTornado() {
-        super("FlameTornado", 100, 60 * 20, 30, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Materialize a twister of pure fire, which slowly expands to reach a radius of " + maxradius + " blocks in size.\nThe tornado deals " + dps + " damage per second, and follows the nearest enemy at a speed of " + travelspeed + " blocks per second.");
+        super("FlameTornado", 150, 60 * 20, 30, 0, "%player% has shot a fireball!", "CAST");
+        setDescription("Materialize a twister of pure fire, which expands to reach a radius of " + maxradius + " blocks in size.\nThe tornado deals " + dps + " damage per second, and follows the nearest enemy at a speed of " + travelspeed + " blocks per second.");
         tornados = new HashMap<>();
         damage = new HashMap<>();
     }
@@ -107,8 +108,8 @@ public class FlameTornado extends Skill {
         boolean maxr = false;
         boolean maxh = false;
         double random = Math.random();
-        if (random <= 0.1) {
-            loc.getWorld().playSound(loc, Sound.ENTITY_BLAZE_AMBIENT, 1.0F, 1.0F);
+        if (random <= 0.02) {
+            loc.getWorld().playSound(loc, Sound.ENTITY_BLAZE_AMBIENT, 0.7F, 1.0F);
         }
         while(!(maxh &&maxr)) {
             if (radius < maxradius) {
@@ -129,10 +130,10 @@ public class FlameTornado extends Skill {
             }
             HashMap map = new HashMap<>();
             Location addToLocs = loc.clone();
-            addToLocs.add(new Vector(0, height2, 0));
-            map.put(addToLocs, radius + 0.8);
+            addToLocs.add(new Vector(0, height2 * 1.25, 0));
+            map.put(addToLocs, radius + 0.5);
             locs.add((HashMap) map.clone());
-            for (LivingEntity e : loc.getNearbyLivingEntities(radius + 0.8)) {
+            for (LivingEntity e : loc.getNearbyLivingEntities(radius + 0.5)) {
                 if (e instanceof ArmorStand) {
                     continue;
                 }
@@ -149,7 +150,17 @@ public class FlameTornado extends Skill {
                 }
                 for (HashMap<Location, Double> locd : locs) {
                     if (e.getEyeLocation().distance((Location) locd.keySet().toArray()[0]) <= (Double) locd.values().toArray()[0]) {
-                        spellDamage(caster, e, dpt);
+                        if (damage.get(caster.getUniqueId()).containsKey(e)) {
+                            if (Math.abs(damage.get(caster.getUniqueId()).get(e) - e.getWorld().getTime()) >= 10) {
+
+                            } else {
+                                break;
+                            }
+                        }
+                        spellDamage(caster, e, dps / 2.0);
+                        Map h = damage.get(caster.getUniqueId());
+                        h.put(e, e.getWorld().getTime());
+                        damage.replace(caster.getUniqueId(), h);
                         loc.getWorld().playSound(loc, Sound.ENTITY_PLAYER_HURT_ON_FIRE, 0.25F, 1.0F);
                         break;
                     }
@@ -160,7 +171,16 @@ public class FlameTornado extends Skill {
 
     public void warmup(Player p) {
         super.warmup(p);
-        makeTornado(p.getLocation(), p);
+        double radius = 1;
+        for (double height2 = 0; height2 <= 3; height2+=1) {
+            radius+=0.4;
+            for (double alpha = 0; alpha < Math.PI; alpha += Math.PI / 8) {
+                Location firstLocation = p.getLocation().clone().add(radius * Math.cos(alpha), height2, radius * Math.sin(alpha));
+                Location secondLocation = p.getLocation().clone().add(radius * Math.cos(alpha + Math.PI), height2, radius * Math.sin(alpha + Math.PI));
+                p.getWorld().spawnParticle(Particle.FLAME, firstLocation, 1, 0, 0.01, 0.01, 0.01);
+                p.getWorld().spawnParticle(Particle.FLAME, secondLocation, 1, 0, 0.01, 0.01, 0.01);
+            }
+        }
     }
 
 }

@@ -16,9 +16,15 @@ public class DummyCommand implements CommandExecutor, Listener {
     @EventHandler
     public void dummy(EntityDamageEvent e) {
         if (e.getEntity() instanceof Villager && e.getEntity() instanceof LivingEntity) {
-            if (e.getEntity().isCustomNameVisible() && e.getEntity().getCustomName().contains("HP:")) {
+            if (e.getEntity() instanceof Entity && e.getEntity().isCustomNameVisible() && e.getEntity().getCustomName().contains("HP:")) {
                 LivingEntity ent = (LivingEntity) e.getEntity();
-                e.getEntity().setCustomName(Main.color("&cHP: &f" + ent.getHealth()));
+                new BukkitRunnable() {
+                    public void run() {
+                        if (!ent.isDead()) {
+                            ent.setCustomName(Main.color("&cHP: &f" + ent.getHealth()));
+                        }
+                    }
+                }.runTaskLater(Main.getInstance(), 5L);
             }
         }
     }
@@ -35,11 +41,7 @@ public class DummyCommand implements CommandExecutor, Listener {
                 ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10000);
                 ent.setHealth(10000);
                 ent.setCustomNameVisible(true);
-                new BukkitRunnable() {
-                    public void run() {
-                        ent.setCustomName(Main.color("&cHP: &f" + ent.getHealth()));
-                    }
-                }.runTaskLater(Main.getInstance(), 1L);
+                ent.setCustomName(Main.color("&cHP: &f" + ent.getHealth()));
             } else {
                 Main.msg(p, Main.getInstance().noperm);
             }
