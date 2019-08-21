@@ -182,7 +182,8 @@ public class ClassManager implements Listener {
         skillsPyro.add(new InfernoVault());
         skillsPyro.add(new MeteorShower());
         skillsPyro.add(new FlameTornado());
-        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 800.0, 5.0, 400, 10, 5, 0.1, "HOE", 10, 20, 22, 0.2, 0.1, skillsPyro));
+        skillsPyro.add(new Pyroclasm());
+        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 800.0, 2.0, 400, 10, 5, 0.1, "HOE", 15, 20, 22, 0.31, 0.22, skillsPyro));
     }
 
     public PlayerClass getPClassFromString(String s) {

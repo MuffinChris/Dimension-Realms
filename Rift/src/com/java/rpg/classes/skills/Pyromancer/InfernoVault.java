@@ -26,7 +26,7 @@ public class InfernoVault extends Skill implements Listener {
     private Main main = Main.getInstance();
 
     private double vaultdamage = 50;
-    private double landdamage = 150;
+    private double landdamage = 100;
     private int range = 3;
 
     public InfernoVault() {
@@ -72,6 +72,26 @@ public class InfernoVault extends Skill implements Listener {
         }.runTaskLater(Main.getInstance(), 200L);
     }
 
+    @EventHandler
+    public void fallDamageSafe (EntityDamageEvent e) {
+        if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            Player p = (Player) e.getEntity();
+            if (main.getCM().getFall().contains(p.getUniqueId())) {
+                e.setCancelled(true);
+                main.getCM().getFall().remove(p.getUniqueId());
+                if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
+                    Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
+                    main.getCM().getFallMap().remove(p.getUniqueId());
+                }
+                landDamage(p);
+                p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
+                p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_SHOOT, 1.0F, 1.0F);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
+            }
+        }
+    }
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void fallDamage (PlayerMoveEvent e) {
         Player p = e.getPlayer();
@@ -108,7 +128,7 @@ public class InfernoVault extends Skill implements Listener {
                     continue;
                 }
             }
-            ent.setFireTicks(60);
+            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
             spellDamage(caster, ent, landdamage);
         }
     }
@@ -129,7 +149,7 @@ public class InfernoVault extends Skill implements Listener {
                     continue;
                 }
             }
-            ent.setFireTicks(60);
+            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
             spellDamage(caster, ent, vaultdamage);
         }
     }

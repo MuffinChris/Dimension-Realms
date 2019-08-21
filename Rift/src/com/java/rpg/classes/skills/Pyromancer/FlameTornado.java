@@ -20,7 +20,7 @@ public class FlameTornado extends Skill {
 
     private double dps = 50;
     private double dpt = 3;
-    private double travelspeed = 2;
+    private double travelspeed = 0.1;
     private double height = 8;
     private int duration = 20 * 30;
     private int maxradius = 4; // actually diameter lol
@@ -29,7 +29,7 @@ public class FlameTornado extends Skill {
 
     public FlameTornado() {
         super("FlameTornado", 150, 60 * 20, 30, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Materialize a twister of pure fire, which expands to reach a radius of " + maxradius + " blocks in size.\nThe tornado deals " + dps + " damage per second, and follows the nearest enemy at a speed of " + travelspeed + " blocks per second.");
+        setDescription("Materialize a twister of pure fire, which expands to reach a radius of " + maxradius + " blocks in size.\nThe tornado deals " + dps + " damage per second, and follows the nearest enemy at a speed of " + travelspeed * 20 + " blocks per second.");
         tornados = new HashMap<>();
         damage = new HashMap<>();
     }
@@ -81,7 +81,7 @@ public class FlameTornado extends Skill {
                 }
                 if (dist < Double.MAX_VALUE && nadoEnt instanceof Entity) {
                     if (!(dist <= 1)) {
-                        locOf = locOf.toVector().clone().add(nadoEnt.getLocation().clone().subtract(new Vector(0, 0.5, 0)).toVector().subtract(locOf.clone().toVector()).normalize().multiply((travelspeed * 1.0) / (locOf.distance(nadoEnt.getLocation())))).toLocation(locOf.getWorld());
+                        locOf = locOf.add(nadoEnt.getLocation().toVector().subtract(new Vector(0, 0.5, 0)).subtract(locOf.toVector()).normalize().multiply((travelspeed * 1.0)));
                     }
                 }
                 makeTornado(locOf.clone(), p);
@@ -113,12 +113,12 @@ public class FlameTornado extends Skill {
         }
         while(!(maxh &&maxr)) {
             if (radius < maxradius) {
-                radius += 0.2;
+                radius += 0.6;
             } else {
                 maxr = true;
             }
             if (height2 < height) {
-                height2 += 0.4;
+                height2 += 1.2;
             } else {
                 maxh = true;
             }

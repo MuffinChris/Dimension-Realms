@@ -5,6 +5,7 @@ import com.java.holograms.Hologram;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,13 +44,15 @@ public class Environmental implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void addDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof LivingEntity) {
+        if (e.getEntity() instanceof LivingEntity && !e.isCancelled()) {
             LivingEntity p = (LivingEntity) e.getEntity();
             double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            boolean event = false;
             if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                 e.setDamage(e.getDamage() * (hp / 40.0));
+                event = true;
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
                 e.setDamage(e.getDamage() / 4.0 * hp / 20.0);
@@ -114,6 +117,11 @@ public class Environmental implements Listener {
             if (e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
                 e.setDamage((e.getDamage() / 30.0) * hp);
             }
+            if (!(e.getEntity() instanceof ArmorStand) && e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && e.getCause() != EntityDamageEvent.DamageCause.CUSTOM) {
+                DecimalFormat df = new DecimalFormat("#.##");
+                Hologram magic = new Hologram(e.getEntity(), e.getEntity().getLocation(), "&c&l❤" + df.format(e.getDamage()), Hologram.HologramType.DAMAGE);
+                magic.rise();
+            }
         }
     }
 
@@ -153,10 +161,14 @@ public class Environmental implements Listener {
                     e.setAmount(2);
                 }
                 DecimalFormat df = new DecimalFormat("#.##");
-                Hologram magic = new Hologram(ent.getLocation(), "&a&l❤" + df.format(e.getAmount()));
+                Hologram magic = new Hologram(ent, ent.getLocation(), "&a&l❤" + df.format(e.getAmount()), Hologram.HologramType.DAMAGE);
                 magic.rise();
                 if (e.getEntity() instanceof Player) {
                     Main.sendHp((Player) e.getEntity());
+                }
+                DecimalFormat dF = new DecimalFormat("#.##");
+                if (main.getHpBars().containsKey(ent)) {
+                    main.getHpBars().get(ent).setText("&f" + dF.format(ent.getHealth()) + "&c❤");
                 }
             }
         }

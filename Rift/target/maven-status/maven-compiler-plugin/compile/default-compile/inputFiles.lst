@@ -22,6 +22,8 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentia
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\KillAllCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\ManaCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\InvseeCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\holograms\EntityHealthBars.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\SkillsCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\MsgCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\holograms\Hologram.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\RPGConstants.java
@@ -31,9 +33,11 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\clas
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\playerinfo.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\party\Party.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\HealCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\CDCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\InfernoVault.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\Skill.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\RPGPlayer.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\Pyroclasm.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\playerinfoManager.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\ClassCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\Skillboard.java

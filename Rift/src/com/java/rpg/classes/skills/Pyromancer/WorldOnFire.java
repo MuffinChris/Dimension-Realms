@@ -28,8 +28,9 @@ public class WorldOnFire extends Skill implements Listener {
     private int range = 8;
     private int hp = 5;
     private int mana = 5;
-    private int ramp = 1;
-    private int initRamp = 10;
+    private int ramp = 2;
+    private int initRamp = 20;
+    private int maxramp = 300;
     private Map<Player, Integer> amp;
 
     public void toggleEnd(Player p) {
@@ -44,8 +45,10 @@ public class WorldOnFire extends Skill implements Listener {
             return false;
         }
         if (p.getFireTicks() > 0) {
-            amp.replace(p, amp.get(p) + ramp);
-            main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
+            if (amp.get(p)+ramp <= maxramp) {
+                amp.replace(p, amp.get(p) + ramp);
+                main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
+            }
         }
         for (LivingEntity ent : p.getLocation().getNearbyLivingEntities(range)) {
             if (ent instanceof ArmorStand) {
@@ -63,8 +66,10 @@ public class WorldOnFire extends Skill implements Listener {
                 }
             }
             if (ent.getFireTicks() > 0) {
-                amp.replace(p, amp.get(p) + ramp);
-                main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
+                if (amp.get(p)+ramp <= maxramp) {
+                    amp.replace(p, amp.get(p) + ramp);
+                    main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
+                }
             }
         }
         for (double alpha = 0; alpha < Math.PI; alpha+= Math.PI/64) {
@@ -89,7 +94,7 @@ public class WorldOnFire extends Skill implements Listener {
 
     public WorldOnFire() {
         super("WorldOnFire", 50, 3 * 20, 0, 0, "%player% has conjured a burst of Flame!", "TOGGLE-PASSIVE-CAST");
-        setDescription("&bPassive\nCasting WorldOnFire ignites you for 5 seconds.\nPlayers within " + range + " blocks are ignited when you are on fire.\nFor each nearby player on fire, regain" + hp + " health and " + mana + " mana every half a second.\n&bActive\nSurround yourself in a fiery aura, granting you " + initRamp * 100.0 + "% power strength.\nWhile you are on fire and nearby enemies are on fire, gain " + ramp * 100.0 + "% power strength every half a second.");
+        setDescription("&bPassive\nCasting WorldOnFire ignites you for 5 seconds.\nPlayers within " + range + " blocks are ignited when you are on fire.\nFor each nearby player on fire, regain" + hp + " health and " + mana + " mana every half a second.\n&bActive\nSurround yourself in a fiery aura, granting you " + initRamp * 100.0 + "% power strength.\nWhile you are on fire and nearby enemies are on fire, gain " + ramp * 100.0 + "% power strength every half a second.\nMax power strength is 300%");
         setPassiveTicks(1);
         setToggleTicks(10);
         setToggleMana(10);
@@ -126,7 +131,7 @@ public class WorldOnFire extends Skill implements Listener {
             if (ent.getFireTicks() == 0) {
                 drawLine(caster, ent);
             }
-            ent.setFireTicks(100);
+            ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
         }
     }
 
@@ -145,7 +150,7 @@ public class WorldOnFire extends Skill implements Listener {
 
         /*p.getLineOfSight(null, range).forEach(block -> block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 1));
         p.getLineOfSight(null, range).forEach(block -> damageEntities(block, p));*/
-        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 1.0F, 1.0F);
+        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_BURN, 1.0F, 1.0F);
         p.setFireTicks(5 * 20);
     }
 
@@ -169,7 +174,7 @@ public class WorldOnFire extends Skill implements Listener {
             if (ent.getFireTicks() == 0) {
                 drawLine(caster, ent);
             }
-            ent.setFireTicks(100);
+            ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
         }
     }
 
@@ -192,7 +197,7 @@ public class WorldOnFire extends Skill implements Listener {
             if (ent.getFireTicks() > 0) {
                 if (!caster.isDead() && !ent.isDead()) {
                     ent.getWorld().spawnParticle(Particle.FLAME, ent.getLocation(), 15, 0.04, 0.04, 0.04, 0.04);
-                    ent.getWorld().playSound(ent.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.5F, 1.0F);
+                    ent.getWorld().playSound(ent.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 0.25F, 0.5F);
 
                     if (caster.getHealth() + hp <= caster.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
                         caster.setHealth(caster.getHealth() + hp);

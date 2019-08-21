@@ -1,22 +1,26 @@
 package com.java.rpg.classes;
 
 import com.java.Main;
+import com.java.rpg.party.Party;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import com.java.rpg.Leveleable;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class RPGPlayer extends Leveleable {
@@ -45,12 +49,15 @@ public class RPGPlayer extends Leveleable {
         return df.format(currentMana);
     }
 
+    Map<String, Integer> skillLevels;
     List<String> statuses;
     List<String> passives;
     List<String> toggles;
     List<Map<Integer, String>> toggleTasks;
     List<Map<Integer, String>> passiveTasks;
     private Map<String, Long> cooldowns;
+
+    private LivingEntity target;
 
     public RPGPlayer(Player p) {
         super (0, 0);
@@ -62,9 +69,15 @@ public class RPGPlayer extends Leveleable {
         passiveTasks = new ArrayList<>();
         toggleTasks = new ArrayList<>();
         toggles = new ArrayList<>();
+        skillLevels = new HashMap<>();
+        target = null;
         pullFiles();
         board = new Skillboard(p);
         pstrength = 100;
+    }
+
+    public Map<String, Integer> getSkillLevels() {
+        return skillLevels;
     }
 
     public void setPStrength(int d) {
@@ -99,6 +112,7 @@ public class RPGPlayer extends Leveleable {
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
+            pData.set("Username", player.getName());
             String name = "None";
             if (pclass instanceof PlayerClass) {
                 name = pclass.getName();
@@ -109,6 +123,29 @@ public class RPGPlayer extends Leveleable {
             pData.set(name + "Level", getLevel());
             pData.set(name + "Exp", getExp());
             pData.set(name + "CMana", currentMana);
+            String output = "";
+            for (String s : skillLevels.keySet()) {
+                output+=s + "-" + skillLevels.get(s) + ",";
+            }
+            if (output.contains(",")) {
+                output = output.substring(0, output.length() - 1);
+            }
+            boolean none = false;
+            if (pData.contains(name + "Skills") && pData.get(name + "Skills").equals("") && !pclass.getName().equals("None")) {
+                none = true;
+            }
+            if (pData.contains(name + "Skills") && !none) {
+                pData.set(name + "Skills", output);
+            } else {
+                output = "";
+                for (Skill s : pclass.getSkills()) {
+                    output+=s.getName() + "-0,";
+                }
+                if (output.contains(",")) {
+                    output = output.substring(0, output.length() - 1);
+                }
+                pData.set(name + "Skills", output);
+            }
             String cd = "";
             for (String skill : cooldowns.keySet()) {
                 cd+=skill + ":" + cooldowns.get(skill) + ",";
@@ -118,6 +155,7 @@ public class RPGPlayer extends Leveleable {
             }
             pData.set("Cooldowns", cd);
             pData.save(pFile);
+            updateStats();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,6 +165,7 @@ public class RPGPlayer extends Leveleable {
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         if (pFile.exists()) {
+            pData.set("Username", player.getName());
             String name = "None";
             pclass = main.getCM().getPClassFromString(pData.getString("Current Class"));
             if (pclass instanceof PlayerClass) {
@@ -135,6 +174,21 @@ public class RPGPlayer extends Leveleable {
             setLevel(pData.getInt(name + "Level"));
             setExp(pData.getDouble(name + "Exp"));
             currentMana = (pData.getInt(name + "CMana"));
+            if(pData.contains(name + "Skills")) {
+                if (pData.get(name + "Skills").equals("") && !pclass.getName().equals("None")) {
+                    pushFiles();
+                }
+                String skstr = pData.getString(name + "Skills");
+                if (skstr.length() > 0) {
+                    String[] sks = skstr.split(",");
+                    for (String s : sks) {
+                        String[] skobj = s.split("-");
+                        skillLevels.put(skobj[0], Integer.valueOf(skobj[1]));
+                    }
+                }
+            } else {
+                pushFiles();
+            }
             if(pData.contains("Cooldowns")) {
                 String cdstr = pData.getString("Cooldowns");
                 if (cdstr.length() > 0) {
@@ -208,8 +262,47 @@ public class RPGPlayer extends Leveleable {
         }
     }
 
+    public ArrayList<LivingEntity> getNearbyTargets(Player p, int range) {
+        ArrayList<LivingEntity> list = new ArrayList<>();
+        for (LivingEntity ent : p.getLocation().getNearbyLivingEntities(range)) {
+            if (ent instanceof ArmorStand) {
+                continue;
+            }
+            if (ent instanceof Player) {
+                Player pl = (Player) ent;
+                if (main.getPM().getParty(pl) instanceof Party && !main.getPM().getParty(pl).getPvp()) {
+                    if (main.getPM().getParty(pl).getPlayers().contains(p)) {
+                        continue;
+                    }
+                }
+                if (pl.equals(p)) {
+                    continue;
+                }
+            }
+            list.add(ent);
+        }
+        return list;
+    }
+
+    public LivingEntity getNearestEntityInSight(Player player, int range) {
+        ArrayList<LivingEntity> entities = getNearbyTargets(player, range);
+            for (LivingEntity ent : entities) {
+                Vector toEntity = ent.getLocation().toVector().subtract(player.getEyeLocation().toVector());
+                Vector toEntity2 = ent.getEyeLocation().toVector().subtract(player.getEyeLocation().toVector());
+                Vector direction = player.getEyeLocation().getDirection();
+                double dot = toEntity.normalize().dot(direction);
+                double dot2 = toEntity2.normalize().dot(direction);
+                if (dot > 0.98 || dot2 > 0.98) {
+                    if (player.hasLineOfSight(ent)) {
+                        return ent;
+                    }
+                }
+            }
+        //}
+        return null;
+    }
+
     public String castSkill(String name) {
-        Main.msg(player, pstrength + "");
         if (pclass instanceof PlayerClass) {
             for (Skill s : pclass.getSkills()) {
                 if (name.equalsIgnoreCase(s.getName())) {
@@ -223,6 +316,23 @@ public class RPGPlayer extends Leveleable {
                                 } else {
                                     return "AlreadyCasting";
                                 }
+
+                                if (s.getType().contains("TARGET")) {
+                                    if (getNearestEntityInSight(player, 32) instanceof LivingEntity) {
+                                        target = getNearestEntityInSight(player, 32);
+                                        if (target.getLocation().distance(player.getLocation()) > s.getTargetRange()) {
+                                            target = null;
+                                            getStatuses().remove("Warmup" + s.getName());
+                                            return "OutOfRangeTarget";
+                                        }
+                                        s.targetParticles(player, target);
+                                    } else {
+                                        getStatuses().remove("Warmup" + s.getName());
+                                        target = null;
+                                        return "BadTarget";
+                                    }
+                                }
+
                                 List<Integer> indexesToRemove = new ArrayList<>();
                                 int index = 0;
                                 for (String status : statuses) {
@@ -244,8 +354,16 @@ public class RPGPlayer extends Leveleable {
                                         } else {
                                             cooldowns.put(s.getName(), System.currentTimeMillis());
                                         }
-                                        currentMana -= s.getManaCost();
-                                        s.cast(player);
+                                        if (currentMana >= s.getManaCost()) {
+                                            currentMana -= s.getManaCost();
+                                            if (s.getType().contains("TARGET")) {
+                                                s.target(player, target);
+                                            } else {
+                                                s.cast(player);
+                                            }
+                                        } else {
+                                            Main.msg(player, "&cOut of mana to cast " + s.getName() + "!");
+                                        }
                                         statuses.remove("Warmup" + s.getName());
                                     }
                                 }, s.getWarmup());
@@ -292,6 +410,45 @@ public class RPGPlayer extends Leveleable {
                                     } else {
                                         cooldowns.put(s.getName(), System.currentTimeMillis());
                                     }
+                                }
+                                return "CastedSkill";
+                            }
+                            if (s.getType().contains("TARGET")) {
+                                if (getNearestEntityInSight(player, 32) instanceof LivingEntity) {
+                                    target = getNearestEntityInSight(player, 32);
+                                    if (target.getLocation().distance(player.getLocation()) > s.getTargetRange()) {
+                                        target = null;
+                                        getStatuses().remove("Warmup" + s.getName());
+                                        return "OutOfRangeTarget";
+                                    }
+                                    s.targetParticles(player, target);
+                                } else {
+                                    getStatuses().remove("Warmup" + s.getName());
+                                    target = null;
+                                    return "BadTarget";
+                                }
+                                List<Integer> indexesToRemove = new ArrayList<>();
+                                int index = 0;
+                                for (String status : statuses) {
+                                    if (status.contains("Warmup")) {
+                                        if (!status.contains(s.getName())) {
+                                            indexesToRemove.add(index);
+                                        }
+                                        index++;
+                                    }
+                                }
+                                for (int ind : indexesToRemove) {
+                                    statuses.remove(ind);
+                                }
+                                if (cooldowns.containsKey(s.getName())) {
+                                    cooldowns.replace(s.getName(), System.currentTimeMillis());
+                                } else {
+                                    cooldowns.put(s.getName(), System.currentTimeMillis());
+                                }
+                                currentMana -= s.getManaCost();
+                                s.target(player, target);
+                                if (indexesToRemove != null && indexesToRemove.size() > 0) {
+                                    return "Interrupted";
                                 }
                                 return "CastedSkill";
                             }

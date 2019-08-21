@@ -71,5 +71,12 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/apiresources/HolographicDisplays-2.3.3.jar</systemPath>
     </dependency>
+  <dependency>
+    <groupId>effect.lib</groupId>
+    <artifactId>effectlib</artifactId>
+    <version>6.1</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/apiresources/EffectLib-6.1.jar</systemPath>
+  </dependency>
   </dependencies>
 </project>

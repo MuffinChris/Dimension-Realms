@@ -31,12 +31,12 @@ public class Fireball extends Skill implements Listener {
 
     private Main main = Main.getInstance();
 
-    private double damage = 175;
+    private double damage = 100;
     private int range = 4;
 
     public Fireball() {
         super("Fireball", 75, 4 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Shoot a flaming projectile that travels for " + range + " seconds,\ndealing " + damage + " damage and igniting nearby enemies for 3 seconds.");
+        setDescription("Shoot a flaming projectile that travels for " + range + " seconds,\ndealing " + damage + " damage and igniting nearby enemies for 5 seconds.");
     }
 
     public void cast(Player p) {
@@ -105,7 +105,7 @@ public class Fireball extends Skill implements Listener {
 
     @EventHandler (priority = EventPriority.LOWEST)
     public void onHit (EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Arrow) {
+        if (e.getDamager() instanceof Arrow && !(e.getEntity() instanceof ArmorStand)) {
             Arrow a = (Arrow) e.getDamager();
             if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:") && a.getShooter() instanceof Player) {
                 Player shooter = (Player) a.getShooter();
@@ -131,13 +131,14 @@ public class Fireball extends Skill implements Listener {
                     ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
                 }
                 a.remove();
+                e.setDamage(0);
                 e.setCancelled(true);
             }
         }
     }
 
     public void lightEntities(Entity e, Player caster, Location loc, double damage) {
-        for (LivingEntity ent : loc.getNearbyLivingEntities(1)) {
+        for (LivingEntity ent : loc.getNearbyLivingEntities(1.5)) {
             if (ent instanceof ArmorStand) {
                 continue;
             }
@@ -152,8 +153,12 @@ public class Fireball extends Skill implements Listener {
                     continue;
                 }
             }
+            new BukkitRunnable() {
+                public void run() {
+                    ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
+                }
+            }.runTaskLater(Main.getInstance(), 1L);
             spellDamage(caster, ent, damage);
-            ent.setFireTicks(60);
         }
     }
 

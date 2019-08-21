@@ -3,8 +3,10 @@ package com.java.rpg.classes;
 import com.java.Main;
 import com.java.rpg.Damage;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +15,22 @@ public class Skill {
 
     private Main main = Main.getInstance();
 
+    // Description should be list.
+
     public void spellDamage(Player caster, LivingEntity target, double damage) {
-        target.setKiller(caster);
+        if (target.isDead()) {
+            return;
+        }
+        //target.setKiller(caster);
         //caster.damage(0.25, target);
         //target.damage(Math.max(damage - 0.25, 0.0));
         main.getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
+        target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
+        target.setNoDamageTicks(0);
         target.damage(damage, caster);
+        target.setNoDamageTicks(5);
+        target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+
     }
 
     private int manaCost;
@@ -35,6 +47,16 @@ public class Skill {
     private String description;
 
     private String type;
+
+    private int targetRange;
+
+    public int getTargetRange() {
+        return targetRange;
+    }
+
+    public void setTargetRange(int t) {
+        targetRange = t;
+    }
 
     private List<Integer> tasks;
 
@@ -113,7 +135,15 @@ public class Skill {
         return name;
     }
 
+    public void targetParticles(Player p, LivingEntity t) {
+
+    }
+
     public void cast(Player p) {
+        Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateCast(this);
+    }
+
+    public void target(Player p, LivingEntity t) {
         Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateCast(this);
     }
 

@@ -83,6 +83,7 @@ public class PartyCommand implements CommandExecutor, Listener {
         DecimalFormat df = new DecimalFormat("#.##");
         RPGPlayer rp = main.getPC().get(p.getUniqueId());
         lore.add("");
+        lore.add(Main.color("&8» &eCLASS: &f" + rp.getPClass().getName()));
         lore.add(Main.color("&8» &cHP: &f" + df.format(p.getHealth()) + "&8/" + "&c" + df.format(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())));
         lore.add(Main.color("&8» &eLVL: &f" + rp.getLevel()));
         lore.add(Main.color("&8» &aXP: &f" + rp.getPrettyPercent() + "%"));
@@ -127,6 +128,7 @@ public class PartyCommand implements CommandExecutor, Listener {
                 RPGPlayer tp = main.getPC().get(t.getUniqueId());
                 df = new DecimalFormat("#.##");
                 lore.add("");
+                lore.add(Main.color("&8» &eCLASS: &f" + tp.getPClass().getName()));
                 lore.add(Main.color("&8» &cHP: &f" + df.format(t.getHealth()) + "&8/" + "&c" + df.format(t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue())));
                 lore.add(Main.color("&8» &eLVL: &f" + tp.getLevel()));
                 lore.add(Main.color("&8» &aXP: &f" + tp.getPrettyPercent() + "%"));

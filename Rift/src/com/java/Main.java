@@ -11,6 +11,7 @@ import com.java.communication.MsgCommand;
 import com.java.communication.PlayerinfoListener;
 import com.java.communication.playerinfoManager;
 import com.java.essentials.*;
+import com.java.holograms.EntityHealthBars;
 import com.java.holograms.Hologram;
 import com.java.rpg.Damage;
 import com.java.rpg.DamageListener;
@@ -22,6 +23,7 @@ import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
 import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import com.java.rpg.modifiers.Environmental;
 import com.java.rpg.player.PlayerListener;
+import de.slikey.effectlib.EffectManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
@@ -29,6 +31,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +42,7 @@ import com.java.rpg.party.Party;
 import com.java.rpg.party.PartyCommand;
 import com.java.rpg.party.PartyManager;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -82,6 +87,36 @@ public class Main extends JavaPlugin {
 
      */
 
+    public Map<LivingEntity, Hologram> hpBars = new HashMap<>();
+    public Map<LivingEntity, Hologram> getHpBars() {
+        return hpBars;
+    }
+
+    public void remHpBar() {
+        new BukkitRunnable() {
+            public void run() {
+                List<LivingEntity> remove = new ArrayList<>();
+                for (LivingEntity e : hpBars.keySet()) {
+                    if (e.isDead() || (e instanceof Player && !((Player)e).isOnline())) {
+                        remove.add(e);
+                    } else {
+                        DecimalFormat dF = new DecimalFormat("#.##");
+                        getHpBars().get(e).setText("&f" + dF.format(e.getHealth()) + "&c❤");
+                    }
+                }
+                for (LivingEntity e : remove) {
+                    hpBars.get(e).destroy();
+                    hpBars.remove(e);
+                }
+            }
+        }.runTaskTimer(this, 1L, 10L);
+    }
+
+    public List<Hologram> holograms = new ArrayList<>();
+    public List<Hologram> getHolos() {
+        return holograms;
+    }
+
     public DamageTypes dmg = new DamageTypes();
 
     public List<Damage> getDmg() {
@@ -114,6 +149,23 @@ public class Main extends JavaPlugin {
      * CLASS VARIABLES
      *
      */
+
+    EffectManager em = new EffectManager(this);
+
+    public EffectManager getEm() {
+        return em;
+    }
+
+    public RPGPlayer getRP(Player p) {
+        return getPC().get(p.getUniqueId());
+    }
+
+    public int getSkillLevel(Player p, String name) {
+        if (getRP(p).getSkillLevels().containsKey(name)) {
+            return getRP(p).getSkillLevels().get(name);
+        }
+        return -1;
+    }
 
     private ClassManager cm;
     public ClassManager getCM() {
@@ -264,6 +316,8 @@ public class Main extends JavaPlugin {
         getCommand("list").setExecutor(new ListCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("mana").setExecutor(new ManaCommand());
+        getCommand("skills").setExecutor(new SkillsCommand());
+        getCommand("cd").setExecutor(new CDCommand());
 
         getCommand("dummy").setExecutor(new DummyCommand());
         so("&bRIFT: &fEnabled commands!");
@@ -277,6 +331,8 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
         Bukkit.getPluginManager().registerEvents(new DummyCommand(), this);
         Bukkit.getPluginManager().registerEvents(new Hologram(), this);
+        Bukkit.getPluginManager().registerEvents(new SkillsCommand(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityHealthBars(), this);
 
         //Skills
         Bukkit.getPluginManager().registerEvents(new Fireball(), this);
@@ -292,6 +348,29 @@ public class Main extends JavaPlugin {
         chatPeriodic();
         passivesPeriodic();
         cooldownsPeriodic();
+        remHpBar();
+
+        for (World w : Bukkit.getWorlds()) {
+            for (LivingEntity e : w.getLivingEntities()) {
+                if (e.getType() == EntityType.ARMOR_STAND) {
+                    if (e.isCustomNameVisible() && e.getCustomName().contains("❤")) {
+                        e.remove();
+                    }
+                    continue;
+                }
+                if (e instanceof LivingEntity && !(e instanceof Player)) {
+                    if (!getHpBars().containsKey(e)) {
+                        new BukkitRunnable() {
+                            public void run() {
+                                DecimalFormat dF = new DecimalFormat("#.##");
+                                getHpBars().put(e, new Hologram(e, e.getLocation().add(new Vector(0, e.getHeight() - 0.2, 0)), "&f" + dF.format(e.getHealth()) + "&c❤", Hologram.HologramType.HOLOGRAM));
+                            }
+                        }.runTaskLater(Main.getInstance(), 1);
+                    }
+                }
+            }
+        }
+
         so("&bRIFT: &fSetup complete!");
 
     }
@@ -300,6 +379,10 @@ public class Main extends JavaPlugin {
 
         final BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.cancelTasks(this);
+
+        for (Hologram h : holograms) {
+            h.destroy();
+        }
 
         List<String> projectiles = new ArrayList<>();
         projectiles.add("Fireball");

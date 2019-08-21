@@ -10,7 +10,7 @@ commands:
     aliases: [parties, group, p, pa]
   skill:
     description: Cast a skill!
-    aliases: [cast]
+    aliases: [cast, spell]
   class:
     description: Select a class!
     aliases: [classes]
@@ -57,4 +57,9 @@ commands:
   mana:
     description: Restore your mana
     permission: core.admin
+  skills:
+    description: View your skills
+    aliases: [abilities, skilllist, skillslist, spells, magic]
+  cd:
+    description: Reset cooldowns
 depend: [ProtocolLib, Vault]
