@@ -117,7 +117,7 @@ public class Environmental implements Listener {
             if (e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
                 e.setDamage((e.getDamage() / 30.0) * hp);
             }
-            if (!(e.getEntity() instanceof ArmorStand) && e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && e.getCause() != EntityDamageEvent.DamageCause.CUSTOM) {
+            if (!(e.getEntity() instanceof ArmorStand) && e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK && e.getCause() != EntityDamageEvent.DamageCause.CUSTOM && e.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && e.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK && e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE) {
                 DecimalFormat df = new DecimalFormat("#.##");
                 Hologram magic = new Hologram(e.getEntity(), e.getEntity().getLocation(), "&c&l❤" + df.format(e.getDamage()), Hologram.HologramType.DAMAGE);
                 magic.rise();

@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class SkillsCommand implements CommandExecutor, Listener {
@@ -53,7 +54,27 @@ public class SkillsCommand implements CommandExecutor, Listener {
                 lore.add(Main.color("&cLOCKED &8(&cLVL " + s.getLevel() + "&8)"));
                 lore.add(Main.color(""));
             }
-            lore.add(Main.color("&e" + s.getDescription()));
+            DecimalFormat dF = new DecimalFormat("#.##");
+            if (s.getManaCost() > 0) {
+                lore.add(Main.color("&bMana Cost: &f" + s.getManaCost()));
+            }
+            if (s.getToggleMana() > 0) {
+                lore.add(Main.color("&bToggle Mana Cost: &f" + s.getToggleMana()));
+            }
+            if (s.getToggleTicks() > 0) {
+                lore.add(Main.color("&eToggle Tick Rate: &f" + dF.format((s.getToggleTicks()*1.0)/20.0) + " seconds"));
+            }
+            if (s.getWarmup() > 0) {
+                lore.add(Main.color("&eWarmup: &f" + dF.format((s.getWarmup()*1.0)/20.0) + " seconds"));
+            }
+            if (s.getCooldown() > 0) {
+                lore.add(Main.color("&eCooldown: &f" + dF.format((s.getCooldown()*1.0)/20.0) + " seconds"));
+            }
+            lore.add(Main.color(""));
+            for (String st : s.getDescription()) {
+                lore.add(Main.color(st));
+            }
+
             spMeta.setLore(lore);
             sp.setItemMeta(spMeta);
             playerInv.setItem(i, sp);

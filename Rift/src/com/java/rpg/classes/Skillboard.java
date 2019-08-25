@@ -21,9 +21,39 @@ public class Skillboard {
 
     private UUID uuid;
     private BossBar bossbar;
+    private boolean skillbar;
     List<Integer> prefixes = new ArrayList<>();
 
     private Objective obj;
+
+    public boolean getSkillbar() {
+        return skillbar;
+    }
+
+    public void setSkillbar(boolean bool) {
+        skillbar = bool;
+    }
+
+    public void toggleSkillbar() {
+        skillbar = !skillbar;
+    }
+
+    public void updateSkillbar() {
+        if (skillbar) {
+            String output = "";
+            int slot = 2;
+            for (Skill s : main.getRP(Bukkit.getPlayer(uuid)).getPClass().getSkills()) {
+                output+="&e" + s.getName() + " &8<&6" + slot + "&8> || ";
+                slot++;
+            }
+            if (output.contains("||")) {
+                output = output.substring(0, output.length() - 4);
+            }
+            bossbar.setTitle(Main.color(output));
+        } else {
+            bossbar.setTitle("");
+        }
+    }
 
     public void setScoreBoard(Player player) {
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -64,8 +94,9 @@ public class Skillboard {
     }
 
     public Skillboard(Player p) {
+        skillbar = false;
         uuid = p.getUniqueId();
-        bossbar = Bukkit.getServer().createBossBar("", BarColor.BLUE, BarStyle.SOLID);
+        bossbar = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         uuid = p.getUniqueId();
         bossbar.addPlayer(p);
         setScoreBoard(p);
@@ -96,6 +127,7 @@ public class Skillboard {
     }
 
     public void updateWarmup(Skill s, int warmup) {
+        /*
         bossbar.setTitle(Main.color("&bChanneling ") + s.getName() + "...");
         new BukkitRunnable() {
             public void run() {
@@ -104,9 +136,12 @@ public class Skillboard {
                 }
             }
         }.runTaskLater(Main.getInstance(), warmup);
+        */
+
     }
 
     public void updateCast(Skill s) {
+        /*
         bossbar.setTitle(Main.color("&bCasted ") + s.getName() + "...");
         new BukkitRunnable() {
             public void run() {
@@ -114,23 +149,34 @@ public class Skillboard {
                     bossbar.setTitle("");
                 }
             }
-        }.runTaskLater(Main.getInstance(), 20L);
+        }.runTaskLater(Main.getInstance(), 20L);*/
+    }
+
+    public void clearChannel() {
+        /*
+        if (bossbar.getTitle().contains("Channeling")) {
+            bossbar.setTitle("");
+        }*/
     }
 
     public void clearBoard() {
+        /*
         bossbar.setTitle("");
+        */
+
     }
 
     public void updateToggle(Skill s) {
+        /*
         if (bossbar.getTitle().equals("")) {
             bossbar.setTitle(Main.color("&bEnabled ") + s.getName() + "");
-        }
+        }*/
     }
 
-    public void endToggle(Skill s) {
+    public void endToggle(Skill s) {/*
         if (bossbar.getTitle().contains("Enabled")) {
             bossbar.setTitle("");
-        }
+        }*/
     }
 
 

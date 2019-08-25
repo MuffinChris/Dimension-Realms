@@ -1,6 +1,7 @@
 package com.java.essentials;
 
 import com.java.Main;
+import com.java.rpg.classes.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -18,7 +19,7 @@ public class HealCommand implements CommandExecutor {
 			Player p = (Player) sender;
 			if (p.hasPermission("core.mod")) {
 				if (args.length == 0) {
-					p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+					Skill.healTarget(p, p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 					p.setFoodLevel(20);
 					p.setSaturation(10.0F);
 					for (PotionEffect pot : p.getActivePotionEffects()) {
@@ -29,7 +30,7 @@ public class HealCommand implements CommandExecutor {
 				} else if (args.length == 1) {
 					if (Bukkit.getPlayer(args[0]) instanceof Player) {
 						Player t = Bukkit.getPlayer(args[0]);
-						t.setHealth(t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+						Skill.healTarget(t, t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 						t.setFoodLevel(20);
 						t.setSaturation(10.0F);
 						for (PotionEffect pot : t.getActivePotionEffects()) {
@@ -50,7 +51,7 @@ public class HealCommand implements CommandExecutor {
 			if (args.length == 1) {
 				if (Bukkit.getPlayer(args[0]) instanceof Player) {
 					Player t = Bukkit.getPlayer(args[0]);
-					t.setHealth(t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+					Skill.healTarget(t, t.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 					t.setFoodLevel(20);
 					t.setSaturation(10.0F);
 					for (PotionEffect pot : t.getActivePotionEffects()) {

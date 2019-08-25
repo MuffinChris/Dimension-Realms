@@ -1,6 +1,7 @@
 package com.java.rpg.classes;
 
 import com.java.Main;
+import org.bukkit.Material;
 
 import java.util.List;
 
@@ -27,12 +28,22 @@ public class PlayerClass {
     private double armorPerLevel;
     private double magicResistPerLevel;
 
+    public double getArmorPerLevel() {
+        return armorPerLevel;
+    }
+
+    public double getMagicResistPerLevel() {
+        return magicResistPerLevel;
+    }
+
+    private int weight;
+
     private String resourceName = "Mana";
     private String fancyResourceName = "&bMana";
 
     private List<Skill> skills;
 
-    public PlayerClass(String name, String fancyname, double basehp, double hpPerLevel, double mana, double manaPerlevel, double manaRegen, double manaRegenPerLevel, String weapon, double baseDmg, double armor, double magicresist, double armorPerLevel, double magicResistPerLevel, List<Skill> skills) {
+    public PlayerClass(String name, String fancyname, double basehp, double hpPerLevel, double mana, double manaPerLevel, double manaRegen, double manaRegenPerLevel, String weapon, double baseDmg, double armor, double magicresist, double armorPerLevel, double magicResistPerLevel, List<Skill> skills, int weight) {
         this.name = name;
         this.fancyname = fancyname;
         this.basehp = basehp;
@@ -48,6 +59,15 @@ public class PlayerClass {
         this.magicresist = magicresist;
         this.armorPerLevel = armorPerLevel;
         this.magicResistPerLevel = magicResistPerLevel;
+        this.weight = weight;
+    }
+
+    public void setWeight(int w) {
+        weight = w;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public double getCalcArmor(int level) {

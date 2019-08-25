@@ -20,6 +20,9 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //FIREBALLS ARE TREATED AS ATTACK - BECAUSE THE EVENTS! eSETDMG - fixed? (not rly doesnt make sense)
 //ALSO SPELLS ARE KNOCKING BACK, DISABLE THAT (set knockback resist whenever hitting spell) - fixed?
 //FLAMETORNADO TOO FAST.
@@ -31,12 +34,17 @@ public class Fireball extends Skill implements Listener {
 
     private Main main = Main.getInstance();
 
-    private double damage = 100;
-    private int range = 4;
+    private double damage = 120;
+    private int range = 3;
 
     public Fireball() {
-        super("Fireball", 75, 4 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Shoot a flaming projectile that travels for " + range + " seconds,\ndealing " + damage + " damage and igniting nearby enemies for 5 seconds.");
+        super("Fireball", 50, 3 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
+        List<String> desc = new ArrayList<>();
+        desc.add(Main.color("&bActive:"));
+        desc.add(Main.color("&fShoot a flaming projectile that travels for &e" + range + "&f seconds."));
+        desc.add(Main.color("&fIt deals &b" + damage + " &fdamage to nearby foes"));
+        desc.add(Main.color("&fand ignites them for 5 seconds."));
+        setDescription(desc);
     }
 
     public void cast(Player p) {

@@ -62,4 +62,12 @@ commands:
     aliases: [abilities, skilllist, skillslist, spells, magic]
   cd:
     description: Reset cooldowns
+  level:
+    description: View level
+    aliases: [exp, lvl]
+  seen:
+    description: Check when someone last logged in
+  biome:
+    description: Get the level range of your current location
+    aliases: [locinfo, locationinfo, loclevel, biomelevel, biomelvl, nl, bl, ll]
 depend: [ProtocolLib, Vault]

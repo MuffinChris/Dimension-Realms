@@ -20,6 +20,12 @@ public class Hologram implements Listener {
     private ArmorStand stand;
     private String text;
     private Entity entity;
+    private int lifetime;
+    private HologramType type;
+
+    public ArmorStand getStand() {
+        return stand;
+    }
 
     public Hologram() {
 
@@ -47,7 +53,9 @@ public class Hologram implements Listener {
 
     public Hologram(Entity e, Location loc, String text, HologramType type) {
         this.text = text;
+        this.type = type;
         entity = e;
+        lifetime = 0;
         stand = (ArmorStand) loc.getWorld().spawnEntity(new Location(loc.getWorld(), 0, 0, 0), EntityType.ARMOR_STAND);
         stand.setVisible(false);
         stand.setMarker(true);
@@ -76,18 +84,17 @@ public class Hologram implements Listener {
         stand.setGravity(false);
         stand.setCanPickupItems(false);
         main.getHolos().add(this);
-        if (type == HologramType.HOLOGRAM && !(e instanceof Player)) {
-            new BukkitRunnable() {
-                public void run() {
-                    if (stand.isDead()) {
-                        cancel();
-                        return;
-                    }
-                    center();
-                }
+    }
 
-            }.runTaskTimer(Main.getInstance(), 1, 1);
+    public boolean shouldRemove() {
+        if (!(entity instanceof LivingEntity) || entity.isDead()) {
+            return true;
         }
+        return false;
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 
     public void center() {
@@ -103,24 +110,28 @@ public class Hologram implements Listener {
         stand.setCustomName(Main.color(this.text));
     }
 
+    public int getLifetime() {
+        return lifetime;
+    }
+
+    public HologramType getType() {
+        return type;
+    }
+
     public void rise() {
-        new BukkitRunnable() {
-            int times = 0;
-            public void run() {
-                stand.teleport(stand.getLocation().add(new Vector(0, 0.025, 0)));
-                times++;
-                if (times * 0.025 >= 1) {
-                    destroy();
-                    cancel();
-                }
-            }
-        }.runTaskTimer(Main.getInstance(), 1L, 1L);
+        // say sike right now
+    }
+
+    public void incrementLifetime() {
+        lifetime++;
     }
 
     public void destroy() {
         stand.remove();
         text = null;
         entity = null;
+        type = null;
+        lifetime = 0;
     }
 
 }

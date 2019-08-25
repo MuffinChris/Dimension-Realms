@@ -1,13 +1,16 @@
 package com.java.rpg.classes;
 
 import com.java.Main;
+import com.java.holograms.Hologram;
 import com.java.rpg.Damage;
+import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +24,39 @@ public class Skill {
         if (target.isDead()) {
             return;
         }
-        //target.setKiller(caster);
-        //caster.damage(0.25, target);
-        //target.damage(Math.max(damage - 0.25, 0.0));
+        if (main.getRP(caster).getPassives().contains("WorldOnFire")) {
+            damage*= WorldOnFire.getEmp();
+        }
         main.getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
         target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
         target.setNoDamageTicks(0);
         target.damage(damage, caster);
-        target.setNoDamageTicks(5);
+        target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
+
+    }
+
+    public static void healTarget(Player target, double hp) {
+        if (target.getHealth() + hp <= target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()) {
+            target.setHealth(target.getHealth() + hp);
+            DecimalFormat df = new DecimalFormat("#.##");
+            Hologram magic = new Hologram(target, target.getLocation(), "&a&l❤" + df.format(hp), Hologram.HologramType.DAMAGE);
+            magic.rise();
+        } else {
+            target.setHealth(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        }
+    }
+
+    public static void spellDamageStatic(Player caster, LivingEntity target, double damage) {
+        if (target.isDead()) {
+            return;
+        }
+        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire")) {
+            damage*= WorldOnFire.getEmp();
+        }
+        Main.getInstance().getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
+        target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1.0);
+        target.setNoDamageTicks(0);
+        target.damage(damage, caster);
         target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.0);
 
     }
@@ -44,9 +72,10 @@ public class Skill {
 
     private String name;
     private String flavor;
-    private String description;
 
     private String type;
+
+    private List<String> description;
 
     private int targetRange;
 
@@ -79,7 +108,7 @@ public class Skill {
         return type;
     }
 
-    public void setDescription(String desc) {
+    public void setDescription(List<String> desc) {
         description = desc;
     }
 
@@ -99,7 +128,7 @@ public class Skill {
         return toggleTicks;
     }
 
-    public String getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 
@@ -141,10 +170,16 @@ public class Skill {
 
     public void cast(Player p) {
         Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateCast(this);
+        /*if (main.getRP(p).getToggles().contains("WorldOnFire")) {
+            p.setFireTicks(p.getFireTicks() + 100);
+        }*/
     }
 
     public void target(Player p, LivingEntity t) {
         Main.getInstance().getPC().get(p.getUniqueId()).getBoard().updateCast(this);
+        /*if (main.getRP(p).getToggles().contains("WorldOnFire")) {
+            p.setFireTicks(p.getFireTicks() + 100);
+        }*/
     }
 
     public int toggleInit(Player p) {

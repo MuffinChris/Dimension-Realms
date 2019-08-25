@@ -29,7 +29,12 @@ public class FlameTornado extends Skill {
 
     public FlameTornado() {
         super("FlameTornado", 150, 60 * 20, 30, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Materialize a twister of pure fire, which expands to reach a radius of " + maxradius + " blocks in size.\nThe tornado deals " + dps + " damage per second, and follows the nearest enemy at a speed of " + travelspeed * 20 + " blocks per second.");
+
+        List<String> desc = new ArrayList<>();
+        desc.add(Main.color("&bActive:"));
+        desc.add(Main.color("&fCreate a tornado that damages and follows enemies."));
+        setDescription(desc);
+
         tornados = new HashMap<>();
         damage = new HashMap<>();
     }

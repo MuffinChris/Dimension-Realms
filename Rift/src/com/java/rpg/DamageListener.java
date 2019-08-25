@@ -66,6 +66,22 @@ public class DamageListener implements Listener {
                     }
                 }
                 main.getDmg().add(new Damage(damager, (LivingEntity) e.getEntity(), Damage.DamageType.ATTACK, e.getDamage()));
+                if (main.getPC().get(damager.getUniqueId()) != null) {
+                    if (main.getPC().get(damager.getUniqueId()).getStatuses() != null) {
+                        List<String> statuses = main.getPC().get(damager.getUniqueId()).getStatuses();
+                        List<Integer> indexesToRemove = new ArrayList<>();
+                        int index = 0;
+                        for (String status : statuses) {
+                            if (status.contains("Warmup")) {
+                                indexesToRemove.add(index);
+                                index++;
+                            }
+                        }
+                        for (int ind : indexesToRemove) {
+                            statuses.remove(ind);
+                        }
+                    }
+                }
             }
         }
     }
@@ -187,7 +203,7 @@ public class DamageListener implements Listener {
                                 }
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&b&l⚡" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -203,7 +219,7 @@ public class DamageListener implements Listener {
                                 }
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&b&l⚔" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -213,7 +229,7 @@ public class DamageListener implements Listener {
                                 double damage = d.getDamage() * pstrength;
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&d&l♦" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -236,7 +252,7 @@ public class DamageListener implements Listener {
                                 }
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&c&l❤" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -259,7 +275,7 @@ public class DamageListener implements Listener {
                                 }
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&9&l⚡" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -276,7 +292,7 @@ public class DamageListener implements Listener {
                                 }
                                 Hologram magic = new Hologram(ent, ent.getLocation(), "&5&l♦" + df.format(damage), Hologram.HologramType.DAMAGE);
                                 magic.rise();
-                                //ent.setKiller(damager);
+                                ent.setKiller(damager);
                                 //ent.damage(damage);
                                 //e.setCancelled(true);
                                 e.setDamage(damage);
@@ -295,6 +311,16 @@ public class DamageListener implements Listener {
                 */
                 main.getDmg().get(index).scrub();
                 main.getDmg().remove(index);
+            }
+        }
+        if (!(e.getDamager() instanceof Player) && e.getEntity() instanceof Player) {
+            if (!(e.getDamager() instanceof Projectile) || (e.getDamager() instanceof Projectile && !(((Projectile)e.getDamager()).getShooter() instanceof Player))) {
+                Player p = (Player) e.getEntity();
+                RPGPlayer rp = main.getRP(p);
+                double am = rp.getPClass().getCalcArmor(rp.getLevel());
+                double damage = e.getDamage();
+                damage = damage * (300.0 / (300 + am));
+                e.setDamage(damage);
             }
         }
     }

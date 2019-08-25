@@ -30,8 +30,13 @@ public class InfernoVault extends Skill implements Listener {
     private int range = 3;
 
     public InfernoVault() {
-        super("InfernoVault", 100, 15 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
-        setDescription("Combust the location at your feet dealing" +  vaultdamage + " damage, launching yourself in the air.\nLanding creates another explosion, dealing " + landdamage + " damage.");
+        super("InfernoVault", 100, 14 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
+        List<String> desc = new ArrayList<>();
+        desc.add(Main.color("&bActive:"));
+        desc.add(Main.color("&fCombust the location at your feet, dealing &b" + vaultdamage + " &fdamage."));
+        desc.add(Main.color("&fThe explosion launches yourself into the air."));
+        desc.add(Main.color("&fLanding creates another explosion, dealing &b" + landdamage + " &fdamage."));
+        setDescription(desc);
     }
 
     public void cast(Player p) {
@@ -49,6 +54,21 @@ public class InfernoVault extends Skill implements Listener {
             main.getCM().getFallMap().put(p.getUniqueId(), sched.scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
                 public void run() {
                     p.getWorld().spawnParticle(Particle.LAVA, p.getLocation(), 15, 0, 0.1, 0.1, 0.1);
+                    if (p.isOnGround()) {
+                        if (main.getCM().getFall().contains(p.getUniqueId())) {
+                            p.setFallDistance(0);
+                            main.getCM().getFall().remove(p.getUniqueId());
+                            if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
+                                Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
+                                main.getCM().getFallMap().remove(p.getUniqueId());
+                            }
+                            landDamage(p);
+                            p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
+                            p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
+                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_SHOOT, 1.0F, 1.0F);
+                            p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
+                        }
+                    }
                 }
             }, 0L, 1L));
         }
@@ -58,46 +78,15 @@ public class InfernoVault extends Skill implements Listener {
                     main.getCM().getFall().add(p.getUniqueId());
                 }
             }
-        }.runTaskLater(Main.getInstance(), 10L);
-        new BukkitRunnable() {
-            public void run() {
-                if (main.getCM().getFall().contains(p.getUniqueId())) {
-                    main.getCM().getFall().remove(p.getUniqueId());
-                }
-                if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
-                    Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
-                    main.getCM().getFallMap().remove(p.getUniqueId());
-                }
-            }
-        }.runTaskLater(Main.getInstance(), 200L);
+        }.runTaskLater(Main.getInstance(), 5L);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOWEST)
     public void fallDamageSafe (EntityDamageEvent e) {
         if (e.getEntity() instanceof Player && e.getCause() == EntityDamageEvent.DamageCause.FALL) {
             Player p = (Player) e.getEntity();
             if (main.getCM().getFall().contains(p.getUniqueId())) {
                 e.setCancelled(true);
-                main.getCM().getFall().remove(p.getUniqueId());
-                if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
-                    Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));
-                    main.getCM().getFallMap().remove(p.getUniqueId());
-                }
-                landDamage(p);
-                p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
-                p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
-                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_SHOOT, 1.0F, 1.0F);
-                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
-            }
-        }
-    }
-
-    @EventHandler (priority = EventPriority.HIGHEST)
-    public void fallDamage (PlayerMoveEvent e) {
-        Player p = e.getPlayer();
-        if (p.getLocation().subtract(new Vector(0, 1, 0)).getBlock() != null && p.getLocation().subtract(new Vector(0, 1, 0)).getBlock().getType() != Material.AIR) {
-            if (main.getCM().getFall().contains(p.getUniqueId())) {
-                p.setFallDistance(0);
                 main.getCM().getFall().remove(p.getUniqueId());
                 if (main.getCM().getFallMap().containsKey(p.getUniqueId())) {
                     Bukkit.getScheduler().cancelTask(main.getCM().getFallMap().get(p.getUniqueId()));

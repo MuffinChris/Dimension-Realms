@@ -18,17 +18,26 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MeteorShower extends Skill implements Listener {
 
     private Main main = Main.getInstance();
 
-    private double damage = 50;
+    private double damage = 40;
     private int duration = 10;
     private int range = 8;
 
     public MeteorShower() {
-        super("MeteorShower", 150, 30 * 20, 40, 0, "%player% has created a Meteor Shower!", "CAST");
-        setDescription("Rain hell on opponents within " + range + " blocks,\nrandomly creating meteors dealing " + damage + " damage for " + duration + " seconds.\nMeteors target entities on fire first!");
+        super("MeteorShower", 150, 40 * 20, 40, 0, "%player% has created a Meteor Shower!", "CAST");
+        List<String> desc = new ArrayList<>();
+        desc.add(Main.color("&bActive:"));
+        desc.add(Main.color("&fRain hell on opponents within &e" + range + " &fblocks."));
+        desc.add(Main.color("&fMeteors randomly drop, they fly towards targets on fire."));
+        desc.add(Main.color("&fEach meteor deals &b" + damage + " &fdamage"));
+        desc.add(Main.color("&fThe shower lasts for &e" + duration + " &fseconds."));
+        setDescription(desc);
     }
 
     public void warmup(Player p) {

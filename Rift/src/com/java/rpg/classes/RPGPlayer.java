@@ -1,6 +1,7 @@
 package com.java.rpg.classes;
 
 import com.java.Main;
+import com.java.holograms.Hologram;
 import com.java.rpg.party.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import com.java.rpg.Leveleable;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.Vector;
@@ -34,10 +36,24 @@ public class RPGPlayer extends Leveleable {
 
     private double currentMana;
 
+    private double walkspeed;
+
     private Skillboard board;
 
     public void setMana(double m) {
+        double dif = (m - getCMana());
         currentMana = Math.min(m, pclass.getCalcMana(getLevel()));
+        /*
+        if (dif > 0) {
+            DecimalFormat df = new DecimalFormat("#");
+            Hologram magic = new Hologram(player, player.getLocation(), "&9&l+" + df.format(dif), Hologram.HologramType.DAMAGE);
+            magic.rise();
+        } else {
+            DecimalFormat df = new DecimalFormat("#");
+            Hologram magic = new Hologram(player, player.getLocation(), "&9&l" + df.format(dif), Hologram.HologramType.DAMAGE);
+            magic.rise();
+        }
+        */
     }
 
     public void setManaOverflow(double m) {
@@ -60,7 +76,7 @@ public class RPGPlayer extends Leveleable {
     private LivingEntity target;
 
     public RPGPlayer(Player p) {
-        super (0, 0);
+        super (0, 50);
         player = p;
         currentMana = 0;
         statuses = new ArrayList<>();
@@ -74,6 +90,11 @@ public class RPGPlayer extends Leveleable {
         pullFiles();
         board = new Skillboard(p);
         pstrength = 100;
+        walkspeed = 0.2;
+    }
+
+    public double getWalkspeed() {
+        return walkspeed;
     }
 
     public Map<String, Integer> getSkillLevels() {
@@ -119,6 +140,7 @@ public class RPGPlayer extends Leveleable {
                 pData.set("Current Class", name);
             } else {
                 pData.set("Current Class", "None");
+                pclass = main.getCM().getPClassFromString("None");
             }
             pData.set(name + "Level", getLevel());
             pData.set(name + "Exp", getExp());
@@ -179,11 +201,19 @@ public class RPGPlayer extends Leveleable {
                     pushFiles();
                 }
                 String skstr = pData.getString(name + "Skills");
+                List<Skill> skills = new ArrayList(pclass.getSkills());
                 if (skstr.length() > 0) {
                     String[] sks = skstr.split(",");
                     for (String s : sks) {
                         String[] skobj = s.split("-");
                         skillLevels.put(skobj[0], Integer.valueOf(skobj[1]));
+                        skills.remove(getSkillFromName(skobj[0]));
+                    }
+                    if (!skills.isEmpty()) {
+                        for (Skill s : skills) {
+                            skillLevels.put(s.getName(), 0);
+                        }
+                        skills.clear();
                     }
                 }
             } else {
@@ -232,6 +262,7 @@ public class RPGPlayer extends Leveleable {
             return false;
         }
         pclass = pc;
+        skillLevels.clear();
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
@@ -259,6 +290,7 @@ public class RPGPlayer extends Leveleable {
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
             player.setHealth(Math.min(hp, hp * hpprev));
             player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pclass.getBaseDmg());
+            player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0);
         }
     }
 
@@ -285,8 +317,21 @@ public class RPGPlayer extends Leveleable {
     }
 
     public LivingEntity getNearestEntityInSight(Player player, int range) {
-        ArrayList<LivingEntity> entities = getNearbyTargets(player, range);
+        ArrayList<LivingEntity> entities = new ArrayList(getNearbyTargets(player, range));
+        List<LivingEntity> sortedEntities = new ArrayList<>();
+        while(!entities.isEmpty()) {
+            double dist = 999;
+            LivingEntity add = null;
             for (LivingEntity ent : entities) {
+                if (ent.getEyeLocation().distance(player.getEyeLocation()) < dist) {
+                    dist = ent.getEyeLocation().distance(player.getEyeLocation());
+                    add = ent;
+                }
+            }
+            entities.remove(add);
+            sortedEntities.add(add);
+        }
+            for (LivingEntity ent : sortedEntities) {
                 Vector toEntity = ent.getLocation().toVector().subtract(player.getEyeLocation().toVector());
                 Vector toEntity2 = ent.getEyeLocation().toVector().subtract(player.getEyeLocation().toVector());
                 Vector direction = player.getEyeLocation().getDirection();
@@ -318,8 +363,8 @@ public class RPGPlayer extends Leveleable {
                                 }
 
                                 if (s.getType().contains("TARGET")) {
-                                    if (getNearestEntityInSight(player, 32) instanceof LivingEntity) {
-                                        target = getNearestEntityInSight(player, 32);
+                                    if (getNearestEntityInSight(player, s.getTargetRange() * 2) instanceof LivingEntity) {
+                                        target = getNearestEntityInSight(player, s.getTargetRange() * 2);
                                         if (target.getLocation().distance(player.getLocation()) > s.getTargetRange()) {
                                             target = null;
                                             getStatuses().remove("Warmup" + s.getName());
@@ -355,12 +400,17 @@ public class RPGPlayer extends Leveleable {
                                             cooldowns.put(s.getName(), System.currentTimeMillis());
                                         }
                                         if (currentMana >= s.getManaCost()) {
-                                            currentMana -= s.getManaCost();
                                             if (s.getType().contains("TARGET")) {
+                                                if (target == null || (target != null && target.isDead())) {
+                                                    statuses.remove("Warmup" + s.getName());
+                                                    return;
+                                                }
                                                 s.target(player, target);
+                                                target = null;
                                             } else {
                                                 s.cast(player);
                                             }
+                                            currentMana -= s.getManaCost();
                                         } else {
                                             Main.msg(player, "&cOut of mana to cast " + s.getName() + "!");
                                         }
@@ -368,13 +418,29 @@ public class RPGPlayer extends Leveleable {
                                     }
                                 }, s.getWarmup());
 
-                                scheduler.scheduleSyncRepeatingTask(main, new Runnable(){
+                                new BukkitRunnable() {
+                                    int time = 0;
                                     public void run() {
-                                        if (!getStatuses().contains("Warmup" + s.getName())) {
+                                        time++;
+                                        if (time >= s.getWarmup()) {
+                                            cancel();
+                                            return;
+                                        }
+                                        if (!getStatuses().contains("Warmup" + s.getName()) || (target != null) && target.isDead() && s.getType().contains("TARGET") || (target == null && s.getType().contains("TARGET"))) {
                                             scheduler.cancelTask(task);
+                                            if (target == null && s.getType().contains("TARGET")) {
+                                                Main.msg(player, "&cYour target died!");
+                                                statuses.remove("Warmup" + s.getName());
+                                            }
+                                            if (target != null && target.isDead() && s.getType().contains("TARGET")) {
+                                                Main.msg(player, "&cYour target died!");
+                                                statuses.remove("Warmup" + s.getName());
+                                                target = null;
+                                            }
+                                            cancel();
                                         }
                                     }
-                                }, 0, 1);
+                                }.runTaskTimer(Main.getInstance(),  0, 1);
                                 return "Warmup:" + s.getWarmup();
                             }
                             if (cd.equalsIgnoreCase("Invalid")) {
@@ -414,8 +480,8 @@ public class RPGPlayer extends Leveleable {
                                 return "CastedSkill";
                             }
                             if (s.getType().contains("TARGET")) {
-                                if (getNearestEntityInSight(player, 32) instanceof LivingEntity) {
-                                    target = getNearestEntityInSight(player, 32);
+                                if (getNearestEntityInSight(player, s.getTargetRange() * 2) instanceof LivingEntity) {
+                                    target = getNearestEntityInSight(player, s.getTargetRange() * 2);
                                     if (target.getLocation().distance(player.getLocation()) > s.getTargetRange()) {
                                         target = null;
                                         getStatuses().remove("Warmup" + s.getName());
@@ -450,6 +516,7 @@ public class RPGPlayer extends Leveleable {
                                 if (indexesToRemove != null && indexesToRemove.size() > 0) {
                                     return "Interrupted";
                                 }
+                                target = null;
                                 return "CastedSkill";
                             }
                             if (cd.equalsIgnoreCase("Casted")) {

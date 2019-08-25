@@ -1,10 +1,12 @@
 package com.java.rpg.classes;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import com.java.Main;
 import com.java.rpg.classes.skills.Pyromancer.*;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,6 +29,8 @@ public class ClassManager implements Listener {
 
     private Main main = Main.getInstance();
 
+    private static Map<org.bukkit.Material, Integer> weight;
+
     private List<UUID> fall;
 
     private Map<UUID, Integer> fallMap;
@@ -43,6 +47,36 @@ public class ClassManager implements Listener {
         fall = new ArrayList<>();
         fallMap = new HashMap<>();
         createClasses();
+
+        weight = new HashMap<>();
+        weight.put(org.bukkit.Material.ELYTRA, 5);
+        weight.put(org.bukkit.Material.TURTLE_HELMET, 5);
+
+        weight.put(org.bukkit.Material.DIAMOND_HELMET, 30);
+        weight.put(org.bukkit.Material.DIAMOND_CHESTPLATE, 50);
+        weight.put(org.bukkit.Material.DIAMOND_LEGGINGS, 45);
+        weight.put(org.bukkit.Material.DIAMOND_BOOTS, 25);
+
+        weight.put(org.bukkit.Material.IRON_HELMET, 25);
+        weight.put(org.bukkit.Material.IRON_CHESTPLATE, 50);
+        weight.put(org.bukkit.Material.IRON_LEGGINGS, 40);
+        weight.put(org.bukkit.Material.IRON_BOOTS, 20);
+
+        weight.put(org.bukkit.Material.CHAINMAIL_HELMET, 20);
+        weight.put(org.bukkit.Material.CHAINMAIL_CHESTPLATE, 40);
+        weight.put(org.bukkit.Material.CHAINMAIL_LEGGINGS, 35);
+        weight.put(org.bukkit.Material.CHAINMAIL_BOOTS, 15);
+
+        weight.put(org.bukkit.Material.GOLDEN_HELMET, 15);
+        weight.put(org.bukkit.Material.GOLDEN_CHESTPLATE, 35);
+        weight.put(org.bukkit.Material.GOLDEN_LEGGINGS, 30);
+        weight.put(org.bukkit.Material.GOLDEN_BOOTS, 10);
+
+        weight.put(org.bukkit.Material.LEATHER_HELMET, 10);
+        weight.put(org.bukkit.Material.LEATHER_CHESTPLATE, 25);
+        weight.put(org.bukkit.Material.LEATHER_LEGGINGS, 20);
+        weight.put(org.bukkit.Material.LEATHER_BOOTS, 5);
+
     }
 
     @EventHandler
@@ -88,7 +122,6 @@ public class ClassManager implements Listener {
 
                 String item = i.toString().toLowerCase();
 
-
                 if (item.contains("helmet") || item.contains("cap")) {
                     itemC.set("Slot", new NBTTagString("head"));
                 }
@@ -108,6 +141,16 @@ public class ClassManager implements Listener {
                 ItemStack nItem = CraftItemStack.asBukkitCopy(nmsStack);
 
                 ItemMeta meta = nItem.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                if (meta.hasLore()) {
+                    lore = meta.getLore();
+            }
+                if (weight.containsKey(nItem.getType())) {
+                    if (lore.isEmpty() || !lore.contains(Main.color("&eWeight: &f" + weight.get(nItem.getType())))) {
+                        lore.add(Main.color("&eWeight: &f" + weight.get(nItem.getType())));
+                    }
+                }
+                meta.setLore(lore);
                 nItem.setItemMeta(meta);
                 return nItem;
             }
@@ -129,6 +172,48 @@ public class ClassManager implements Listener {
     @EventHandler
     public void newArmor (PlayerArmorChangeEvent e) {
         updateArmor(e.getPlayer());
+            double fullweight = 0;
+            double maxweight = main.getRP(e.getPlayer()).getPClass().getWeight();
+            for (ItemStack armor : e.getPlayer().getInventory().getArmorContents()) {
+                if (armor != null && weight.containsKey(armor.getType())) {
+                    fullweight += weight.get(armor.getType());
+                }
+            }
+        if (e.getPlayer().getLastLogin() + 2000 < System.currentTimeMillis() &&  (((e.getOldItem() == null && e.getNewItem() != null)||(e.getOldItem() == null && e.getNewItem() != null))||(e.getOldItem() != null && e.getNewItem() != null && e.getOldItem().getType() != e.getNewItem().getType()))) {
+            Main.msg(e.getPlayer(), "&e&lArmor Weight: &f" + fullweight + " &8/ &f" + maxweight);
+        }
+            if (fullweight > maxweight) {
+                if (fullweight < maxweight * 1.5) {
+                    Main.msg(e.getPlayer(), "&cYour armor is too heavy, you're afflicted with slowness.");
+                    e.getPlayer().setWalkSpeed(0.05F);
+                } else if (fullweight < maxweight * 2) {
+                    Main.msg(e.getPlayer(), "&cYour armor is far too heavy, you're afflicted with slowness.");
+                    e.getPlayer().setWalkSpeed(0.02F);
+                } else if (fullweight < maxweight * 2.5) {
+                    Main.msg(e.getPlayer(), "&cYour armor is extremely heavy, you're afflicted with high slowness.");
+                    e.getPlayer().setWalkSpeed(0.01F);
+                } else {
+                    Main.msg(e.getPlayer(), "&cYour armor is impossibly heavy, you can't move!");
+                    e.getPlayer().setWalkSpeed(0.0F);
+                }
+            } else {
+                e.getPlayer().setWalkSpeed(Float.valueOf(String.valueOf(main.getRP(e.getPlayer()).getWalkspeed())));
+            }
+    }
+
+    @EventHandler
+    public void jump (PlayerJumpEvent e) {
+        double fullweight = 0;
+        double maxweight = main.getRP(e.getPlayer()).getPClass().getWeight();
+        for (ItemStack armor : e.getPlayer().getInventory().getArmorContents()) {
+            if (armor != null && weight.containsKey(armor.getType())) {
+                fullweight+=weight.get(armor.getType());
+            }
+        }
+        if (fullweight > maxweight) {
+            Main.msg(e.getPlayer(), "&cYour armor is too heavy to jump in!");
+            e.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -173,17 +258,17 @@ public class ClassManager implements Listener {
 
     public static void createClasses() {
         List<Skill> skillsNone = new ArrayList<>();
-        classes.put("None", new PlayerClass("None", "&eNone", RPGConstants.defaultHP, 5.0, 100, 2, 3, 0.1, "SWORD", 10, 30, 32, 0.2, 0.2, skillsNone));
+        classes.put("None", new PlayerClass("None", "&eNone", RPGConstants.defaultHP, 5.0, 100, 2, 3, 0.1, "SWORD", 30, 40, 32, 0.35, 0.25, skillsNone, 100));
 
 
         List<Skill> skillsPyro = new ArrayList<>();
         skillsPyro.add(new Fireball());
         skillsPyro.add(new WorldOnFire());
         skillsPyro.add(new InfernoVault());
-        skillsPyro.add(new MeteorShower());
-        skillsPyro.add(new FlameTornado());
         skillsPyro.add(new Pyroclasm());
-        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 800.0, 2.0, 400, 10, 5, 0.1, "HOE", 15, 20, 22, 0.31, 0.22, skillsPyro));
+        skillsPyro.add(new MeteorShower());
+
+        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 600.0, 10, 400, 5, 5, 0.14, "HOE", 15, 20, 22, 0.31, 0.22, skillsPyro, 70));
     }
 
     public PlayerClass getPClassFromString(String s) {

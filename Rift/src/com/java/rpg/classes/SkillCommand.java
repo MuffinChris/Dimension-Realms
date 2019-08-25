@@ -41,11 +41,13 @@ public class SkillCommand implements CommandExecutor {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,999999, 2));
                             if (!main.getPC().get(p.getUniqueId()).getStatuses().contains("Warmup" + main.getPC().get(p.getUniqueId()).getSkillFromName(args[0]).getName())) {
                                 p.removePotionEffect(PotionEffectType.SLOW);
+                                main.getRP(p).getBoard().clearChannel();
                                 cancel();
                             } else {
                                 Skill skill = main.getPC().get(p.getUniqueId()).getSkillFromName(args[0]);
                                 if (skill.getManaCost() > main.getMana(p)) {
                                     p.removePotionEffect(PotionEffectType.SLOW);
+                                    main.getRP(p).getBoard().clearChannel();
                                     Main.msg(p, "&cOut of mana to cast " + skill.getName() + "!");
                                     main.getRP(p).getStatuses().remove("Warmup" + skill.getName());
                                     cancel();
@@ -59,6 +61,7 @@ public class SkillCommand implements CommandExecutor {
                     Main.msg(p, "&cAlready casting!");
                 } else if (flavor.contains("Interrupt")) {
                     p.removePotionEffect(PotionEffectType.SLOW);
+                    main.getRP(p).getBoard().clearChannel();
                 } else if (flavor.contains("CannotCast")) {
                     Main.msg(p, "&cYou cannot cast this skill.");
                 } else if (flavor.contains("BadTarget")) {

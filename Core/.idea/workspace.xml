@@ -2,17 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc2cac6d-f15b-4cee-9ffd-b59b116ab179" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/AFKInvuln.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/essentials/SeenCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/BiomeLevelCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/LevelCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/LevelRange.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/MobEXP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/Skillcast.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/PyroclasmProjectile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/essentials/HealCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/essentials/HealCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/holograms/Hologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/holograms/Hologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/DamageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/DamageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/Leveleable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/Leveleable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/PlayerClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/PlayerClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/RPGPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/RPGPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/Skill.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/Skill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/SkillCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/SkillCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/Skillboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/Skillboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/SkillsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/SkillsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/FlameTornado.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/FlameTornado.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/MeteorShower.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/MeteorShower.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/modifiers/Environmental.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/modifiers/Environmental.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/resources/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/Rift-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/Rift-0.0.1-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$2.class" afterDir="false" />
@@ -21,21 +40,56 @@
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/essentials/HealCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/essentials/HealCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram$HologramType.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram$HologramType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/holograms/Hologram.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/DamageListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/DamageListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/Leveleable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/Leveleable.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/PlayerClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/PlayerClass.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skill$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skill$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skill.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skill.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillCommand$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillCommand$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/Skillboard.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillsCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/SkillsCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/FlameTornado$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/FlameTornado$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/FlameTornado.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/FlameTornado.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/modifiers/Environmental.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/modifiers/Environmental.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -51,62 +105,57 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="445" column="4" selection-start-line="445" selection-start-column="4" selection-end-line="445" selection-end-column="4" />
+            <state relative-caret-position="116">
+              <caret line="136" column="32" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#912#913#0" expanded="true" />
+                <element signature="e#939#940#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="129" column="32" selection-start-line="128" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+            <state relative-caret-position="356">
+              <caret line="108" column="29" selection-start-line="108" selection-start-column="29" selection-end-line="108" selection-end-column="29" />
               <folding>
-                <element signature="e#623#624#0" expanded="true" />
-                <element signature="e#650#651#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#16079#16080#0" expanded="true" />
+                <element signature="e#16159#16160#0" expanded="true" />
+                <element signature="e#16369#16370#0" expanded="true" />
+                <element signature="e#16395#16396#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpeedCommand.java">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="18" column="71" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="580" column="40" lean-forward="true" selection-start-line="580" selection-start-column="40" selection-end-line="580" selection-end-column="40" />
+            <state relative-caret-position="-1615">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1369#1370#0" expanded="true" />
+                <element signature="e#1419#1420#0" expanded="true" />
+                <element signature="e#1448#1449#0" expanded="true" />
+                <element signature="e#1476#1477#0" expanded="true" />
+                <element signature="e#1508#1509#0" expanded="true" />
+                <element signature="e#1539#1540#0" expanded="true" />
+                <element signature="e#1569#1570#0" expanded="true" />
+                <element signature="e#1595#1596#0" expanded="true" />
+                <element signature="e#1691#1692#0" expanded="true" />
+                <element signature="e#1714#1715#0" expanded="true" />
+                <element signature="e#1751#1752#0" expanded="true" />
+                <element signature="e#1801#1802#0" expanded="true" />
+                <element signature="e#2745#2746#0" expanded="true" />
+                <element signature="e#2772#2773#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,8 +163,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6555">
-              <caret line="490" column="30" selection-start-line="490" selection-start-column="30" selection-end-line="490" selection-end-column="30" />
+            <state relative-caret-position="6240">
+              <caret line="477" column="17" selection-start-line="477" selection-start-column="17" selection-end-line="477" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -124,9 +173,47 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1350">
+              <caret line="125" column="29" selection-start-line="125" selection-start-column="29" selection-end-line="125" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="11775">
+              <caret line="933" column="25" selection-start-line="933" selection-start-column="25" selection-end-line="933" selection-end-column="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#6266#6267#0" expanded="true" />
+                <element signature="e#6312#6313#0" expanded="true" />
+                <element signature="e#8219#8220#0" expanded="true" />
+                <element signature="e#8259#8260#0" expanded="true" />
+                <element signature="e#9106#9107#0" expanded="true" />
+                <element signature="e#9155#9156#0" expanded="true" />
+                <element signature="e#18442#18443#0" expanded="true" />
+                <element signature="e#18477#18478#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="53" column="69" selection-start-line="53" selection-start-column="69" selection-end-line="53" selection-end-column="69" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4170">
+            <state relative-caret-position="4050">
               <caret line="334" column="17" selection-start-line="334" selection-start-column="17" selection-end-line="334" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -164,14 +251,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Math.min</find>
-      <find>info</find>
       <find>64</find>
       <find>// chance at double crop</find>
       <find>getExpMap</find>
       <find>setDoubleValue</find>
       <find>bonusDmg</find>
-      <find>levelup</find>
       <find>&quot;AD&quot;</find>
       <find>death</find>
       <find>bossbar</find>
@@ -194,6 +278,9 @@
       <find>party</find>
       <find>sendHp</find>
       <find>blood</find>
+      <find>levelup</find>
+      <find>leve</find>
+      <find>metadata</find>
     </findStrings>
     <replaceStrings>
       <replace>»</replace>
@@ -293,11 +380,11 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1909" />
-    <option name="y" value="-11" />
-    <option name="width" value="2582" />
-    <option name="height" value="1403" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-12" />
+    <option name="y" value="-12" />
+    <option name="width" value="1944" />
+    <option name="height" value="1044" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -305,7 +392,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -397,6 +483,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="rpgbase" type="462c0819:PsiDirectoryNode" />
+              <item name="player" type="462c0819:PsiDirectoryNode" />
+              <item name="professions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Core" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="rpgbase" type="462c0819:PsiDirectoryNode" />
               <item name="skills" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -438,6 +533,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -544,11 +640,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1913" y="-7" width="1721" height="935" extended-state="6" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49688667" visible="true" weight="0.2769416" />
-      <window_info id="Structure" order="1" sideWeight="0.5031133" side_tool="true" visible="true" weight="0.2769416" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4937833" visible="true" weight="0.24534413" />
+      <window_info id="Structure" order="1" sideWeight="0.5062167" side_tool="true" visible="true" weight="0.24534413" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -668,18 +764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="85" column="9" lean-forward="true" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2340#2341#0" expanded="true" />
-            <element signature="e#2397#2398#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/DataReloadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -734,13 +818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="320" column="39" selection-start-line="320" selection-start-column="39" selection-end-line="320" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/SkilltreeListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -792,29 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="26" column="5" lean-forward="true" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#296#297#0" expanded="true" />
-            <element signature="e#323#324#0" expanded="true" />
-            <element signature="e#702#703#0" expanded="true" />
-            <element signature="e#769#770#0" expanded="true" />
-            <element signature="e#1419#1420#0" expanded="true" />
-            <element signature="e#1476#1477#0" expanded="true" />
-            <element signature="e#1539#1540#0" expanded="true" />
-            <element signature="e#1595#1596#0" expanded="true" />
-            <element signature="e#1347#1348#0" expanded="true" />
-            <element signature="e#1372#1373#0" expanded="true" />
-            <element signature="e#1714#1715#0" expanded="true" />
-            <element signature="e#1801#1802#0" expanded="true" />
-            <element signature="e#2772#2773#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BossBarManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -833,45 +887,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="53" column="69" selection-start-line="53" selection-start-column="69" selection-end-line="53" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Healthbar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="26" column="51" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11055">
-          <caret line="781" column="54" selection-start-line="781" selection-start-column="54" selection-end-line="781" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#16079#16080#0" expanded="true" />
-            <element signature="e#16159#16160#0" expanded="true" />
-            <element signature="e#16369#16370#0" expanded="true" />
-            <element signature="e#16395#16396#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="136" column="32" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#912#913#0" expanded="true" />
-            <element signature="e#939#940#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -921,10 +942,88 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6240">
+          <caret line="445" column="4" selection-start-line="445" selection-start-column="4" selection-end-line="445" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
+          <folding>
+            <element signature="e#623#624#0" expanded="true" />
+            <element signature="e#650#651#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpeedCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="18" column="71" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7995">
+          <caret line="580" column="40" selection-start-line="580" selection-start-column="40" selection-end-line="580" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1395">
+          <caret line="126" column="85" selection-start-line="126" selection-start-column="85" selection-end-line="126" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/PartyCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2340#2341#0" expanded="true" />
+            <element signature="e#2397#2398#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6240">
+          <caret line="477" column="17" selection-start-line="477" selection-start-column="17" selection-end-line="477" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/EXP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1350">
+          <caret line="125" column="29" selection-start-line="125" selection-start-column="29" selection-end-line="125" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5985">
-          <caret line="524" column="4" selection-start-line="524" selection-start-column="4" selection-end-line="532" selection-end-column="5" />
+        <state relative-caret-position="11775">
+          <caret line="933" column="25" selection-start-line="933" selection-start-column="25" selection-end-line="933" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#6266#6267#0" expanded="true" />
@@ -939,19 +1038,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Weapons.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/InfoCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6555">
-          <caret line="490" column="30" selection-start-line="490" selection-start-column="30" selection-end-line="490" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="390">
+          <caret line="53" column="69" selection-start-line="53" selection-start-column="69" selection-end-line="53" selection-end-column="69" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/Armor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4170">
+        <state relative-caret-position="4050">
           <caret line="334" column="17" selection-start-line="334" selection-start-column="17" selection-end-line="334" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -973,52 +1069,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/RPGFunctions.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/Profession.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="580" column="40" lean-forward="true" selection-start-line="580" selection-start-column="40" selection-end-line="580" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/MsgCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="18" column="71" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/essentials/commands/SpeedCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/bossbars/BS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="33" selection-end-line="47" selection-end-column="33" />
-          <folding>
-            <element signature="e#623#624#0" expanded="true" />
-            <element signature="e#650#651#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/EntityIncreases.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="445" column="4" selection-start-line="445" selection-start-column="4" selection-end-line="445" selection-end-column="4" />
+        <state relative-caret-position="-1615">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1369#1370#0" expanded="true" />
+            <element signature="e#1419#1420#0" expanded="true" />
+            <element signature="e#1448#1449#0" expanded="true" />
+            <element signature="e#1476#1477#0" expanded="true" />
+            <element signature="e#1508#1509#0" expanded="true" />
+            <element signature="e#1539#1540#0" expanded="true" />
+            <element signature="e#1569#1570#0" expanded="true" />
+            <element signature="e#1595#1596#0" expanded="true" />
+            <element signature="e#1691#1692#0" expanded="true" />
+            <element signature="e#1714#1715#0" expanded="true" />
+            <element signature="e#1751#1752#0" expanded="true" />
+            <element signature="e#1801#1802#0" expanded="true" />
+            <element signature="e#2745#2746#0" expanded="true" />
+            <element signature="e#2772#2773#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/skills/ArmorSkills.java">
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/PlayerProf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="129" column="32" selection-start-line="128" selection-start-column="32" selection-end-line="129" selection-end-column="32" />
+        <state relative-caret-position="116">
+          <caret line="136" column="32" selection-start-line="136" selection-start-column="32" selection-end-line="136" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#912#913#0" expanded="true" />
+            <element signature="e#939#940#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/core/java/rpgbase/player/professions/ProfCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="108" column="29" selection-start-line="108" selection-start-column="29" selection-end-line="108" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#16079#16080#0" expanded="true" />
+            <element signature="e#16159#16160#0" expanded="true" />
+            <element signature="e#16369#16370#0" expanded="true" />
+            <element signature="e#16395#16396#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

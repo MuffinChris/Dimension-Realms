@@ -17,10 +17,8 @@ import com.java.rpg.Damage;
 import com.java.rpg.DamageListener;
 import com.java.rpg.DamageTypes;
 import com.java.rpg.classes.*;
+import com.java.rpg.classes.skills.Pyromancer.*;
 import com.java.rpg.classes.skills.Pyromancer.Fireball;
-import com.java.rpg.classes.skills.Pyromancer.InfernoVault;
-import com.java.rpg.classes.skills.Pyromancer.MeteorShower;
-import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
 import com.java.rpg.modifiers.Environmental;
 import com.java.rpg.player.PlayerListener;
 import de.slikey.effectlib.EffectManager;
@@ -30,10 +28,7 @@ import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -50,28 +45,50 @@ import java.util.*;
 public class Main extends JavaPlugin {
 
     /*
-        Code logic:
-            For armor and mr removal, as well as pstrength, make a single RPGPlayer list to hold all info
+
+    DIRECT LINE TODO LIST:
+
+        WHEN THE TIME COMES, DO RELIABLESITE. SYS SETUP FEES MAKE FIRST MONTH MORE EXPENSIVE, MAY AS WELL BLOW IT ALL
+        ON SOMETHING BETTER AND HOPE FOR DONOS. UPGRADE INEVITABLE (HOPEFULLY)
+
+        0. Create a settings GUI
+            - Add a setting for close Skillmenu on cast, or persist, or disable!
+        1. Remedy particles for Pyromancer (less flame, more orange and red redstone)
+        2. Create 2 new skills:
+            - Blaze -> Gain Speed 3 + Leave a trail of fire + Leave a trail of flaming particles that deal magic damage
+            - Meteor -> Fire a flaming meteor (Particle Sphere of Redstone + Flame Particles)
+                        Meteor blasts targets away, deals damage, and ignites them.
+            - Pyroclasm -> Increased speed, damage, oopmh. Slightly less spammable because Meteor.
+        3. Create skillpoint system to level up skills
+        4. Create skillpoint GUI to level up skills
+        5. Add skill levels to Pyromancer
+        6. Create map of HP modifiers and XP modifiers for each mob, and determine a base HP and XP equation.
+        7. RPGPlayer improvement: Make all stats, pstrength, armor, mr, tied to a map that holds info on modifiers
+        8. Create Hunter and Ninja class
+        9. Improve skill castng, allow changing of skillbar slots and binding items
+        10. Determine armor system and profs system.
+
+     RIFT THEME IDEAS:
+        Players can open a personal rift using a Rift Key or Rift Gem or Rift Stone
+        The personal rift is an end world with no blocks, cancel all mob spawning, perhaps do custom biome?
+        The personal rift needs to disable things like Wither and stuff.
+        Personal rift = hide all players including self, and check if login world is Personal Rift area.
+        Surrounded with black wool or concrete and barriers, grant them a 5x5 chunk of space to work in.
+
+        Towns:
+            - Anchors - "Anchor" points that allow people to teleport to using rift tech
+            - Rift generator - Open a rift and enter it, can teleport to an anchor or random location
+            - Terrain control and claiming needs to be done based off of a source block, ie. Nexus
+            - Regenerator Core - Heal all damage done to blocks through explosions and mobs
+
+
+        Rifts can open and spawn bosses
+        Rifts can open for other things too...
+        Blood Moon - Rifts spawn with red mobs, drops red essence or something of the sort.
 
     * Class ideas:
     * Build out of components for certain classes, like Warframe. Unlock em!
     * Alternate Resource Systems, like Rage, Shadow, etc, thematic!
-    *
-    * Blood moons
-    * Skills have tiers
-    * unlock all by 10, upgrade them
-    *
-    *
-    * SKILLS MUST HAVE TIERS!
-    *
-    * Class specific magic resist and armor, and per level resistances
-    * Wearing armor adds to those resistances
-    * Armor weight for classes?
-    *
-    * BETTER WAY TO MANAGE CDS: just put all skills in and dont print if 0. This will remove conc modi excep.
-    * Make Bossbar warmup and skill cast messages.
-    * Make scoreboard cooldowns.
-    * Need to implement toggleable abilities
     *
     */
 
@@ -87,29 +104,58 @@ public class Main extends JavaPlugin {
 
      */
 
-    public Map<LivingEntity, Hologram> hpBars = new HashMap<>();
-    public Map<LivingEntity, Hologram> getHpBars() {
+    public Map<Entity, Hologram> hpBars = new HashMap<>();
+    public Map<Entity, Hologram> getHpBars() {
         return hpBars;
     }
 
     public void remHpBar() {
         new BukkitRunnable() {
             public void run() {
-                List<LivingEntity> remove = new ArrayList<>();
-                for (LivingEntity e : hpBars.keySet()) {
-                    if (e.isDead() || (e instanceof Player && !((Player)e).isOnline())) {
-                        remove.add(e);
+                List<Entity> remove = new ArrayList<>();
+                for (Entity e : hpBars.keySet()) {
+                    if (e instanceof LivingEntity) {
+                        LivingEntity ent = (LivingEntity) e;
+                        if (ent.isDead() || ent.getHealth() <= 0 || (ent instanceof Player && !((Player) ent).isOnline())) {
+                            remove.add(e);
+                        } else {
+                            DecimalFormat dF = new DecimalFormat("#.##");
+                            getHpBars().get(e).setText("&f" + dF.format(ent.getHealth()) + "&c❤");
+                        }
                     } else {
-                        DecimalFormat dF = new DecimalFormat("#.##");
-                        getHpBars().get(e).setText("&f" + dF.format(e.getHealth()) + "&c❤");
+                        remove.add(e);
                     }
                 }
-                for (LivingEntity e : remove) {
+                for (Entity e : remove) {
+                    getHolos().remove(hpBars.get(e));
                     hpBars.get(e).destroy();
                     hpBars.remove(e);
                 }
             }
-        }.runTaskTimer(this, 1L, 10L);
+        }.runTaskTimer(this, 10L, 20L);
+    }
+
+    public void riseBars() {
+        new BukkitRunnable() {
+            public void run() {
+                for (Hologram h : getHolos()) {
+                    if (h.getType() == Hologram.HologramType.DAMAGE) {
+                        ArmorStand stand = h.getStand();
+                        stand.teleport(stand.getLocation().add(new Vector(0, 0.025, 0)));
+                        h.incrementLifetime();
+                        if (h.getLifetime() * 0.025 >= 1) {
+                            h.destroy();
+                        }
+                    } else if (h.getType() == Hologram.HologramType.HOLOGRAM) {
+                        h.center();
+                        if (h.shouldRemove()) {
+                            hpBars.remove(h.getEntity());
+                            h.destroy();
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(this, 10L, 1L);
     }
 
     public List<Hologram> holograms = new ArrayList<>();
@@ -279,6 +325,7 @@ public class Main extends JavaPlugin {
             public void run() {
                 for (Player  p : Bukkit.getOnlinePlayers()) {
                     ChatFunctions.updateName(p);
+                    getRP(p).updateStats();
                 }
             }
         }.runTaskTimerAsynchronously(this, 10L, 80L);
@@ -318,6 +365,10 @@ public class Main extends JavaPlugin {
         getCommand("mana").setExecutor(new ManaCommand());
         getCommand("skills").setExecutor(new SkillsCommand());
         getCommand("cd").setExecutor(new CDCommand());
+        getCommand("seen").setExecutor(new SeenCommand());
+        getCommand("biome").setExecutor(new BiomeLevelCommand());
+
+        getCommand("level").setExecutor(new LevelCommand());
 
         getCommand("dummy").setExecutor(new DummyCommand());
         so("&bRIFT: &fEnabled commands!");
@@ -333,12 +384,17 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new Hologram(), this);
         Bukkit.getPluginManager().registerEvents(new SkillsCommand(), this);
         Bukkit.getPluginManager().registerEvents(new EntityHealthBars(), this);
+        Bukkit.getPluginManager().registerEvents(new MobEXP(), this);
+        Bukkit.getPluginManager().registerEvents(new AFKInvuln(), this);
 
         //Skills
+        Bukkit.getPluginManager().registerEvents(new Skillcast(), this);
+
         Bukkit.getPluginManager().registerEvents(new Fireball(), this);
         Bukkit.getPluginManager().registerEvents(new MeteorShower(), this);
         Bukkit.getPluginManager().registerEvents(new WorldOnFire(), this);
         Bukkit.getPluginManager().registerEvents(new InfernoVault(), this);
+        Bukkit.getPluginManager().registerEvents(new Pyroclasm(), this);
         so("&bRIFT: &fRegistered events!");
 
         pm = new PartyManager();
@@ -349,9 +405,10 @@ public class Main extends JavaPlugin {
         passivesPeriodic();
         cooldownsPeriodic();
         remHpBar();
+        riseBars();
 
         for (World w : Bukkit.getWorlds()) {
-            for (LivingEntity e : w.getLivingEntities()) {
+            for (Entity e : w.getEntities()) {
                 if (e.getType() == EntityType.ARMOR_STAND) {
                     if (e.isCustomNameVisible() && e.getCustomName().contains("❤")) {
                         e.remove();
@@ -360,12 +417,8 @@ public class Main extends JavaPlugin {
                 }
                 if (e instanceof LivingEntity && !(e instanceof Player)) {
                     if (!getHpBars().containsKey(e)) {
-                        new BukkitRunnable() {
-                            public void run() {
-                                DecimalFormat dF = new DecimalFormat("#.##");
-                                getHpBars().put(e, new Hologram(e, e.getLocation().add(new Vector(0, e.getHeight() - 0.2, 0)), "&f" + dF.format(e.getHealth()) + "&c❤", Hologram.HologramType.HOLOGRAM));
-                            }
-                        }.runTaskLater(Main.getInstance(), 1);
+                        DecimalFormat dF = new DecimalFormat("#.##");
+                        getHpBars().put(e, new Hologram(e, e.getLocation().add(new Vector(0, e.getHeight() - 0.2, 0)), "&f" + dF.format(((LivingEntity)e).getHealth()) + "&c❤", Hologram.HologramType.HOLOGRAM));
                     }
                 }
             }
