@@ -4,16 +4,39 @@ import com.java.Main;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.ServerListPingEvent;
+
+import java.io.File;
 
 public class ChatFunctions implements Listener {
 
     private Main main = Main.getInstance();
+
+    @EventHandler
+    public void ping(ServerListPingEvent e) {
+        File pFile = new File("plugins/Rift/motd.yml");
+        FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+        if (!pData.contains("LineOne")) {
+            pData.set("LineOne", "&bThe Rift");
+            pData.set("LineTwo", "&bMC Server");
+            try {
+                pData.save(pFile);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            e.setMotd(Main.color(pData.getString("LineOne") + "\n" + pData.getString("LineTwo")));
+        }
+
+    }
 
     @EventHandler
     public void joinMessage (PlayerJoinEvent e) {
@@ -23,8 +46,32 @@ public class ChatFunctions implements Listener {
         if (prefix.length() > 2) {
             prefix+=" ";
         }
-        e.setJoinMessage(Main.color("   &a\u25B6 &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer())));
-        Main.so(Main.color("   &a\u25B6 &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer())));
+        if (e.getPlayer().hasPlayedBefore()) {
+            String join = Main.color("   &a\u25B6 &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer()));
+            e.setJoinMessage(join);
+            Main.so(join);
+        } else {
+            File pFile = new File("plugins/Rift/joins.yml");
+            FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+            if (!pData.contains("Joins")) {
+                pData.set("Joins", 1);
+                try {
+                    pData.save(pFile);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                pData.set("Joins", pData.getInt("Joins") + 1);
+                try {
+                    pData.save(pFile);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            String join = Main.color("&8» &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer()) + " &8(#" + pData.getInt("Joins") + "&8)" + " &ehas joined the server for the first time!");
+            e.setJoinMessage(join);
+            Main.so(join);
+        }
     }
 
     public static void updateName(Player p) {

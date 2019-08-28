@@ -62,6 +62,7 @@ commands:
     aliases: [abilities, skilllist, skillslist, spells, magic]
   cd:
     description: Reset cooldowns
+    permission: core.admin
   level:
     description: View level
     aliases: [exp, lvl]
@@ -70,4 +71,7 @@ commands:
   biome:
     description: Get the level range of your current location
     aliases: [locinfo, locationinfo, loclevel, biomelevel, biomelvl, nl, bl, ll]
+  arestart:
+    description: Restart the server on a 60 second timer
+    aliases: [autorestart, timedrestart, trestart]
 depend: [ProtocolLib, Vault]

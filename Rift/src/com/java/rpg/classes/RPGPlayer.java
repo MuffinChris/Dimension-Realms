@@ -65,6 +65,8 @@ public class RPGPlayer extends Leveleable {
         return df.format(currentMana);
     }
 
+
+
     Map<String, Integer> skillLevels;
     List<String> statuses;
     List<String> passives;
@@ -75,8 +77,23 @@ public class RPGPlayer extends Leveleable {
 
     private LivingEntity target;
 
+    private StatusObject stun;
+    private StatusObject root;
+    private StatusObject silence;
+    private StatusObject manafreeze;
+    private StatusObject hpfreeze;
+    private StatusObject pstrength;
+
     public RPGPlayer(Player p) {
         super (0, 50);
+
+        stun = new StatusObject("Stun", 0, 0);
+        root = new StatusObject("Root", 0, 0);
+        silence = new StatusObject("Silence", 0, 0);
+        manafreeze = new StatusObject("ManaFreeze", 0, 0);
+        hpfreeze = new StatusObject("HPFreeze", 0, 0);
+        pstrength = new StatusObject("PStrength", 0, 0);
+
         player = p;
         currentMana = 0;
         statuses = new ArrayList<>();
@@ -674,6 +691,7 @@ public class RPGPlayer extends Leveleable {
             tasksToRemove = new ArrayList<>();
         }
         skillsToRemove = new ArrayList<>();
+        board.scrub();
         board = null;
         cooldowns = new HashMap<>();
         statuses = new ArrayList<>();

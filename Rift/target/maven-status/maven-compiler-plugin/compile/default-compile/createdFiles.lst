@@ -20,6 +20,7 @@ com\java\rpg\classes\skills\Pyromancer\InfernoVault$2.class
 com\java\rpg\classes\PlayerClass.class
 com\java\rpg\classes\skills\Pyromancer\PyroclasmProjectile.class
 com\java\rpg\classes\skills\Pyromancer\Fireball$2.class
+com\java\Main$11.class
 com\java\communication\ChatFunctions.class
 com\java\essentials\DummyCommand.class
 com\java\rpg\classes\Skill.class
@@ -35,6 +36,7 @@ com\java\rpg\classes\Skillboard.class
 com\java\rpg\classes\RPGPlayer.class
 com\java\rpg\classes\SkillsCommand.class
 com\java\AFKInvuln.class
+com\java\rpg\classes\StatusValue.class
 com\java\essentials\KillAllCommand.class
 com\java\rpg\classes\Skill$1.class
 com\java\essentials\InvseeCommand.class
@@ -63,8 +65,11 @@ com\java\rpg\classes\RPGConstants.class
 com\java\rpg\classes\ClassManager$1.class
 com\java\essentials\FlyCommand.class
 com\java\essentials\DummyCommand$1.class
+com\java\Main$2$1.class
 com\java\Main.class
 com\java\Main$2.class
+com\java\Main$1$1.class
+com\java\rpg\classes\StatusObject.class
 com\java\essentials\KillAllCommand$1.class
 com\java\Main$3.class
 com\java\holograms\Hologram$HologramType.class
@@ -78,8 +83,9 @@ com\java\rpg\classes\skills\Pyromancer\FlameTornado.class
 com\java\essentials\GamemodeCommand.class
 com\java\rpg\classes\SkillCommand.class
 com\java\Main$6.class
-com\java\rpg\classes\skills\Pyromancer\InfernoVault$3.class
+com\java\essentials\TimedrestartCommand.class
 com\java\rpg\classes\LevelRange.class
+com\java\Main$10.class
 com\java\rpg\classes\RPGPlayer$1.class
 com\java\rpg\classes\skills\Pyromancer\Fireball$3.class
 com\java\essentials\LagCommand.class

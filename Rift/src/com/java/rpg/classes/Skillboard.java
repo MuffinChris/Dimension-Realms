@@ -21,6 +21,7 @@ public class Skillboard {
 
     private UUID uuid;
     private BossBar bossbar;
+    private BossBar bossbar2;
     private boolean skillbar;
     List<Integer> prefixes = new ArrayList<>();
 
@@ -50,8 +51,12 @@ public class Skillboard {
                 output = output.substring(0, output.length() - 4);
             }
             bossbar.setTitle(Main.color(output));
+            bossbar2.setVisible(true);
+            bossbar.setVisible(true);
         } else {
             bossbar.setTitle("");
+            bossbar2.setVisible(false);
+            bossbar.setVisible(false);
         }
     }
 
@@ -96,12 +101,22 @@ public class Skillboard {
     public Skillboard(Player p) {
         skillbar = false;
         uuid = p.getUniqueId();
+        bossbar2 = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         bossbar = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         uuid = p.getUniqueId();
+        bossbar2.addPlayer(p);
         bossbar.addPlayer(p);
         setScoreBoard(p);
         update();
-        bossbar.setVisible(true);
+        bossbar2.setVisible(false);
+        bossbar.setVisible(false);
+    }
+
+    public void scrub() {
+        uuid = null;
+        bossbar = null;
+        bossbar2 = null;
+        prefixes = null;
     }
 
     public void update() {

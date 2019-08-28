@@ -139,7 +139,7 @@ public class Environmental implements Listener {
 
     @EventHandler
     public void bonusRegen (EntityRegainHealthEvent e) {
-        if (e.getEntity() instanceof LivingEntity) {
+        if (e.getEntity() instanceof LivingEntity && !e.isCancelled()) {
             if (e.getEntity().isDead()) {
                 e.setCancelled(true);
             } else {

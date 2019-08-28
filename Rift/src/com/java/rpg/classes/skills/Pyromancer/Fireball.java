@@ -35,7 +35,7 @@ public class Fireball extends Skill implements Listener {
     private Main main = Main.getInstance();
 
     private double damage = 120;
-    private int range = 3;
+    private int range = 4;
 
     public Fireball() {
         super("Fireball", 50, 3 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
@@ -62,7 +62,7 @@ public class Fireball extends Skill implements Listener {
             PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(arrow.getEntityId());
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             arrow.setShooter(p);
-            arrow.setVelocity(p.getEyeLocation().getDirection().multiply(4));
+            arrow.setVelocity(p.getEyeLocation().getDirection().multiply(2));
             arrow.setBounce(false);
             arrow.setGravity(false);
             arrow.setKnockbackStrength(0);

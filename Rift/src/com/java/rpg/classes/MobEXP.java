@@ -108,14 +108,17 @@ public class MobEXP implements Listener {
     }
 
     public void setLevel(LivingEntity ent, int level) {
-        if (!ent.getName().contains("&6Lv.")) {
+        if (!ent.getName().contains("Lv.")) {
             ent.setCustomName(Main.color(ent.getName() + " &6Lv. " + level));
+            ent.setCustomNameVisible(true);
+        } else {
+            ent.setCustomName(Main.color(ent.getName().substring(0, ent.getName().indexOf("Lv.")) + " &6Lv. " + level));
             ent.setCustomNameVisible(true);
         }
     }
 
     public void scaleHealth(LivingEntity ent, int level, double modifier) {
-        double hp = 400;
+        double hp = 400 + level * 50;
         hp*=modifier;
         ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
         ent.setHealth(ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());

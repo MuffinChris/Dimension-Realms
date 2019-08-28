@@ -12,6 +12,7 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\clas
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\holograms\Hologram.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\ChatFunctions.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\LevelCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\StatusValue.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\party\Party.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\HealCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\CDCommand.java
@@ -33,6 +34,7 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\Main.jav
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\SpeedCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\WorldOnFire.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\SkillCommand.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\TimedrestartCommand.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\FlameTornado.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\MeteorShower.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\essentials\DummyCommand.java
@@ -44,6 +46,7 @@ C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\clas
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\Damage.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\ClassManager.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\communication\playerinfo.java
+C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\StatusObject.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\skills\Pyromancer\InfernoVault.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\MobEXP.java
 C:\Users\aiden\OneDrive\Desktop\Dimension Realms 2019\Rift\src\com\java\rpg\classes\Skillcast.java

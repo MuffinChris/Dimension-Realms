@@ -6,6 +6,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.destroystokyo.paper.Title;
 import com.java.communication.ChatFunctions;
 import com.java.communication.MsgCommand;
 import com.java.communication.PlayerinfoListener;
@@ -27,6 +28,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -51,9 +53,13 @@ public class Main extends JavaPlugin {
         WHEN THE TIME COMES, DO RELIABLESITE. SYS SETUP FEES MAKE FIRST MONTH MORE EXPENSIVE, MAY AS WELL BLOW IT ALL
         ON SOMETHING BETTER AND HOPE FOR DONOS. UPGRADE INEVITABLE (HOPEFULLY)
 
+        -4. For stuns, do a continous loop that tps back in one runnable, add and rem player from list
+        -3. Need to add NBT persistence... Names are stacking up.
+        -2. Meteor Shower blows shit up when entity dmg event only
+        -1. Create autorestart command and ticking timer.
         0. Create a settings GUI
             - Add a setting for close Skillmenu on cast, or persist, or disable!
-        1. Remedy particles for Pyromancer (less flame, more orange and red redstone)
+        1. Remedy particles for Pyromancer (less flame, more orange and red redstone). Maybe try flying items and blocks
         2. Create 2 new skills:
             - Blaze -> Gain Speed 3 + Leave a trail of fire + Leave a trail of flaming particles that deal magic damage
             - Meteor -> Fire a flaming meteor (Particle Sphere of Redstone + Flame Particles)
@@ -96,6 +102,61 @@ public class Main extends JavaPlugin {
 
     public static Main getInstance() {
         return JavaPlugin.getPlugin(Main.class);
+    }
+
+    /*
+
+    Auto restart
+
+     */
+
+    public void restartTimer(int seconds) {
+        new BukkitRunnable() {
+            int times = 0;
+            public void run() {
+                times++;
+                if (times == 1) {
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+                        p.sendTitle(new Title(Main.color("&a&lServer Restarting"), Main.color("&fIn " + seconds + " seconds!"), 5, 80, 5));
+                    }
+                    Bukkit.getServer().broadcastMessage(Main.color("&8\u00BB &a&lServer Restarting in &f&l" + seconds + "&a&l seconds!"));
+                } else {
+                    if (times % 20 == 0) {
+                        Bukkit.getServer().broadcastMessage(Main.color("&8\u00BB &a&lServer Restarting in &f&l" + ((seconds * 4 - times) / 4) + "&a&l seconds!"));
+                    }
+                }
+                if (times >= 4 * seconds) {
+                    for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+                        p.sendTitle(new Title(Main.color("&a&lSERVER RESTARTING..."), Main.color("&fSee you in a minute!"), 5, 80, 5));
+                    }
+                    Bukkit.getServer().broadcastMessage(Main.color("&8\u00BB &a&lSERVER RESTARTING..."));
+                    cancel();
+                    new BukkitRunnable() {
+                        public void run() {
+                            Bukkit.getServer().shutdown();
+                        }
+                    }.runTaskLater(Main.getInstance(), 20);
+                }
+            }
+        }.runTaskTimer(this, 0L, 5);
+    }
+
+    public void autorestart() {
+        new BukkitRunnable() {
+            public void run() {
+                Bukkit.getServer().broadcastMessage(Main.color("&8\u00BB &a&lServer Automatically Restarting in 5 minutes!"));
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0F, 1.0F);
+                }
+                new BukkitRunnable() {
+                    public void run() {
+                        restartTimer(60);
+                    }
+                }.runTaskLater(Main.getInstance(), 5 * 60 * 20);
+            }
+        }.runTaskLater(this, 12 * 60 * 60 * 20);
     }
 
     /*
@@ -328,7 +389,7 @@ public class Main extends JavaPlugin {
                     getRP(p).updateStats();
                 }
             }
-        }.runTaskTimerAsynchronously(this, 10L, 80L);
+        }.runTaskTimer(this, 10L, 80L);
     }
 
     public void onEnable() {
@@ -367,7 +428,7 @@ public class Main extends JavaPlugin {
         getCommand("cd").setExecutor(new CDCommand());
         getCommand("seen").setExecutor(new SeenCommand());
         getCommand("biome").setExecutor(new BiomeLevelCommand());
-
+        getCommand("arestart").setExecutor(new TimedrestartCommand());
         getCommand("level").setExecutor(new LevelCommand());
 
         getCommand("dummy").setExecutor(new DummyCommand());
@@ -423,6 +484,8 @@ public class Main extends JavaPlugin {
                 }
             }
         }
+
+        autorestart();
 
         so("&bRIFT: &fSetup complete!");
 
