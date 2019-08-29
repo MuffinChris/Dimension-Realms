@@ -13,7 +13,7 @@ commands:
     aliases: [cast, spell]
   class:
     description: Select a class!
-    aliases: [classes]
+    aliases: [soul]
   heal:
     description: Heal a target.
     permission: core.mod

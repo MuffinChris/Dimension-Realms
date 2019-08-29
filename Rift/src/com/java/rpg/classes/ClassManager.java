@@ -350,32 +350,34 @@ public class ClassManager implements Listener {
     public void cleanPassives(Player p) {
         BukkitScheduler scheduler = Bukkit.getScheduler();
         RPGPlayer rp = main.getPC().get(p.getUniqueId());
-        List<String> skillsToRemove = new ArrayList<>();
-        for (String s : rp.getPassives()) {
-            if (!(rp.getSkillFromName(s) instanceof Skill)) {
-                skillsToRemove.add(s);
-                continue;
-            }
-            if (rp.getPClass() == null || (!rp.getPClass().getSkills().contains(rp.getSkillFromName(s)) || rp.getSkillFromName(s).getLevel() > rp.getLevel())) {
-                skillsToRemove.add(s);
-            }
-        }
-        for (String s : skillsToRemove) {
-            rp.getPassives().remove(s);
-            List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
-            for (Map<Integer, String> map : rp.getPassiveTasks()) {
-                if (map.containsValue(s)) {
-                    tasksToRemove.add(map);
+        if (rp != null) {
+            List<String> skillsToRemove = new ArrayList<>();
+            for (String s : rp.getPassives()) {
+                if (!(rp.getSkillFromName(s) instanceof Skill)) {
+                    skillsToRemove.add(s);
+                    continue;
+                }
+                if (rp.getPClass() == null || (!rp.getPClass().getSkills().contains(rp.getSkillFromName(s)) || rp.getSkillFromName(s).getLevel() > rp.getLevel())) {
+                    skillsToRemove.add(s);
                 }
             }
+            for (String s : skillsToRemove) {
+                rp.getPassives().remove(s);
+                List<Map<Integer, String>> tasksToRemove = new ArrayList<>();
+                for (Map<Integer, String> map : rp.getPassiveTasks()) {
+                    if (map.containsValue(s)) {
+                        tasksToRemove.add(map);
+                    }
+                }
 
-            for (Map<Integer, String> map : tasksToRemove) {
-                scheduler.cancelTask((int) map.keySet().toArray()[0]);
-                rp.getPassiveTasks().remove(map);
+                for (Map<Integer, String> map : tasksToRemove) {
+                    scheduler.cancelTask((int) map.keySet().toArray()[0]);
+                    rp.getPassiveTasks().remove(map);
+                }
+                tasksToRemove = new ArrayList<>();
             }
-            tasksToRemove = new ArrayList<>();
+            skillsToRemove = new ArrayList<>();
         }
-        skillsToRemove = new ArrayList<>();
     }
 
 }

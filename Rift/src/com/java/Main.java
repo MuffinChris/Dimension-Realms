@@ -50,13 +50,20 @@ public class Main extends JavaPlugin {
 
     DIRECT LINE TODO LIST:
 
+        The Bananamancer
+Potassium Rush (Passive) - Every attack gives you K stacks. If you have 8 K stacks have potassium surges speeding up the nerve signals in your body causing an attack to send out 3.
+Banana Beam (Active 1) - Shoot a laser giving yourself a K stack for every unit hit
+Banana Eat (Active 2) - Give yourself a strength buff for 5s and 2 K stacks
+Banana Bomb (Active 3) - Cause a banana explosion in a radius around you. Consumes K stacks for additional damage
+Banana Gas (Active 4) - Release banana gas around you for 12s weakening and damaging enemies while healing yourself and giving yourself 4 K stacks over the period
+
         WHEN THE TIME COMES, DO RELIABLESITE. SYS SETUP FEES MAKE FIRST MONTH MORE EXPENSIVE, MAY AS WELL BLOW IT ALL
         ON SOMETHING BETTER AND HOPE FOR DONOS. UPGRADE INEVITABLE (HOPEFULLY)
-
-        -4. For stuns, do a continous loop that tps back in one runnable, add and rem player from list
-        -3. Need to add NBT persistence... Names are stacking up.
+        -8. Make player damage map that stores all damage events to entities for XP gain, or formulate another way.
+        -7. Make better more linear XP system
+        -6. Scoreboard should show skills and if they are off cd and have mana.
+        Perhaps also do the same for Skillbar, gray it out etc.
         -2. Meteor Shower blows shit up when entity dmg event only
-        -1. Create autorestart command and ticking timer.
         0. Create a settings GUI
             - Add a setting for close Skillmenu on cast, or persist, or disable!
         1. Remedy particles for Pyromancer (less flame, more orange and red redstone). Maybe try flying items and blocks
@@ -365,6 +372,22 @@ public class Main extends JavaPlugin {
                         //} catch (ConcurrentModificationException ex) {
 
                         //}
+                        getPC().get(p).getBoard().statusUpdate();
+                        List<StatusObject> statuses = getRP(pl).getSo();
+                        if (statuses != null) {
+                            for (StatusObject so : statuses) {
+                                List<StatusValue> remove = new ArrayList<>();
+                                for (StatusValue s : so.getStatuses()) {
+                                    if (20 * 0.001 * (System.currentTimeMillis() - s.getTimestamp()) >= s.getDuration() && !s.getDurationless()) {
+                                        s.scrub();
+                                        remove.add(s);
+                                    }
+                                }
+                                for (StatusValue rem : remove) {
+                                    statuses.remove(rem);
+                                }
+                            }
+                        }
                     }
                 }
             }

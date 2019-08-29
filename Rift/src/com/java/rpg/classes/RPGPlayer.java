@@ -77,22 +77,57 @@ public class RPGPlayer extends Leveleable {
 
     private LivingEntity target;
 
+    private List<StatusObject> so;
+
+    public List<StatusObject> getSo() {
+        return so;
+    }
+
     private StatusObject stun;
     private StatusObject root;
     private StatusObject silence;
     private StatusObject manafreeze;
     private StatusObject hpfreeze;
-    private StatusObject pstrength;
+    private StatusObject pstrength2;
+
+
+    public StatusObject getStun() {
+        return stun;
+    }
+
+    public StatusObject getRoot() {
+        return root;
+    }
+    public StatusObject getSilence() {
+        return silence;
+    }
+    public StatusObject getManaFreeze() {
+        return manafreeze;
+    }
+    public StatusObject getHpFreeze() {
+        return hpfreeze;
+    }
+
+    public StatusObject getPStrength2() {
+        return pstrength2;
+    }
 
     public RPGPlayer(Player p) {
         super (0, 50);
 
-        stun = new StatusObject("Stun", 0, 0);
-        root = new StatusObject("Root", 0, 0);
-        silence = new StatusObject("Silence", 0, 0);
-        manafreeze = new StatusObject("ManaFreeze", 0, 0);
-        hpfreeze = new StatusObject("HPFreeze", 0, 0);
-        pstrength = new StatusObject("PStrength", 0, 0);
+        stun = new StatusObject("Stun", "Stunned");
+        root = new StatusObject("Root", "Rooted");
+        silence = new StatusObject("Silence", "Silenced");
+        manafreeze = new StatusObject("ManaFreeze", "Mana Frozen");
+        hpfreeze = new StatusObject("HPFreeze", "HP Frozen");
+        pstrength2 = new StatusObject("PStrength", "Power Strength");
+        so = new ArrayList<>();
+        so.add(stun);
+        so.add(root);
+        so.add(silence);
+        so.add(manafreeze);
+        so.add(hpfreeze);
+        so.add(pstrength2);
 
         player = p;
         currentMana = 0;
@@ -701,5 +736,18 @@ public class RPGPlayer extends Leveleable {
         toggles = new ArrayList<>();
         player = null;
         pclass = null;
+        so.clear();
+        stun.scrub();
+        root.scrub();
+        silence.scrub();
+        hpfreeze.scrub();
+        manafreeze.scrub();
+        pstrength2.scrub();
+        stun = null;
+        root = null;
+        silence = null;
+        hpfreeze = null;
+        manafreeze = null;
+        pstrength2 = null;
     }
 }

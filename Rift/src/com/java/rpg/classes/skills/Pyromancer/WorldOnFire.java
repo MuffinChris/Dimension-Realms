@@ -3,6 +3,7 @@ package com.java.rpg.classes.skills.Pyromancer;
 import com.java.Main;
 import com.java.holograms.Hologram;
 import com.java.rpg.classes.Skill;
+import com.java.rpg.classes.StatusValue;
 import com.java.rpg.party.Party;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -45,8 +46,9 @@ public class WorldOnFire extends Skill implements Listener {
 
     public void toggleEnd(Player p) {
         super.toggleEnd(p);
-        main.getPC().get(p.getUniqueId()).setPStrength((main.getPC().get(p.getUniqueId()).getPStrength() - initRamp - amp.get(p)));
-        amp.remove(p);
+        //main.getPC().get(p.getUniqueId()).setPStrength((main.getPC().get(p.getUniqueId()).getPStrength() - initRamp - amp.get(p)));
+        //amp.remove(p);
+        main.getRP(p).getPStrength2().clearBasedTitle(getName(), p);
         endDamage(p);
     }
 
@@ -122,10 +124,12 @@ public class WorldOnFire extends Skill implements Listener {
             }
             ent.setKiller(p);
             if (ent.getFireTicks() > 0) {
-                if (amp.get(p)+ramp <= maxramp) {
+                main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getDisplayName(), ramp, 0, 0, true));
+
+                /*if (amp.get(p)+ramp <= maxramp) {
                     amp.replace(p, amp.get(p) + ramp);
                     main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + ramp);
-                }
+                }*/
             } else {
                 drawLine(p, ent);
                 ent.setFireTicks(100);
@@ -147,8 +151,9 @@ public class WorldOnFire extends Skill implements Listener {
 
     public int toggleInit(Player p) {
         DecimalFormat df = new DecimalFormat("#.##");
-        amp.put(p, 0);
-        main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + initRamp);
+        /*amp.put(p, 0);
+        main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + initRamp);*/
+        main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getDisplayName(), initRamp, 0, 0, true));
         return super.toggleInit(p);
     }
 

@@ -2,6 +2,7 @@ package com.java.rpg.classes;
 
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.java.Main;
+import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.ArmorStand;
@@ -118,10 +119,19 @@ public class MobEXP implements Listener {
     }
 
     public void scaleHealth(LivingEntity ent, int level, double modifier) {
-        double hp = 400 + level * 50;
+        double hp = (400 + level * 50) * ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/20;
         hp*=modifier;
         ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
         ent.setHealth(ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+    }
+
+    public void scaleDamage(LivingEntity ent, int level, double modifier) {
+        if (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null) {
+            double damage = level * 3 * (ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue()/4.0);
+            damage += ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getBaseValue() * 3;
+            damage *= modifier;
+            ent.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(damage);
+        }
     }
 
     public void setExp(LivingEntity ent, double exp) {
@@ -138,9 +148,16 @@ public class MobEXP implements Listener {
                 public void run() {
                     LivingEntity ent = (LivingEntity) e.getEntity();
                     int level = biomeLevels.get(ent.getLocation().getBlock().getBiome()).getRandomLevel();
+                    if (ent.getName().contains("Lv.")) {
+                        String name = ChatColor.stripColor(ent.getName());
+                        level = Integer.valueOf(name.substring(name.indexOf("Lv. ") + 4));
+                    } else {
+                        scaleHealth(ent, level, 1);
+                        scaleDamage(ent, level, 1);
+                    }
                     setLevel(ent, level);
-                    scaleHealth(ent, level, 1);
-                    setExp(ent, 25);
+                    setExp(ent, level * 20 + 30);
+
                 }
             }.runTaskLater(Main.getInstance(), 1);
         }

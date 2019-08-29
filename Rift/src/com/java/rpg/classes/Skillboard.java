@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Skillboard {
     private UUID uuid;
     private BossBar bossbar;
     private BossBar bossbar2;
+    private BossBar bossbar3;
     private boolean skillbar;
     List<Integer> prefixes = new ArrayList<>();
 
@@ -39,6 +41,25 @@ public class Skillboard {
         skillbar = !skillbar;
     }
 
+    public void statusUpdate() {
+        String statuses = "";
+        DecimalFormat dF = new DecimalFormat("#.##");
+        for (StatusObject so : main.getRP(Bukkit.getPlayer(uuid)).getSo()) {
+            if (so.active()) {
+                if (so.getName().equals("PStrength")) {
+                    statuses += "&e" + so.getFlavor() + "&8: &6" + so.getValue() + "%&f, ";
+                } else {
+                    statuses += "&e" + so.getFlavor() + "&8: &6" + dF.format(so.ticksMore() * 1.0 / 20.0) + "s&f, ";
+                }
+            }
+        }
+        if (statuses.contains(",")) {
+            statuses = statuses.substring(0, statuses.length() - 2);
+        }
+
+        bossbar3.setTitle(Main.color(statuses));
+    }
+
     public void updateSkillbar() {
         if (skillbar) {
             String output = "";
@@ -50,13 +71,10 @@ public class Skillboard {
             if (output.contains("||")) {
                 output = output.substring(0, output.length() - 4);
             }
+
             bossbar.setTitle(Main.color(output));
-            bossbar2.setVisible(true);
-            bossbar.setVisible(true);
         } else {
             bossbar.setTitle("");
-            bossbar2.setVisible(false);
-            bossbar.setVisible(false);
         }
     }
 
@@ -101,32 +119,36 @@ public class Skillboard {
     public Skillboard(Player p) {
         skillbar = false;
         uuid = p.getUniqueId();
+        bossbar3 = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         bossbar2 = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         bossbar = Bukkit.getServer().createBossBar("", BarColor.YELLOW, BarStyle.SOLID);
         uuid = p.getUniqueId();
         bossbar2.addPlayer(p);
         bossbar.addPlayer(p);
+        bossbar3.addPlayer(p);
         setScoreBoard(p);
         update();
-        bossbar2.setVisible(false);
-        bossbar.setVisible(false);
+        bossbar2.setVisible(true);
+        bossbar.setVisible(true);
+        bossbar3.setVisible(true);
     }
 
     public void scrub() {
         uuid = null;
         bossbar = null;
         bossbar2 = null;
+        bossbar3 = null;
         prefixes = null;
     }
 
     public void update() {
         Player p = Bukkit.getPlayer(uuid);
         if (main.getPC().get(uuid) instanceof RPGPlayer && main.getPC().get(uuid).getPClass() instanceof PlayerClass) {
-            /*double mana = main.getMana(p);
+            double mana = main.getMana(p);
             double maxmana = main.getPC().get(uuid).getPClass().getCalcMana(main.getPC().get(uuid).getLevel());
             double manaprogress = Math.max((1.0D * mana) / (1.0D * maxmana), 0.0);
-            bossbar.setProgress(Math.min(manaprogress, 1.0));
-            String title = "";
+            bossbar.setProgress(Math.min(manaprogress, 0.99));
+            /*String title = "";
             for (int i = main.getPC().get(uuid).getCooldowns().keySet().size() - 1; i >= 0; i--) {
                 String name = main.getPC().get(uuid).getCooldowns().keySet().toArray()[i].toString();
                 if (main.getPC().get(uuid).getCooldown(main.getPC().get(uuid).getSkillFromName(name)).contains("CD:")) {

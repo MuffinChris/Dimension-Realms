@@ -89,9 +89,9 @@ public class Leveleable {
         Main.msg(p, "&e&lLEVEL UP &7- &6" + playerclass.getName() + " &7(&f" + (level - 1) + " &7-> &f" + level + "&7)");
         Main.msg(p, "");
         Main.msg(p, "&e&lSTAT INCREASES:");
-        Main.msg(p, "&8» &f+" + playerclass.getHpPerLevel() + " HP");
-        Main.msg(p, "&8» &f+" + playerclass.getManaPerLevel() + " M &8| " + "&f+" + playerclass.getManaRegenPerLevel() + " M/s");
-        Main.msg(p, "&8» &f+" + playerclass.getArmorPerLevel() + " A &8| " + "&f+" + playerclass.getMagicResistPerLevel() + " MR");
+        Main.msg(p, "&8» &f+" + playerclass.getHpPerLevel() + " &cHP");
+        Main.msg(p, "&8» &f+" + playerclass.getManaPerLevel() + " &bM &8| " + "&f+" + playerclass.getManaRegenPerLevel() + " &bM/s");
+        Main.msg(p, "&8» &f+" + playerclass.getArmorPerLevel() + " &cA &8| " + "&f+" + playerclass.getMagicResistPerLevel() + " &bMR");
         if (level % 2 == 0) {
             Main.msg(p, "&8» &f+1 &bSKILL POINT");
         }

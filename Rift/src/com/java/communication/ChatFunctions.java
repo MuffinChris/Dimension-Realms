@@ -50,6 +50,24 @@ public class ChatFunctions implements Listener {
             String join = Main.color("   &a\u25B6 &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer()));
             e.setJoinMessage(join);
             Main.so(join);
+
+            File pFile = new File("plugins/Rift/welcome.yml");
+            FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
+            if (!pData.contains("Welcome")) {
+                pData.set("Welcome", "");
+                try {
+                    pData.save(pFile);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            String[] welcome = pData.getString("Welcome").split("\n");
+
+            for (String s : welcome) {
+                Main.msg(e.getPlayer(), s);
+            }
+
         } else {
             File pFile = new File("plugins/Rift/joins.yml");
             FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);

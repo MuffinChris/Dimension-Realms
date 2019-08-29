@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -25,11 +26,13 @@ public class AFKInvuln implements Listener {
         }
         hasMoved.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
         e.getPlayer().setCollidable(false);
+        Main.msg(e.getPlayer(), "   &aLogin Shield Enabled.");
         new BukkitRunnable() {
             public void run() {
                 if (hasMoved.containsKey(e.getPlayer().getUniqueId())) {
                     if (haveTheyMoved(e.getPlayer())) {
                         hasMoved.remove(e.getPlayer().getUniqueId());
+                        Main.msg(e.getPlayer(), "   &cLogin Shield Disabled.");
                         e.getPlayer().setCollidable(true);
                         cancel();
                     }
@@ -47,12 +50,26 @@ public class AFKInvuln implements Listener {
             if (hasMoved.containsKey(p.getUniqueId())) {
                 if (haveTheyMoved(p)) {
                     hasMoved.remove(p.getUniqueId());
+                    Main.msg(p, "   &cLogin Shield Disabled.");
                     p.setCollidable(true);
                 } else {
                     e.setCancelled(true);
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void rp (PlayerResourcePackStatusEvent e) {
+        if (e.getStatus() == PlayerResourcePackStatusEvent.Status.DECLINED) {
+            Main.msg(e.getPlayer(), "&c&lIt is high recommended you use the resource pack! If you wish to do so, edit this server's settings to Enable resource packs.");
+        }
+        if (e.getStatus() == PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD) {
+            Main.msg(e.getPlayer(), "&c&lFailed to download resource pack.");
+        }
+        /*if (e.getStatus() == PlayerResourcePackStatusEvent.Status.ACCEPTED) {
+            Main.msg(e.getPlayer(), "&a&lResource Pack Enabled!");
+        }*/
     }
 
     public boolean haveTheyMoved(Player p) {

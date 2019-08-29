@@ -24,7 +24,7 @@ public class Skill {
         if (target.isDead()) {
             return;
         }
-        if (main.getRP(caster).getPassives().contains("WorldOnFire")) {
+        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire")) {
             damage*= WorldOnFire.getEmp();
         }
         main.getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
