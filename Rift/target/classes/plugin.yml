@@ -74,4 +74,21 @@ commands:
   arestart:
     description: Restart the server on a 60 second timer
     aliases: [autorestart, timedrestart, trestart]
+    permission: core.admin
+  setexp:
+    description: Set a player's EXP
+    permission: core.admin
+  addexp:
+    description: Add to a player's EXP
+    permission: core.admin
+  setlevel:
+    description: Set a player's level
+    permission: core.admin
+  addlevel:
+    description: Add to a player's level
+    permission: core.admin
+  help:
+    description: Useful commands
+  settings:
+    description: Access your settings
 depend: [ProtocolLib, Vault]

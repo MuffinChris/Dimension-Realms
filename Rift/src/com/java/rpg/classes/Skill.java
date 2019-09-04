@@ -4,7 +4,9 @@ import com.java.Main;
 import com.java.holograms.Hologram;
 import com.java.rpg.Damage;
 import com.java.rpg.classes.skills.Pyromancer.WorldOnFire;
+import com.java.rpg.party.Party;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,10 +23,21 @@ public class Skill {
     // Description should be list.
 
     public void spellDamage(Player caster, LivingEntity target, double damage) {
-        if (target.isDead()) {
+        if (target.isDead() || target.isInvulnerable()) {
             return;
         }
-        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire")) {
+        if (target instanceof Player) {
+            Player t = (Player) target;
+            if (t.getGameMode() == GameMode.CREATIVE) {
+                return;
+            }
+            if (main.getPM().getParty(t) instanceof Party && !main.getPM().getParty(t).getPvp()) {
+                if (main.getPM().getParty(t).getPlayers().contains(caster)) {
+                    return;
+                }
+            }
+        }
+        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire") && target.getFireTicks() > 0) {
             damage*= WorldOnFire.getEmp();
         }
         main.getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));
@@ -47,10 +60,21 @@ public class Skill {
     }
 
     public static void spellDamageStatic(Player caster, LivingEntity target, double damage) {
-        if (target.isDead()) {
+        if (target.isDead() || target.isInvulnerable()) {
             return;
         }
-        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire")) {
+        if (target instanceof Player) {
+            Player t = (Player) target;
+            if (t.getGameMode() == GameMode.CREATIVE) {
+                return;
+            }
+            if (Main.getInstance().getPM().getParty(t) instanceof Party && !Main.getInstance().getPM().getParty(t).getPvp()) {
+                if (Main.getInstance().getPM().getParty(t).getPlayers().contains(caster)) {
+                    return;
+                }
+            }
+        }
+        if (Main.getInstance().getRP(caster).getPassives().contains("WorldOnFire") && target.getFireTicks() > 0) {
             damage*= WorldOnFire.getEmp();
         }
         Main.getInstance().getDmg().add(new Damage(caster, target, Damage.DamageType.SPELL_MAGIC, damage));

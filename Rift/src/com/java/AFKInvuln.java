@@ -1,6 +1,7 @@
 package com.java;
 
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +28,15 @@ public class AFKInvuln implements Listener {
         }
         hasMoved.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
         e.getPlayer().setCollidable(false);
-        Main.msg(e.getPlayer(), "   &aLogin Shield Enabled.");
         new BukkitRunnable() {
             public void run() {
                 if (hasMoved.containsKey(e.getPlayer().getUniqueId())) {
                     if (haveTheyMoved(e.getPlayer())) {
                         hasMoved.remove(e.getPlayer().getUniqueId());
-                        Main.msg(e.getPlayer(), "   &cLogin Shield Disabled.");
                         e.getPlayer().setCollidable(true);
                         cancel();
+                    } else {
+                        e.getPlayer().getWorld().spawnParticle(Particle.CRIT_MAGIC, e.getPlayer().getEyeLocation().subtract(new Vector(0, 0.25, 0)), 40, 0.1, 0.1, 0.1, 0.1);
                     }
                 } else {
                     cancel();
@@ -50,7 +52,6 @@ public class AFKInvuln implements Listener {
             if (hasMoved.containsKey(p.getUniqueId())) {
                 if (haveTheyMoved(p)) {
                     hasMoved.remove(p.getUniqueId());
-                    Main.msg(p, "   &cLogin Shield Disabled.");
                     p.setCollidable(true);
                 } else {
                     e.setCancelled(true);

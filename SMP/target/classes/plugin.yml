@@ -1,0 +1,44 @@
+name: CCASmp
+main: com.java.Main
+author: eChris
+version: 0.0.1
+description: Command and Feature Suite
+api-version: 1.14
+commands:
+  hub:
+    description: Go to the hub.
+  heal:
+    description: Heal a target.
+    permission: core.mod
+  list:
+    description: List all online players
+    aliases: [listplayers, playerlist]
+  speed:
+    description: Set your fly and walk speed
+    permission: core.mod
+  lag:
+    description: View detailed RAM Usage
+    aliases: [gc, top, ram]
+  fly:
+    description: Fly and Speed Control
+    permission: core.mod
+  gmss:
+    description: Alias for Spectator
+    permission: core.mod
+  gms:
+    description: Alias for Survival
+    permission: core.mod
+  gmc:
+    description: Alias for Creative
+    permission: core.mod
+  msg:
+    description: Message fellow players
+    aliases: [message, tell, w, whisper, dm, pm]
+  r:
+    description: Reply to messages
+    aliases: [reply]
+  inv:
+    description: View a player's inventory
+    permission: core.mod
+    aliases: [invsee]
+depend: [Vault]

@@ -1,6 +1,7 @@
 package com.java.communication;
 
 import com.java.Main;
+import net.minecraft.server.v1_14_R1.PlayerList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -14,15 +15,15 @@ public class playerinfo {
 	private UUID uuid;
 	private Player reply;
 	
-	private Objective o;
-	private Scoreboard board;
+	//private Objective o;
+	//private Scoreboard board;
 	
 	public playerinfo(Player p) {
 		uuid = p.getUniqueId();
 		reply = null;
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
-		o = this.board.registerNewObjective("health", "health", Main.color("&c❤"));
-		o.setDisplaySlot(DisplaySlot.BELOW_NAME);
+		//board = Bukkit.getScoreboardManager().getNewScoreboard();
+		//o = this.board.registerNewObjective("health", "health", Main.color("&c❤"));
+		//o.setDisplaySlot(DisplaySlot.BELOW_NAME);
 	}
 	
 	public Player getReply() {
@@ -31,8 +32,8 @@ public class playerinfo {
 
 	public void scrub() {
 		reply = null;
-		o.unregister();
-		board = null;
+		//o.unregister();
+		//board = null;
 		uuid = null;
 	}
 	

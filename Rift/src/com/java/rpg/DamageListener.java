@@ -120,7 +120,7 @@ public class DamageListener implements Listener {
                 magic.rise();
             }
         }
-        if ((e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) && e.getEntity() instanceof LivingEntity && !e.isCancelled()) {
+        if ((e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) && e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof ArmorStand) && !e.isCancelled()) {
             LivingEntity ent = (LivingEntity) e.getEntity();
             /*if (e.getEntity() instanceof Player) {
                 Player p = (Player) e.getEntity();
@@ -176,6 +176,14 @@ public class DamageListener implements Listener {
             } else {
                 damager = (Player) e.getDamager();
             }
+
+            if (e.getEntity() instanceof Player) {
+                if (sharePartyPvp(damager, (Player) e.getEntity())) {
+                    e.setCancelled(true);
+                    return;
+                }
+            }
+
             for (Damage d : main.getDmg()) {
                 if (d.getPlayer() == e.getEntity()) {
                     if (d.getCaster() == damager) {
@@ -309,8 +317,10 @@ public class DamageListener implements Listener {
                 sched.cancelTask(main.getDmg().get(index).getTask());
                 Bukkit.broadcastMessage(sched.isCurrentlyRunning(main.getDmg().get(index).getTask()) + "");
                 */
-                main.getDmg().get(index).scrub();
-                main.getDmg().remove(index);
+                if (main.getDmg().get(index) != null) {
+                    main.getDmg().get(index).scrub();
+                    main.getDmg().remove(index);
+                }
             }
         }
         if (!(e.getDamager() instanceof Player) && e.getEntity() instanceof Player) {

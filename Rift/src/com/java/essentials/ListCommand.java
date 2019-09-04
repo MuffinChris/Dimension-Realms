@@ -25,10 +25,11 @@ public class ListCommand implements CommandExecutor {
             int index = 0;
             for (String s : players) {
                 if (index + 1 == players.size()) {
-                    out += "&7" + s + ".";
+                    out += "&f" + s + ".";
                 } else {
-                    out += "&7" + s + "&7, &7";
+                    out += "&f" + s + "&f, &f";
                 }
+                index++;
             }
             Main.msg(p, "&8» &ePlayers: " + out);
         } else {
@@ -41,10 +42,11 @@ public class ListCommand implements CommandExecutor {
             int index = 0;
             for (String s : players) {
                 if (index + 1 == players.size()) {
-                    out += "&7" + s + ".";
+                    out += "&f" + s + ".";
                 } else {
-                    out += "&7" + s + "&7, &7";
+                    out += "&f" + s + "&f, &f";
                 }
+                index++;
             }
             Main.so( "&8» &ePlayers: " + out);
         }

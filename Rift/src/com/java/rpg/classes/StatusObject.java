@@ -44,23 +44,39 @@ public class StatusObject {
         return ticks;
     }
 
+    public List<StatusValue> clearbasedtitle;
+
+    public List<StatusValue> getCBT() {
+        return clearbasedtitle;
+    }
+
     public void clearBasedTitle(String title, Player p) {
-        List<StatusValue> remove = new ArrayList<>();
+        //List<StatusValue> remove = new ArrayList<>();
         for (StatusValue s : statuses) {
             if (s.getDurationless()) {
                 if (s.getSource().equals(title + ":" + p.getDisplayName())) {
-                    remove.add(s);
+                    //remove.add(s);
+                    clearbasedtitle.add(s);
                 }
             }
         }
-        for (StatusValue rem : remove) {
+        /*
+        for (StatusValue rem : clearbasedtitle) {//remove) {
             statuses.remove(rem);
-        }
+        }*/
     }
 
-    public StatusObject(String name, String flavor) {
+    private boolean silent;
+
+    public boolean getSilent() {
+        return silent;
+    }
+
+    public StatusObject(String name, String flavor, boolean silent) {
         this.name = name;
         this.flavor = flavor;
+        this.silent = silent;
+        clearbasedtitle = new ArrayList<>();
         statuses = new ArrayList<>();
     }
 
@@ -75,6 +91,8 @@ public class StatusObject {
         }
         statuses.clear();
         statuses = null;
+        clearbasedtitle.clear();
+        clearbasedtitle = null;
     }
 
 }

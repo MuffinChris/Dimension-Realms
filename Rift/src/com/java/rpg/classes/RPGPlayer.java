@@ -36,8 +36,6 @@ public class RPGPlayer extends Leveleable {
 
     private double currentMana;
 
-    private double walkspeed;
-
     private Skillboard board;
 
     public void setMana(double m) {
@@ -66,6 +64,16 @@ public class RPGPlayer extends Leveleable {
     }
 
 
+    private int idleslot = 0;
+    public int getIdleSlot() {
+        return idleslot;
+    }
+
+    public void setIdleSlot(int i) {
+        idleslot = i;
+        pushFiles();
+    }
+
 
     Map<String, Integer> skillLevels;
     List<String> statuses;
@@ -89,7 +97,12 @@ public class RPGPlayer extends Leveleable {
     private StatusObject manafreeze;
     private StatusObject hpfreeze;
     private StatusObject pstrength2;
+    private StatusObject walkspeed;
 
+
+    public StatusObject getWalkspeed() {
+        return walkspeed;
+    }
 
     public StatusObject getStun() {
         return stun;
@@ -113,14 +126,15 @@ public class RPGPlayer extends Leveleable {
     }
 
     public RPGPlayer(Player p) {
-        super (0, 50);
+        super (0, 50, p);
 
-        stun = new StatusObject("Stun", "Stunned");
-        root = new StatusObject("Root", "Rooted");
-        silence = new StatusObject("Silence", "Silenced");
-        manafreeze = new StatusObject("ManaFreeze", "Mana Frozen");
-        hpfreeze = new StatusObject("HPFreeze", "HP Frozen");
-        pstrength2 = new StatusObject("PStrength", "Power Strength");
+        stun = new StatusObject("Stun", "Stunned", false);
+        root = new StatusObject("Root", "Rooted", false);
+        silence = new StatusObject("Silence", "Silenced", false);
+        manafreeze = new StatusObject("ManaFreeze", "Mana Frozen", false);
+        hpfreeze = new StatusObject("HPFreeze", "HP Frozen", false);
+        pstrength2 = new StatusObject("PStrength", "Power Strength", false);
+        walkspeed = new StatusObject("Walkspeed", "Walkspeed", true);
         so = new ArrayList<>();
         so.add(stun);
         so.add(root);
@@ -128,6 +142,7 @@ public class RPGPlayer extends Leveleable {
         so.add(manafreeze);
         so.add(hpfreeze);
         so.add(pstrength2);
+        so.add(walkspeed);
 
         player = p;
         currentMana = 0;
@@ -142,11 +157,8 @@ public class RPGPlayer extends Leveleable {
         pullFiles();
         board = new Skillboard(p);
         pstrength = 100;
-        walkspeed = 0.2;
-    }
 
-    public double getWalkspeed() {
-        return walkspeed;
+        walkspeed.getStatuses().add(new StatusValue("Init", 2, 0, 0, true));
     }
 
     public Map<String, Integer> getSkillLevels() {
@@ -228,6 +240,13 @@ public class RPGPlayer extends Leveleable {
                 cd = cd.substring(0, cd.length() - 1);
             }
             pData.set("Cooldowns", cd);
+
+            if (pData.contains("IdleSlot")) {
+                pData.set("IdleSlot", getIdleSlot());
+            } else {
+                pData.set("IdleSlot", 0);
+            }
+
             pData.save(pFile);
             updateStats();
         } catch (Exception e) {
@@ -280,6 +299,13 @@ public class RPGPlayer extends Leveleable {
                         cooldowns.put(cdobj[0], Long.valueOf(cdobj[1]));
                     }
                 }
+            }
+
+            if (pData.contains("IdleSlot")) {
+                setIdleSlot(pData.getInt("IdleSlot"));
+            } else {
+                pData.set("IdleSlot", 0);
+                setIdleSlot(pData.getInt("IdleSlot"));
             }
             updateStats();
         } else {
@@ -749,5 +775,6 @@ public class RPGPlayer extends Leveleable {
         hpfreeze = null;
         manafreeze = null;
         pstrength2 = null;
+        super.scrub();
     }
 }

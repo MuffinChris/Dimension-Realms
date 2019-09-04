@@ -5,6 +5,7 @@ import com.java.Main;
 import com.java.holograms.Hologram;
 import com.java.rpg.classes.PlayerClass;
 import com.java.rpg.classes.RPGConstants;
+import com.java.rpg.classes.RPGPlayer;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,6 +13,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Leveleable {
 
@@ -25,14 +28,21 @@ public class Leveleable {
     private double expOff;
     private double expPow;
 
+    private Player rp;
+
     private Main main = Main.getInstance();
 
-    public Leveleable(int level, int maxlevel) {
+    public Leveleable(int level, int maxlevel, Player rp) {
         this.level = level;
         this.maxlevel = maxlevel;
+        this.rp = rp;
         expMod = RPGConstants.expMod;
         expOff = RPGConstants.expOff;
         expPow = RPGConstants.expPow;
+    }
+
+    public void scrub() {
+        rp = null;
     }
 
     public int getLevel() {
@@ -74,29 +84,47 @@ public class Leveleable {
         return df.format(maxexp);
     }
 
-    public boolean levelup() {
-        if (exp >= maxexp && level < maxlevel) {
+    public void levelup() {
+        calcMaxExp();
+        int cnt = 0;
+        int lvl = level;
+        while (exp >= maxexp && level < maxlevel) {
             level++;
             exp = exp - maxexp;
             calcMaxExp();
-            return true;
+            cnt++;
         }
-        return false;
+        if (cnt > 0) {
+            levelupRewards(rp, main.getRP(rp).getPClass(), lvl, lvl + cnt);
+        }
     }
 
-    public void levelupRewards(Player p, PlayerClass playerclass) {
+    public void levelupRewards(Player p, PlayerClass playerclass, int oldlvl, int newlvl) {
+
+        DecimalFormat dF =  new DecimalFormat("#.##");
+        main.getRP(p).getBoard().setBossbar4("&e&lLEVEL UP &7- &6" + playerclass.getName() + " &7(&f" + (oldlvl) + " &7-> &f" + newlvl + "&7)");
         Main.msg(p, "");
-        Main.msg(p, "&e&lLEVEL UP &7- &6" + playerclass.getName() + " &7(&f" + (level - 1) + " &7-> &f" + level + "&7)");
+        Main.msg(p, "&e&lLEVEL UP &7- &6" + playerclass.getName() + " &7(&f" + (oldlvl) + " &7-> &f" + newlvl + "&7)");
         Main.msg(p, "");
         Main.msg(p, "&e&lSTAT INCREASES:");
-        Main.msg(p, "&8» &f+" + playerclass.getHpPerLevel() + " &cHP");
-        Main.msg(p, "&8» &f+" + playerclass.getManaPerLevel() + " &bM &8| " + "&f+" + playerclass.getManaRegenPerLevel() + " &bM/s");
-        Main.msg(p, "&8» &f+" + playerclass.getArmorPerLevel() + " &cA &8| " + "&f+" + playerclass.getMagicResistPerLevel() + " &bMR");
-        if (level % 2 == 0) {
-            Main.msg(p, "&8» &f+1 &bSKILL POINT");
+        int dif = newlvl - oldlvl;
+        Main.msg(p, "&8» &7+" + dF.format(playerclass.getHpPerLevel() * dif) + " &7HP");
+        Main.msg(p, "&8» &7+" + dF.format(playerclass.getManaPerLevel() * dif) + " &7M &8| " + "&7+" + dF.format(playerclass.getManaRegenPerLevel() * dif) + " &7M/s");
+        Main.msg(p, "&8» &7+" + dF.format(playerclass.getArmorPerLevel() * dif) + " &7A &8| " + "&7+" + dF.format(playerclass.getMagicResistPerLevel() * dif) + " &7MR");
+
+        int cnt = 0;
+        while (dif > 0) {
+            dif-=2;
+            if (dif >= 0) {
+                cnt++;
+            }
+        }
+
+        if (cnt > 0) {
+            Main.msg(p, "&8» &7+" + cnt + " &7SKILL POINT");
         }
         Main.msg(p, "");
-        p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (level - 1) + " &f-> &6" + level), 5, 40, 5));
+        p.sendTitle(new Title(Main.color("&e&lLEVEL UP!"), Main.color("&6" + (oldlvl) + " &f-> &6" + newlvl), 5, 40, 5));
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 2));
         main.getRP(p).pushFiles();
@@ -104,7 +132,7 @@ public class Leveleable {
 
     public void setLevel(int l) {
         level = l;
-        calcMaxExp();
+        levelup();
     }
 
     public void setExp(double e) {
@@ -112,15 +140,18 @@ public class Leveleable {
         levelup();
     }
 
-    public void giveExpFromSource(Player p, Location t, double xp) {
+    public void giveExpFromSource(Player p, Location t, double xp, String s) {
+        String flavor = " &7(" + s + "&7)";
+        if (s.length() == 0) {
+            flavor = "";
+        }
         exp+=xp;
         DecimalFormat dF = new DecimalFormat("#");
-        Main.msg(p, "   &7[+" + dF.format(xp) + "&7 XP]");
-        Hologram magic = new Hologram(p, t, "&7[+" + dF.format(xp) + " XP]", Hologram.HologramType.DAMAGE);
+        Main.msg(p, "   &7[+" + dF.format(xp) + "&7 XP]" + flavor);
+        main.getRP(p).getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]" + flavor);
+        Hologram magic = new Hologram(p, t, "&7[+" + dF.format(xp) + " XP] &7(" + p.getDisplayName() + "&7)", Hologram.HologramType.DAMAGE);
         magic.rise();
-        if (levelup()) {
-            levelupRewards(p, Main.getInstance().getRP(p).getPClass());
-        }
+        levelup();
     }
 
 }

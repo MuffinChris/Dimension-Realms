@@ -26,6 +26,15 @@ public class ClassCommand implements CommandExecutor {
                     Main.msg(p, "&cClass does not exist.");
                 }
             } else {
+                String output="";
+
+                for (String plc : ClassManager.classes.keySet()) {
+                    output+=plc + ", ";
+                }
+
+                output = output.substring(0, output.length() - 2);
+
+                Main.msg(p, "&fClass List: " + output);
                 Main.msg(p, "&fUsage: /class <class>");
             }
         } else {

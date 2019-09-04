@@ -13,6 +13,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 
@@ -25,8 +26,8 @@ public class ChatFunctions implements Listener {
         File pFile = new File("plugins/Rift/motd.yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         if (!pData.contains("LineOne")) {
-            pData.set("LineOne", "&bThe Rift");
-            pData.set("LineTwo", "&bMC Server");
+            pData.set("LineOne", "&d    The Rift");
+            pData.set("LineTwo", "&d    RPG Survival");
             try {
                 pData.save(pFile);
             } catch (Exception ex) {
@@ -62,11 +63,14 @@ public class ChatFunctions implements Listener {
                 }
             }
 
-            String[] welcome = pData.getString("Welcome").split("\n");
-
-            for (String s : welcome) {
-                Main.msg(e.getPlayer(), s);
-            }
+            String[] welcome = pData.getString("Welcome").split(":newline:");
+            new BukkitRunnable() {
+                public void run() {
+                    for (String s : welcome) {
+                        Main.msg(e.getPlayer(), s);
+                    }
+                }
+            }.runTaskLater(main, 1L);
 
         } else {
             File pFile = new File("plugins/Rift/joins.yml");
@@ -86,9 +90,11 @@ public class ChatFunctions implements Listener {
                     ex.printStackTrace();
                 }
             }
+            Bukkit.broadcastMessage("");
             String join = Main.color("&8» &f" + prefix + e.getPlayer().getName() + " " + c.getPlayerSuffix(e.getPlayer()) + " &8(#" + pData.getInt("Joins") + "&8)" + " &ehas joined the server for the first time!");
-            e.setJoinMessage(join);
-            Main.so(join);
+            Bukkit.broadcastMessage(join);
+            e.setJoinMessage("");
+            Main.so("");
         }
     }
 

@@ -23,9 +23,8 @@ public class EntityHealthBars implements Listener {
 
     private Main main = Main.getInstance();
 
-    //Do scoreboard hp for players
-
-    /*@EventHandler
+    /*
+    @EventHandler
     public void onJoin (PlayerJoinEvent e) {
         LivingEntity ent = (LivingEntity) e.getPlayer();
         if (!main.getHpBars().containsKey(ent)) {
@@ -46,9 +45,26 @@ public class EntityHealthBars implements Listener {
     @EventHandler
     public void onSpawn (EntityAddToWorldEvent e) {
         if (e.getEntity().getType() == EntityType.ARMOR_STAND) {
+            if (e.getEntity().getCustomName() != null && e.getEntity().getCustomName().contains("❤")) {
+                for (Hologram h : main.getHpBars().values()) {
+                    if (h.getStand() == e.getEntity()) {
+                        return;
+                    }
+                }
+                for (Hologram h : main.getHolos()) {
+                    if (h.getStand() == e.getEntity()) {
+                        return;
+                    }
+                }
+                new BukkitRunnable() {
+                    public void run() {
+                        e.getEntity().remove();
+                    }
+                }.runTaskLater(Main.getInstance(), 1);
+            }
             return;
         }
-        if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
+        /*if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
             LivingEntity ent = (LivingEntity) e.getEntity();
             if (!main.getHpBars().containsKey(ent)) {
                 new BukkitRunnable() {
@@ -58,7 +74,7 @@ public class EntityHealthBars implements Listener {
                     }
                 }.runTaskLater(Main.getInstance(), 1);
             }
-        }
+        }*/
     }
 
     @EventHandler
@@ -72,6 +88,10 @@ public class EntityHealthBars implements Listener {
     public void onDamage (EntityDamageEvent e) {
         if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof ArmorStand)) {
             LivingEntity ent = (LivingEntity) e.getEntity();
+            if (!main.getHpBars().containsKey(ent) && !(ent instanceof Player)) {
+                DecimalFormat dF = new DecimalFormat("#.##");
+                main.getHpBars().put(ent, new Hologram(ent, ent.getLocation().add(new Vector(0, ent.getHeight() - 0.2, 0)), "&f" + dF.format(ent.getHealth()) + "&c❤", Hologram.HologramType.HOLOGRAM));
+            }
             if (main.getHpBars().containsKey(ent)) {
                 if (ent.isDead() || (ent instanceof Player && !((Player)ent).isOnline())) {
                     if (main.getHpBars().containsKey(ent)) {
@@ -84,6 +104,7 @@ public class EntityHealthBars implements Listener {
                 double hp = ent.getHealth();
                 hp-=e.getDamage();
                 main.getHpBars().get(ent).setText("&f" + dF.format(hp) + "&c❤");
+                main.getHpBars().get(ent).resetLifetime();
                 new BukkitRunnable() {
                     public void run() {
                         if (ent.isDead() || (ent instanceof Player && !((Player)ent).isOnline())) {

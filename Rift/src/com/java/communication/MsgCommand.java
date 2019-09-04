@@ -16,21 +16,25 @@ public class MsgCommand implements CommandExecutor {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
 			if (cmd.getLabel().equalsIgnoreCase("r") || cmd.getLabel().equalsIgnoreCase("reply")) {
-				if (main.getMsg().getPinf(p).getReply() instanceof Player) {
+				if (main.getMsg().getPinf(p).getReply() != null && main.getMsg().getPinf(p).getReply().isOnline()) {
 					if (args.length == 0) {
 						Main.msg(p, "Usage: /r <msg>");
 					}
 					if (args.length >= 1) {
 						Player t = main.getMsg().getPinf(p).getReply();
-						String output = "";
-						for (String s : args) {
-							output+=s;
-							output+=" ";
+						if (t != null && t.isOnline()) {
+							String output = "";
+							for (String s : args) {
+								output += s;
+								output += " ";
+							}
+							Main.msg(p, "&7[&eYou &8\u00BB &e" + t.getName() + "&7] &f" + output);
+							Main.msg(t, "&7[&e" + p.getName() + " &8\u00BB &eYou&7] &f" + output);
+							main.getMsg().getPinf(p).setReply(t);
+							main.getMsg().getPinf(t).setReply(p);
+						} else {
+							Main.msg(p, "&cYou have no one to reply to.");
 						}
-						Main.msg(p, "&7[&eYou &8\u00BB &e" + t.getName() + "&7] &f" + output);
-						Main.msg(t, "&7[&e" + p.getName() + " &8\u00BB &eYou&7] &f" + output);
-						main.getMsg().getPinf(p).setReply(t);
-						main.getMsg().getPinf(t).setReply(p);
 					}
 				} else {
 					Main.msg(p, "&cYou have no one to reply to.");

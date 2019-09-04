@@ -90,9 +90,9 @@ public class WorldOnFire extends Skill implements Listener {
                     continue;
                 }
             }
+            spellDamage(caster, ent, enddamage);
             ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
             caster.getWorld().spawnParticle(Particle.LAVA, ent.getEyeLocation(), 75, 0.1, 0.2, 0.2, 0.2);
-            spellDamage(caster, ent, enddamage);
         }
     }
 
@@ -158,7 +158,7 @@ public class WorldOnFire extends Skill implements Listener {
     }
 
     public WorldOnFire() {
-        super("WorldOnFire", 50, 3 * 20, 0, 0, "%player% has conjured a burst of Flame!", "TOGGLE-PASSIVE-CAST");
+        super("WorldOnFire", 50, 3 * 20, 0, 2, "%player% has conjured a burst of Flame!", "TOGGLE-PASSIVE-CAST");
         List<String> desc = new ArrayList<>();
         desc.add(Main.color("&aPassive:"));
         desc.add(Main.color("&fSpell damage dealt to enemies on fire"));

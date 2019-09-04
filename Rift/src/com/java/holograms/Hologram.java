@@ -51,6 +51,10 @@ public class Hologram implements Listener {
         DAMAGE, HOLOGRAM
     }
 
+    public void resetLifetime() {
+        lifetime = 0;
+    }
+
     public Hologram(Entity e, Location loc, String text, HologramType type) {
         this.text = text;
         this.type = type;
@@ -98,7 +102,9 @@ public class Hologram implements Listener {
     }
 
     public void center() {
-        stand.teleport(entity.getLocation().add(new Vector(0, entity.getHeight() - 0.2, 0)));
+        if (entity != null && !entity.isDead()) {
+            stand.teleport(entity.getLocation().add(new Vector(0, entity.getHeight() - 0.2, 0)));
+        }
     }
 
     public String getText() {

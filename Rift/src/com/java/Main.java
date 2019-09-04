@@ -46,26 +46,32 @@ import java.util.*;
 
 public class Main extends JavaPlugin {
 
+
     /*
 
     DIRECT LINE TODO LIST:
 
         The Bananamancer
-Potassium Rush (Passive) - Every attack gives you K stacks. If you have 8 K stacks have potassium surges speeding up the nerve signals in your body causing an attack to send out 3.
-Banana Beam (Active 1) - Shoot a laser giving yourself a K stack for every unit hit
-Banana Eat (Active 2) - Give yourself a strength buff for 5s and 2 K stacks
-Banana Bomb (Active 3) - Cause a banana explosion in a radius around you. Consumes K stacks for additional damage
-Banana Gas (Active 4) - Release banana gas around you for 12s weakening and damaging enemies while healing yourself and giving yourself 4 K stacks over the period
+        Potassium Rush (Passive) - Every attack gives you K stacks. If you have 8 K stacks have potassium surges speeding up the nerve signals in your body causing an attack to send out 3.
+        Banana Beam (Active 1) - Shoot a laser giving yourself a K stack for every unit hit
+        Banana Eat (Active 2) - Give yourself a strength buff for 5s and 2 K stacks
+        Banana Bomb (Active 3) - Cause a banana explosion in a radius around you. Consumes K stacks for additional damage
+        Banana Gas (Active 4) - Release banana gas around you for 12s weakening and damaging enemies while healing yourself and giving yourself 4 K stacks over the period
 
         WHEN THE TIME COMES, DO RELIABLESITE. SYS SETUP FEES MAKE FIRST MONTH MORE EXPENSIVE, MAY AS WELL BLOW IT ALL
         ON SOMETHING BETTER AND HOPE FOR DONOS. UPGRADE INEVITABLE (HOPEFULLY)
-        -8. Make player damage map that stores all damage events to entities for XP gain, or formulate another way.
-        -7. Make better more linear XP system
-        -6. Scoreboard should show skills and if they are off cd and have mana.
-        Perhaps also do the same for Skillbar, gray it out etc.
+
+        -10. AD and AP scaling
+
+        -7. Removing armor defense appears not to work on enchanted items (dropped specifically)
+               ^^^ MUST DEBUG USING PRINTING NBT TAG INFO
+
         -2. Meteor Shower blows shit up when entity dmg event only
+        -1. Create info cmd
+
         0. Create a settings GUI
             - Add a setting for close Skillmenu on cast, or persist, or disable!
+
         1. Remedy particles for Pyromancer (less flame, more orange and red redstone). Maybe try flying items and blocks
         2. Create 2 new skills:
             - Blaze -> Gain Speed 3 + Leave a trail of fire + Leave a trail of flaming particles that deal magic damage
@@ -189,6 +195,10 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
                         } else {
                             DecimalFormat dF = new DecimalFormat("#.##");
                             getHpBars().get(e).setText("&f" + dF.format(ent.getHealth()) + "&c❤");
+                            getHpBars().get(e).incrementLifetime();
+                            if (getHpBars().get(e).getLifetime() > 5) {
+                                remove.add(e);
+                            }
                         }
                     } else {
                         remove.add(e);
@@ -373,9 +383,11 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
 
                         //}
                         getPC().get(p).getBoard().statusUpdate();
+                        getPC().get(p).getBoard().updateSkillbar();
                         List<StatusObject> statuses = getRP(pl).getSo();
                         if (statuses != null) {
                             for (StatusObject so : statuses) {
+
                                 List<StatusValue> remove = new ArrayList<>();
                                 for (StatusValue s : so.getStatuses()) {
                                     if (20 * 0.001 * (System.currentTimeMillis() - s.getTimestamp()) >= s.getDuration() && !s.getDurationless()) {
@@ -383,8 +395,15 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
                                         remove.add(s);
                                     }
                                 }
+
+                                for (StatusValue rem : so.getCBT()) {
+                                    rem.scrub();
+                                    so.getStatuses().remove(rem);
+                                }
+
                                 for (StatusValue rem : remove) {
-                                    statuses.remove(rem);
+                                    rem.scrub();
+                                    so.getStatuses().remove(rem);
                                 }
                             }
                         }
@@ -392,6 +411,16 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
                 }
             }
         }.runTaskTimerAsynchronously(this, 1L, 1L);
+    }
+
+    public void updatePeriodic() {
+        new BukkitRunnable() {
+            public void run() {
+                for (Player  pl : Bukkit.getOnlinePlayers()) {
+                    getRP(pl).pushFiles();
+                }
+            }
+        }.runTaskTimer(Main.getInstance(), 100L, 6000);
     }
 
     public void passivesPeriodic() {
@@ -453,8 +482,14 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
         getCommand("biome").setExecutor(new BiomeLevelCommand());
         getCommand("arestart").setExecutor(new TimedrestartCommand());
         getCommand("level").setExecutor(new LevelCommand());
-
+        getCommand("setlevel").setExecutor(new ExpCommand());
+        getCommand("addlevel").setExecutor(new ExpCommand());
+        getCommand("setexp").setExecutor(new ExpCommand());
+        getCommand("addexp").setExecutor(new ExpCommand());
         getCommand("dummy").setExecutor(new DummyCommand());
+        getCommand("help").setExecutor(new HelpCommand());
+
+        getCommand("settings").setExecutor(new SettingsCommand());
         so("&bRIFT: &fEnabled commands!");
 
         Bukkit.getPluginManager().registerEvents(new PartyCommand(), this);
@@ -470,6 +505,7 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
         Bukkit.getPluginManager().registerEvents(new EntityHealthBars(), this);
         Bukkit.getPluginManager().registerEvents(new MobEXP(), this);
         Bukkit.getPluginManager().registerEvents(new AFKInvuln(), this);
+        Bukkit.getPluginManager().registerEvents(new SettingsCommand(), this);
 
         //Skills
         Bukkit.getPluginManager().registerEvents(new Skillcast(), this);
@@ -488,6 +524,7 @@ Banana Gas (Active 4) - Release banana gas around you for 12s weakening and dama
         chatPeriodic();
         passivesPeriodic();
         cooldownsPeriodic();
+        updatePeriodic();
         remHpBar();
         riseBars();
 

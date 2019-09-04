@@ -38,6 +38,19 @@ public class ManaCommand implements CommandExecutor {
             } else {
                 Main.msg(p, Main.getInstance().noperm);
             }
+        } else {
+            if (args.length == 1) {
+                if (Bukkit.getPlayer(args[0]) instanceof Player) {
+                    Player t = Bukkit.getPlayer(args[0]);
+                    RPGPlayer pl = main.getPC().get(t.getUniqueId());
+                    main.setMana(t, pl.getPClass().getCalcMana(pl.getLevel()));
+                    t.getWorld().spawnParticle(Particle.WATER_SPLASH, t.getLocation(), 50, 1, 1, 1);
+                } else {
+                    Main.so( "&cInvalid Target");
+                }
+            } else {
+                Main.so("Usage: /mana <player>");
+            }
         }
         return false;
     }

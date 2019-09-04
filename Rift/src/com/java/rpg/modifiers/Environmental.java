@@ -34,7 +34,7 @@ public class Environmental implements Listener {
                     if (meta.getBasePotionData().getType() == PotionType.INSTANT_DAMAGE) {
                         double hp = e.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                         if (meta.getBasePotionData().isUpgraded()) {
-                            e.getPlayer().damage(100 + hp * 0.2);
+                            e.getPlayer().damage(100 + hp * 0.15);
                         } else {
                             e.getPlayer().damage(50 + hp * 0.1);
                         }
@@ -51,7 +51,7 @@ public class Environmental implements Listener {
             double hp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
             boolean event = false;
             if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                e.setDamage(e.getDamage() * (hp / 40.0));
+                e.setDamage(e.getDamage() * (hp / 30.0));
                 event = true;
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC) {
@@ -86,7 +86,7 @@ public class Environmental implements Listener {
                 e.setDamage(hp * 0.1);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
-                e.setDamage((e.getDamage() / 20.0) * hp);
+                e.setDamage((e.getDamage() / 20.0) * hp * 0.75);
             }
             if (e.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
                 e.setDamage(0.5 * (e.getDamage() / 20.0) * hp);

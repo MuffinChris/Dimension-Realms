@@ -22,13 +22,14 @@ public class SeenCommand implements CommandExecutor {
             if (args.length == 1) {
                 if (Bukkit.getPlayerExact(args[0]) instanceof Player) {
                     Player t = Bukkit.getPlayerExact(args[0]);
-                    long millis = t.getLastLogin();
+                    /*long millis = t.getLastLogin();
                     String time = String.format("%d minutes and %d seconds ago.",
                             TimeUnit.MILLISECONDS.toMinutes(millis),
                             TimeUnit.MILLISECONDS.toSeconds(millis) -
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
-                    );
-                    Main.msg(p, "&8» &e" + t.getName() + " &fwas last seen " + time);
+                    );*/
+                    Main.msg(p, "&cCommand is currenty disabled.");
+                    //Main.msg(p, "&8» &e" + t.getName() + " &fwas last seen " + time);
                 } else {
                     Main.msg(p, "&cInvalid Target");
                 }

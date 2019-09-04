@@ -111,6 +111,19 @@ public class Fireball extends Skill implements Listener {
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F);
     }
 
+    @EventHandler
+    public void projectileHe (ProjectileHitEvent e) {
+        if (e.getEntity() instanceof Arrow) {
+            Arrow a = (Arrow) e.getEntity();
+            if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:") && a.getShooter() instanceof Player) {
+                Player shooter = (Player) a.getShooter();
+                lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getEntity().getLocation(), 50, 0.04, 0.08, 0.08, 0.08);
+                a.remove();
+            }
+        }
+    }
+
     @EventHandler (priority = EventPriority.LOWEST)
     public void onHit (EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Arrow && !(e.getEntity() instanceof ArmorStand)) {
@@ -133,11 +146,11 @@ public class Fireball extends Skill implements Listener {
                     }
                     //((CraftPlayer)p).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b),0);
                 }
-                if (e.getEntity() instanceof LivingEntity) {
+                /*if (e.getEntity() instanceof LivingEntity) {
                     LivingEntity ent = (LivingEntity) e.getEntity();
                     lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
                     ent.getWorld().spawnParticle(Particle.LAVA, ent.getLocation(), 50, 0.04, 0.04, 0.04, 0.04);
-                }
+                }*/
                 a.remove();
                 e.setDamage(0);
                 e.setCancelled(true);
@@ -146,7 +159,8 @@ public class Fireball extends Skill implements Listener {
     }
 
     public void lightEntities(Entity e, Player caster, Location loc, double damage) {
-        for (LivingEntity ent : loc.getNearbyLivingEntities(1.5)) {
+        loc.getWorld().spawnParticle(Particle.LAVA, loc, 50, 0.04, 0.12, 0.12, 0.12);
+        for (LivingEntity ent : loc.getNearbyLivingEntities(2)) {
             if (ent instanceof ArmorStand) {
                 continue;
             }
@@ -163,10 +177,11 @@ public class Fireball extends Skill implements Listener {
             }
             new BukkitRunnable() {
                 public void run() {
+                    spellDamage(caster, ent, damage);
                     ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
+                    ent.getLocation().getWorld().playSound(ent.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0F, 1.0F);
                 }
             }.runTaskLater(Main.getInstance(), 1L);
-            spellDamage(caster, ent, damage);
         }
     }
 

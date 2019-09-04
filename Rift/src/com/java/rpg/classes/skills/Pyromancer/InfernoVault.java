@@ -30,7 +30,7 @@ public class InfernoVault extends Skill implements Listener {
     private int range = 3;
 
     public InfernoVault() {
-        super("InfernoVault", 100, 14 * 20, 0, 0, "%player% has shot a fireball!", "CAST");
+        super("InfernoVault", 100, 14 * 20, 0, 4, "%player% has shot a fireball!", "CAST");
         List<String> desc = new ArrayList<>();
         desc.add(Main.color("&bActive:"));
         desc.add(Main.color("&fCombust the location at your feet, dealing &b" + vaultdamage + " &fdamage."));
@@ -42,7 +42,7 @@ public class InfernoVault extends Skill implements Listener {
     public void cast(Player p) {
         super.cast(p);
         vaultDamage(p);
-        Vector v = new Vector(p.getLocation().getDirection().getX() * 1.5, 1.5, p.getLocation().getDirection().getZ() * 1.5);
+        Vector v = new Vector(p.getLocation().getDirection().getX() * 1.5, 1.75, p.getLocation().getDirection().getZ() * 1.5);
         p.setVelocity(v);
         p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
         p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
@@ -117,8 +117,8 @@ public class InfernoVault extends Skill implements Listener {
                     continue;
                 }
             }
-            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
             spellDamage(caster, ent, landdamage);
+            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
         }
     }
 
@@ -138,8 +138,8 @@ public class InfernoVault extends Skill implements Listener {
                     continue;
                 }
             }
-            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
             spellDamage(caster, ent, vaultdamage);
+            ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
         }
     }
 }

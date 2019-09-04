@@ -108,7 +108,7 @@ public class ClassManager implements Listener {
     public static ItemStack fixItem(ItemStack i) {
         if (i != null && i.getType() != null && isArmor(i.getType().toString())) {
             net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(i);
-            if (nmsStack.getTag() == null || !(nmsStack.getTag().getList("AttributeModifiers", 0) instanceof NBTTagList)) {
+            if (nmsStack.getTag() == null || (nmsStack.getTag().getList("AttributeModifiers", 0) == null)) {
                 NBTTagCompound itemTagC = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
                 NBTTagList modifiers = new NBTTagList();
                 NBTTagCompound itemC = new NBTTagCompound();
@@ -197,7 +197,8 @@ public class ClassManager implements Listener {
                     e.getPlayer().setWalkSpeed(0.0F);
                 }
             } else {
-                e.getPlayer().setWalkSpeed(Float.valueOf(String.valueOf(main.getRP(e.getPlayer()).getWalkspeed())));
+                float walkspeed = (main.getRP(e.getPlayer()).getWalkspeed().getValue() * 1.0F / 10F);
+                e.getPlayer().setWalkSpeed(walkspeed);
             }
     }
 
@@ -258,7 +259,7 @@ public class ClassManager implements Listener {
 
     public static void createClasses() {
         List<Skill> skillsNone = new ArrayList<>();
-        classes.put("None", new PlayerClass("None", "&eNone", RPGConstants.defaultHP, 5.0, 100, 2, 3, 0.1, "SWORD", 30, 40, 32, 0.35, 0.25, skillsNone, 100));
+        classes.put("None", new PlayerClass("None", "&eNone", RPGConstants.defaultHP, 12.0, 100, 2, 3, 0.1, "SWORD", 30, 40, 32, 0.5, 0.25, skillsNone, 150));
 
 
         List<Skill> skillsPyro = new ArrayList<>();
@@ -268,7 +269,7 @@ public class ClassManager implements Listener {
         skillsPyro.add(new Pyroclasm());
         skillsPyro.add(new MeteorShower());
 
-        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 600.0, 10, 400, 5, 5, 0.14, "HOE", 15, 20, 22, 0.31, 0.22, skillsPyro, 70));
+        classes.put("Pyromancer", new PlayerClass("Pyromancer", "&6Pyromancer", 600.0, 10, 400, 5, 7, 0.14, "HOE", 20, 20, 22, 0.41, 0.22, skillsPyro, 110));
     }
 
     public PlayerClass getPClassFromString(String s) {

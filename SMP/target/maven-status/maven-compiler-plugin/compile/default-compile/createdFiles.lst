@@ -1,0 +1,16 @@
+com\java\InvseeCommand.class
+com\java\MsgCommand.class
+com\java\SpeedCommand.class
+com\java\GamemodeCommand.class
+com\java\playerinfoManager.class
+com\java\BungeeCommands.class
+com\java\FlyCommand.class
+com\java\HealCommand.class
+com\java\ChatFunctions$1.class
+com\java\ChatFunctions.class
+com\java\LagCommand.class
+com\java\playerinfo.class
+com\java\Sleep.class
+com\java\ListCommand.class
+com\java\PlayerinfoListener.class
+com\java\Main.class
