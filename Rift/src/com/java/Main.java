@@ -61,6 +61,10 @@ public class Main extends JavaPlugin {
         WHEN THE TIME COMES, DO RELIABLESITE. SYS SETUP FEES MAKE FIRST MONTH MORE EXPENSIVE, MAY AS WELL BLOW IT ALL
         ON SOMETHING BETTER AND HOPE FOR DONOS. UPGRADE INEVITABLE (HOPEFULLY)
 
+        -13. Perhaps redesign damage system to be attached to players. Rn potential issues.
+        -12. Party exp share
+        -11. Add toggle if shift-offhand even works
+
         -10. AD and AP scaling
 
         -7. Removing armor defense appears not to work on enchanted items (dropped specifically)
@@ -86,6 +90,7 @@ public class Main extends JavaPlugin {
         8. Create Hunter and Ninja class
         9. Improve skill castng, allow changing of skillbar slots and binding items
         10. Determine armor system and profs system.
+        11. Account for SAML flags when making bosses
 
      RIFT THEME IDEAS:
         Players can open a personal rift using a Rift Key or Rift Gem or Rift Stone
@@ -382,35 +387,44 @@ public class Main extends JavaPlugin {
                         //} catch (ConcurrentModificationException ex) {
 
                         //}
-                        getPC().get(p).getBoard().statusUpdate();
                         getPC().get(p).getBoard().updateSkillbar();
-                        List<StatusObject> statuses = getRP(pl).getSo();
-                        if (statuses != null) {
-                            for (StatusObject so : statuses) {
+                    }
+                }
+            }
+        }.runTaskTimerAsynchronously(this, 1L, 1L);
+    }
 
-                                List<StatusValue> remove = new ArrayList<>();
-                                for (StatusValue s : so.getStatuses()) {
-                                    if (20 * 0.001 * (System.currentTimeMillis() - s.getTimestamp()) >= s.getDuration() && !s.getDurationless()) {
-                                        s.scrub();
-                                        remove.add(s);
-                                    }
-                                }
+    public void statusesPeriodic() {
+        new BukkitRunnable() {
+            public void run() {
+                for (Player  pl : Bukkit.getOnlinePlayers()) {
+                    getRP(pl).getBoard().statusUpdate();
+                    List<StatusObject> statuses = getRP(pl).getSo();
+                    if (statuses != null) {
+                        for (StatusObject so : statuses) {
 
-                                for (StatusValue rem : so.getCBT()) {
-                                    rem.scrub();
-                                    so.getStatuses().remove(rem);
+                            List<StatusValue> remove = new ArrayList<>();
+                            for (StatusValue s : so.getStatuses()) {
+                                if (20 * 0.001 * (System.currentTimeMillis() - s.getTimestamp()) >= s.getDuration() && !s.getDurationless()) {
+                                    s.scrub();
+                                    remove.add(s);
                                 }
+                            }
 
-                                for (StatusValue rem : remove) {
-                                    rem.scrub();
-                                    so.getStatuses().remove(rem);
-                                }
+                            for (StatusValue rem : so.getCBT()) {
+                                rem.scrub();
+                                so.getStatuses().remove(rem);
+                            }
+
+                            for (StatusValue rem : remove) {
+                                rem.scrub();
+                                so.getStatuses().remove(rem);
                             }
                         }
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(this, 1L, 1L);
+        }.runTaskTimer(this, 1L, 1L);
     }
 
     public void updatePeriodic() {
@@ -524,6 +538,7 @@ public class Main extends JavaPlugin {
         chatPeriodic();
         passivesPeriodic();
         cooldownsPeriodic();
+        statusesPeriodic();
         updatePeriodic();
         remHpBar();
         riseBars();

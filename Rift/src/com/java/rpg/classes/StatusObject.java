@@ -54,7 +54,7 @@ public class StatusObject {
         //List<StatusValue> remove = new ArrayList<>();
         for (StatusValue s : statuses) {
             if (s.getDurationless()) {
-                if (s.getSource().equals(title + ":" + p.getDisplayName())) {
+                if (s.getSource().equals(title + ":" + p.getName())) {
                     //remove.add(s);
                     clearbasedtitle.add(s);
                 }

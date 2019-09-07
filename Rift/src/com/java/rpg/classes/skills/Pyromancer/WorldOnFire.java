@@ -90,6 +90,9 @@ public class WorldOnFire extends Skill implements Listener {
                     continue;
                 }
             }
+            if (ent.getHealth() < enddamage && !(ent instanceof Player)) {
+                ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
+            }
             spellDamage(caster, ent, enddamage);
             ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
             caster.getWorld().spawnParticle(Particle.LAVA, ent.getEyeLocation(), 75, 0.1, 0.2, 0.2, 0.2);
@@ -124,7 +127,7 @@ public class WorldOnFire extends Skill implements Listener {
             }
             ent.setKiller(p);
             if (ent.getFireTicks() > 0) {
-                main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getDisplayName(), ramp, 0, 0, true));
+                main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getName(), ramp, 0, 0, true));
 
                 /*if (amp.get(p)+ramp <= maxramp) {
                     amp.replace(p, amp.get(p) + ramp);
@@ -153,7 +156,7 @@ public class WorldOnFire extends Skill implements Listener {
         DecimalFormat df = new DecimalFormat("#.##");
         /*amp.put(p, 0);
         main.getPC().get(p.getUniqueId()).setPStrength(main.getPC().get(p.getUniqueId()).getPStrength() + initRamp);*/
-        main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getDisplayName(), initRamp, 0, 0, true));
+        main.getRP(p).getPStrength2().getStatuses().add(new StatusValue(getName() + ":" + p.getName(), initRamp, 0, 0, true));
         return super.toggleInit(p);
     }
 

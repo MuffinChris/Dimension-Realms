@@ -177,6 +177,9 @@ public class Fireball extends Skill implements Listener {
             }
             new BukkitRunnable() {
                 public void run() {
+                    if (ent.getHealth() < damage && !(ent instanceof Player)) {
+                        ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
+                    }
                     spellDamage(caster, ent, damage);
                     ent.setFireTicks(Math.min(100 + ent.getFireTicks(), 200));
                     ent.getLocation().getWorld().playSound(ent.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0F, 1.0F);

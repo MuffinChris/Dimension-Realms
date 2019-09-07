@@ -117,6 +117,9 @@ public class InfernoVault extends Skill implements Listener {
                     continue;
                 }
             }
+            if (ent.getHealth() < landdamage && !(ent instanceof Player)) {
+                ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
+            }
             spellDamage(caster, ent, landdamage);
             ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
         }
@@ -137,6 +140,9 @@ public class InfernoVault extends Skill implements Listener {
                 if (p.equals(caster)) {
                     continue;
                 }
+            }
+            if (ent.getHealth() < vaultdamage && !(ent instanceof Player)) {
+                ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));
             }
             spellDamage(caster, ent, vaultdamage);
             ent.setFireTicks(Math.min(60 + ent.getFireTicks(), 200));

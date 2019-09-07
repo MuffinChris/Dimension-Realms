@@ -76,6 +76,7 @@ com\java\communication\playerinfoManager.class
 com\java\rpg\classes\skills\Pyromancer\PyroclasmProjectile$1.class
 com\java\rpg\Damage$DamageType.class
 com\java\rpg\classes\skills\Pyromancer\MeteorShower$1.class
+com\java\Main$13.class
 com\java\rpg\classes\RPGPlayer$2.class
 com\java\rpg\classes\skills\Pyromancer\Fireball$4.class
 com\java\Main$5.class

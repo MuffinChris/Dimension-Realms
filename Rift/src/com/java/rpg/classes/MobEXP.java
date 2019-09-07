@@ -457,7 +457,7 @@ public class MobEXP implements Listener {
             } else {
                 if (exp > 0 && e.getEntity().getKiller() instanceof Player) {//e.getEntity().hasMetadata("EXP") && e.getEntity().getKiller() instanceof Player) {
                     //double exp = (double) e.getEntity().getMetadata("EXP").get(0).value();
-                    main.getRP(e.getEntity().getKiller()).giveExpFromSource(e.getEntity().getKiller(), e.getEntity().getLocation(), exp, e.getEntity().getKiller().getDisplayName());
+                    main.getRP(e.getEntity().getKiller()).giveExpFromSource(e.getEntity().getKiller(), e.getEntity().getLocation(), exp, e.getEntity().getKiller().getName());
                 }
             }
         }

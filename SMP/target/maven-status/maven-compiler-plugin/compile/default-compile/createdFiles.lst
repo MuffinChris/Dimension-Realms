@@ -4,6 +4,7 @@ com\java\SpeedCommand.class
 com\java\GamemodeCommand.class
 com\java\playerinfoManager.class
 com\java\BungeeCommands.class
+com\java\NoEnd.class
 com\java\FlyCommand.class
 com\java\HealCommand.class
 com\java\ChatFunctions$1.class

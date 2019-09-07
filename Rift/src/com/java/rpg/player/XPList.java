@@ -35,10 +35,10 @@ public class XPList {
 
     public void addDamage(Player p, double d) {
         removeDc();
-        if (dmg.containsKey(p.getDisplayName())) {
-            dmg.replace(p.getDisplayName(), d + dmg.get(p.getDisplayName()));
+        if (dmg.containsKey(p.getName())) {
+            dmg.replace(p.getName(), d + dmg.get(p.getName()));
         } else {
-            dmg.put(p.getDisplayName(), d);
+            dmg.put(p.getName(), d);
         }
     }
 

@@ -64,6 +64,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChatFunctions(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerinfoListener(), this);
         Bukkit.getPluginManager().registerEvents(new Sleep(), this);
+        Bukkit.getPluginManager().registerEvents(new NoEnd(), this);
         so("&bRIFT: &fRegistered events!");
 
         so("&bRIFT: &fSetup complete!");

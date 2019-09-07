@@ -197,7 +197,16 @@ public class RPGPlayer extends Leveleable {
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         try {
-            pData.set("Username", player.getName());
+            if (pData.contains("Username")) {
+                if (pData.getString("Username").equalsIgnoreCase(player.getName())) {
+                    pData.set("Username", player.getName());
+                } else {
+                    pData.set("PreviousUsername", pData.getString("Username"));
+                    pData.set("Username", player.getName());
+                }
+            } else {
+                pData.set("Username", player.getName());
+            }
             String name = "None";
             if (pclass instanceof PlayerClass) {
                 name = pclass.getName();
@@ -258,7 +267,16 @@ public class RPGPlayer extends Leveleable {
         File pFile = new File("plugins/Rift/data/classes/" + player.getUniqueId() + ".yml");
         FileConfiguration pData = YamlConfiguration.loadConfiguration(pFile);
         if (pFile.exists()) {
-            pData.set("Username", player.getName());
+            if (pData.contains("Username")) {
+                if (pData.getString("Username").equalsIgnoreCase(player.getName())) {
+                    pData.set("Username", player.getName());
+                } else {
+                    pData.set("PreviousUsername", pData.getString("Username"));
+                    pData.set("Username", player.getName());
+                }
+            } else {
+                pData.set("Username", player.getName());
+            }
             String name = "None";
             pclass = main.getCM().getPClassFromString(pData.getString("Current Class"));
             if (pclass instanceof PlayerClass) {
