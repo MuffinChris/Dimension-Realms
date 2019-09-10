@@ -36,6 +36,19 @@ public class LevelCommand implements CommandExecutor {
             } else {
                 Main.msg(p, "Usage: /level <player>");
             }
+        } else if (args.length == 1) {
+            if (Bukkit.getPlayer(args[0]) instanceof Player) {
+                Player t = Bukkit.getPlayer(args[0]);
+                RPGPlayer pl = main.getPC().get(t.getUniqueId());
+                Main.so( "");
+                Main.so( "&8» &e" + t.getName() + "'s Level: &f" + pl.getLevel() + " &8/ &f" + pl.getMaxLevel() + " &8(&6" + pl.getPClass().getName() + "&8)");
+                Main.so( "&8» &e" + t.getName() + "'s EXP: &f" + pl.getPrettyExp() + " &8/ &f" + pl.getPrettyMaxExp() + " &8(&6" + pl.getPrettyPercent() + "%&8)");
+                Main.so( "");
+            } else {
+                Main.so( "&cInvalid Target");
+            }
+        } else {
+            Main.so( "Usage: /level <player>");
         }
         return false;
     }

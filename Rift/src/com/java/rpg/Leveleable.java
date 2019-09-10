@@ -6,6 +6,7 @@ import com.java.holograms.Hologram;
 import com.java.rpg.classes.PlayerClass;
 import com.java.rpg.classes.RPGConstants;
 import com.java.rpg.classes.RPGPlayer;
+import com.java.rpg.party.Party;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -101,6 +102,11 @@ public class Leveleable {
 
     public void levelupRewards(Player p, PlayerClass playerclass, int oldlvl, int newlvl) {
 
+        String sign = "+";
+        if (newlvl < oldlvl) {
+            sign = "";
+        }
+
         DecimalFormat dF =  new DecimalFormat("#.##");
         main.getRP(p).getBoard().setBossbar4("&e&lLEVEL UP &7- &6" + playerclass.getName() + " &7(&f" + (oldlvl) + " &7-> &f" + newlvl + "&7)");
         Main.msg(p, "");
@@ -108,9 +114,9 @@ public class Leveleable {
         Main.msg(p, "");
         Main.msg(p, "&e&lSTAT INCREASES:");
         int dif = newlvl - oldlvl;
-        Main.msg(p, "&8» &7+" + dF.format(playerclass.getHpPerLevel() * dif) + " &7HP");
-        Main.msg(p, "&8» &7+" + dF.format(playerclass.getManaPerLevel() * dif) + " &7M &8| " + "&7+" + dF.format(playerclass.getManaRegenPerLevel() * dif) + " &7M/s");
-        Main.msg(p, "&8» &7+" + dF.format(playerclass.getArmorPerLevel() * dif) + " &7A &8| " + "&7+" + dF.format(playerclass.getMagicResistPerLevel() * dif) + " &7MR");
+        Main.msg(p, "&8» &7" + sign + dF.format(playerclass.getHpPerLevel() * dif) + " &7HP");
+        Main.msg(p, "&8» &7" + sign + dF.format(playerclass.getManaPerLevel() * dif) + " &7M &8| " + "&7" + sign + dF.format(playerclass.getManaRegenPerLevel() * dif) + " &7M/s");
+        Main.msg(p, "&8» &7" + sign + dF.format(playerclass.getArmorPerLevel() * dif) + " &7A &8| " + "&7" + sign + dF.format(playerclass.getMagicResistPerLevel() * dif) + " &7MR");
 
         int cnt = 0;
         while (dif > 0) {
@@ -142,14 +148,36 @@ public class Leveleable {
 
     public void giveExpFromSource(Player p, Location t, double xp, String s) {
         String flavor = " &7(" + s + "&7)";
+        String sign = "+";
+        if (xp < 0) {
+            sign = "";
+        }
         if (s.length() == 0) {
             flavor = "";
+        } else {
+            if (main.getPM().hasParty(p) && xp >= 0) {
+                Party pa = main.getPM().getParty(p);
+                int amnt = pa.getNearbyPlayersSize(p);
+                if (pa.getShare() && amnt > 0) {
+                    xp*=RPGConstants.partyXpMod;
+                    xp/=(amnt + 1);
+                    for (Player pp : pa.getNearbyPlayers(p)) {
+                        RPGPlayer rp = main.getRP(pp);
+                        rp.setExp(rp.getExp() + xp);
+                        DecimalFormat dF = new DecimalFormat("#");
+                        Main.msg(pp, "   &7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
+                        rp.getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
+                    }
+                    return;
+                }
+            }
         }
         exp+=xp;
+        exp = Math.max(exp, 0);
         DecimalFormat dF = new DecimalFormat("#");
-        Main.msg(p, "   &7[+" + dF.format(xp) + "&7 XP]" + flavor);
-        main.getRP(p).getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]" + flavor);
-        Hologram magic = new Hologram(p, t, "&7[+" + dF.format(xp) + " XP] &7(" + p.getName() + "&7)", Hologram.HologramType.DAMAGE);
+        Main.msg(p, "   &7[" + sign + dF.format(xp) + "&7 XP]" + flavor);
+        main.getRP(p).getBoard().setBossbar4("&7[" + sign + dF.format(xp) + "&7 XP]" + flavor);
+        Hologram magic = new Hologram(p, t, "&7[" + sign + dF.format(xp) + " XP] &7(" + p.getName() + "&7)", Hologram.HologramType.DAMAGE);
         magic.rise();
         levelup();
     }

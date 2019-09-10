@@ -1,0 +1,135 @@
+# This is the main configuration file for Spigot.
+# As you can see, there's tons to configure. Some options may impact gameplay, so use
+# with caution, and make sure you know what each option does before configuring.
+# For a reference for any variable inside this file, check out the Spigot wiki at
+# http://www.spigotmc.org/wiki/spigot-configuration/
+# 
+# If you need help with the configuration or have any questions related to Spigot,
+# join us at the IRC or drop by our forums and leave a post.
+# 
+# IRC: #spigot @ irc.spi.gt ( http://www.spigotmc.org/pages/irc/ )
+# Forums: http://www.spigotmc.org/
+
+config-version: 12
+settings:
+  debug: false
+  save-user-cache-on-stop-only: false
+  moved-too-quickly-multiplier: 10.0
+  moved-wrongly-threshold: 0.0625
+  netty-threads: 4
+  bungeecord: false
+  player-shuffle: 0
+  late-bind: false
+  sample-count: 12
+  user-cache-size: 1000
+  timeout-time: 60
+  restart-on-crash: false
+  restart-script: ./start.sh
+  attribute:
+    maxHealth:
+      max: 1.073741824E300
+    movementSpeed:
+      max: 1.073741824E300
+    attackDamage:
+      max: 1.073741824E300
+messages:
+  whitelist: '&c§l[WHITELIST] &fYou are not whitelisted!'
+  unknown-command: Unknown command. Type "/help" for help.
+  server-full: '&c§l[SERVER FULL] &fPurchase a donator rank for slot priority!'
+  outdated-client: '&c§lSERVER VERSION: &f1.14.4\n&fPlease use an updated client!'
+  outdated-server: '&c§lSERVER VERSION: &f1.14.4\n&fPlease use an updated client!'
+  restart: '&c§l[RESTART] &fServer is Restarting.'
+stats:
+  disable-saving: false
+  forced-stats: {}
+commands:
+  silent-commandblock-console: false
+  log: true
+  replace-commands:
+  - setblock
+  - summon
+  - testforblock
+  - tellraw
+  spam-exclusions:
+  - /skill
+  tab-complete: 0
+  send-namespaced: true
+advancements:
+  disable-saving: false
+  disabled:
+  - minecraft:story/disabled
+world-settings:
+  default:
+    view-distance: default
+    max-entity-collisions: 4
+    seed-outpost: 165745296
+    verbose: true
+    merge-radius:
+      item: 2.5
+      exp: 3.0
+    item-despawn-rate: 6000
+    arrow-despawn-rate: 1200
+    zombie-aggressive-towards-villager: true
+    wither-spawn-sound-radius: 250
+    nerf-spawner-mobs: false
+    enable-zombie-pigmen-portal-spawns: true
+    dragon-death-sound-radius: 500
+    seed-village: 10387312
+    seed-desert: 14357617
+    seed-igloo: 14357618
+    seed-jungle: 14357619
+    seed-swamp: 14357620
+    seed-monument: 10387313
+    seed-shipwreck: 165745295
+    seed-ocean: 14357621
+    seed-slime: 987234911
+    mob-spawn-range: 5
+    growth:
+      bamboo-modifier: 100
+      sweetberry-modifier: 100
+      kelp-modifier: 100
+      beetroot-modifier: 200
+      carrot-modifier: 200
+      potato-modifier: 200
+      cactus-modifier: 100
+      cane-modifier: 100
+      melon-modifier: 200
+      mushroom-modifier: 200
+      pumpkin-modifier: 200
+      sapling-modifier: 200
+      wheat-modifier: 200
+      netherwart-modifier: 200
+      vine-modifier: 200
+      cocoa-modifier: 200
+    entity-activation-range:
+      raiders: 48
+      animals: 8
+      monsters: 24
+      misc: 10
+      tick-inactive-villagers: true
+    entity-tracking-range:
+      players: 48
+      animals: 48
+      monsters: 48
+      misc: 32
+      other: 64
+    ticks-per:
+      hopper-transfer: 10
+      hopper-check: 2
+    hopper-amount: 1
+    hunger:
+      jump-walk-exhaustion: 0.01
+      jump-sprint-exhaustion: 0.05
+      combat-exhaustion: 0.15
+      regen-exhaustion: 0.25
+      swim-multiplier: 0.01
+      sprint-multiplier: 0.075
+      other-multiplier: 0.0
+    random-light-updates: false
+    max-tnt-per-tick: 100
+    max-tick-time:
+      tile: 50
+      entity: 50
+    squid-spawn-range:
+      min: 45.0
+    hanging-tick-frequency: 100

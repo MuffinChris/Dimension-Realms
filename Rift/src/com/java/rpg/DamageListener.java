@@ -249,8 +249,8 @@ public class DamageListener implements Listener {
                                 e.getEntity().getWorld().spawnParticle(Particle.BLOCK_DUST, e.getEntity().getLocation(), 100, 0.5, 1, 0.5, blood);
                                 double crit = Math.random();
                                 if (crit < 0.25) {
-                                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_BLAZE_HURT, 0.5F, 1.0F);
-                                    e.getEntity().getWorld().spawnParticle(Particle.CRIT, e.getEntity().getLocation(), 50, 0.2, 0.04, 0.04, 0.04);
+                                    e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.0F, 1.0F);
+                                    e.getEntity().getWorld().spawnParticle(Particle.CRIT, ent.getEyeLocation(), 50, 0.2, 0.04, 0.04, 0.04);
                                     damage *= 1.25;
                                 }
                                 if (e.getEntity() instanceof Player && main.getPC().containsKey(((Player) e.getEntity()).getUniqueId())) {

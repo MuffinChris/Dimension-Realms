@@ -90,7 +90,7 @@ public class ExpCommand implements CommandExecutor {
                             RPGPlayer tl = main.getRP(target);
                             if (Double.valueOf(args[1]) instanceof Double) {
                                 tl.giveExpFromSource(target, target.getLocation(), Double.valueOf(args[1]), "");
-                                Main.msg(p, "&eSet &6" + target.getName() + "'s &eEXP to " + df.format(Double.valueOf(args[1])) + ".");
+                                Main.msg(p, "&eGave &6" + target.getName() + " &e" + df.format(Double.valueOf(args[1])) + " &eEXP.");
                             } else {
                                 Main.msg(p, "&cInvalid Value");
                             }
@@ -178,7 +178,7 @@ public class ExpCommand implements CommandExecutor {
                             RPGPlayer tl = main.getRP(target);
                             if (Double.valueOf(args[1]) instanceof Double) {
                                 tl.giveExpFromSource(target, target.getLocation(), Double.valueOf(args[1]), "");
-                                Main.so( "&eSet &6" + target.getName() + "'s &eEXP to " + df.format(Double.valueOf(args[1])) + ".");
+                                Main.so( "&eGave &6" + target.getName() + " &e" + df.format(Double.valueOf(args[1])) + " &eEXP.");
                             } else {
                                 Main.so( "&cInvalid Value");
                             }

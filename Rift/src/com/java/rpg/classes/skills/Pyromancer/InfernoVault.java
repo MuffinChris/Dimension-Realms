@@ -42,8 +42,19 @@ public class InfernoVault extends Skill implements Listener {
     public void cast(Player p) {
         super.cast(p);
         vaultDamage(p);
-        Vector v = new Vector(p.getLocation().getDirection().getX() * 1.5, 1.75, p.getLocation().getDirection().getZ() * 1.5);
-        p.setVelocity(v);
+
+        new BukkitRunnable() {
+            double rem = -0.1;
+            public void run() {
+                Vector v = new Vector(p.getLocation().getDirection().getX() * 0.7, 0.4 + rem, p.getLocation().getDirection().getZ() * 0.7);
+                p.setVelocity(v);
+                rem+=0.1;
+                if (rem > 0.5) {
+                    cancel();
+                }
+            }
+        }.runTaskTimer(Main.getInstance(), 0L, 2L);
+
         p.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, p.getLocation(), 1, 0, 0, 0, 0);
         p.getWorld().spawnParticle(Particle.LAVA, p.getEyeLocation(), 45, 0, 0.2, 0.2, 0.2);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 1.0F, 1.0F);

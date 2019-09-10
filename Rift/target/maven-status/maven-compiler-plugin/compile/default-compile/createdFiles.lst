@@ -8,6 +8,7 @@ com\java\rpg\classes\skills\Pyromancer\MeteorShower.class
 com\java\holograms\Hologram.class
 com\java\rpg\classes\skills\Pyromancer\FlameTornado$1.class
 com\java\Main$7.class
+com\java\rpg\classes\BiomesCommand.class
 com\java\rpg\Leveleable.class
 com\java\rpg\classes\skills\Pyromancer\InfernoVault$2.class
 com\java\rpg\classes\PlayerClass.class
@@ -99,6 +100,7 @@ com\java\rpg\classes\skills\Pyromancer\FlameTornado.class
 com\java\essentials\GamemodeCommand.class
 com\java\rpg\classes\SkillCommand.class
 com\java\Main$6.class
+com\java\rpg\classes\skills\Pyromancer\InfernoVault$3.class
 com\java\essentials\TimedrestartCommand.class
 com\java\rpg\classes\RPGPlayer$1.class
 com\java\rpg\classes\SettingsCommand.class

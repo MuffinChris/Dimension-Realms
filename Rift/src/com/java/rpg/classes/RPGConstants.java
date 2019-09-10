@@ -11,4 +11,6 @@ public class RPGConstants {
 
     public static double defenseDiv = 300.0;
 
+    public static double partyXpMod = 1.5;
+
 }

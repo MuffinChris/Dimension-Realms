@@ -91,4 +91,6 @@ commands:
     description: Useful commands
   settings:
     description: Access your settings
+  biomes:
+    description: View all biome levels
 depend: [ProtocolLib, Vault]

@@ -57,12 +57,12 @@ timings:
   - settings.bungeecord-addresses
   history-interval: 300
   history-length: 3600
-  server-name: Dimension Realms
+  server-name: The Rift
 world-settings:
   default:
     per-player-mob-spawns: false
     count-all-mobs-for-spawning: false
-    max-auto-save-chunks-per-tick: 24
+    max-auto-save-chunks-per-tick: 8
     auto-save-interval: -1
     duplicate-uuid-resolver: saferegen
     duplicate-uuid-saferegen-delete-range: 32
@@ -76,31 +76,31 @@ world-settings:
     enable-treasure-maps: true
     treasure-maps-return-already-discovered: false
     experience-merge-max-value: -1
-    prevent-moving-into-unloaded-chunks: false
+    prevent-moving-into-unloaded-chunks: true
     falling-block-height-nerf: 0
     tnt-entity-height-nerf: 0
     filter-nbt-data-from-spawn-eggs-and-related: true
-    max-entity-collisions: 10
+    max-entity-collisions: 4
     disable-creeper-lingering-effect: false
-    optimize-explosions: false
+    optimize-explosions: true
     disable-thunder: false
     skeleton-horse-thunder-spawn-chance: 0.01
     disable-ice-and-snow: false
     keep-spawn-loaded: true
-    armor-stands-do-collision-entity-lookups: true
+    armor-stands-do-collision-entity-lookups: false
     nether-ceiling-void-damage-height: 0
-    grass-spread-tick-rate: 2
+    grass-spread-tick-rate: 4
     water-over-lava-flow-speed: 5
     bed-search-radius: 1
-    use-faster-eigencraft-redstone: false
+    use-faster-eigencraft-redstone: true
     allow-non-player-entities-on-scoreboards: false
     disable-explosion-knockback: false
     parrots-are-unaffected-by-player-movement: false
     container-update-tick-rate: 3
-    non-player-arrow-despawn-rate: -1
-    creative-arrow-despawn-rate: -1
+    non-player-arrow-despawn-rate: 90
+    creative-arrow-despawn-rate: 90
     prevent-tnt-from-moving-in-water: false
-    armor-stands-tick: true
+    armor-stands-tick: false
     spawner-nerfed-mobs-should-jump: false
     allow-leashing-undead-horse: false
     baby-zombie-movement-speed: 0.5
@@ -109,7 +109,7 @@ world-settings:
     game-mechanics:
       disable-relative-projectile-velocity: false
       scan-for-legacy-ender-dragon: true
-      disable-chest-cat-detection: true
+      disable-chest-cat-detection: false
       shield-blocking-delay: 5
       disable-player-crits: true
       disable-sprint-interruption-on-attack: true
@@ -123,7 +123,7 @@ world-settings:
       MaximumTicks: 400
     despawn-ranges:
       soft: 32
-      hard: 128
+      hard: 96
     lightning-strike-distance-limit:
       sound: 200
       impact-sound: 150
@@ -142,12 +142,12 @@ world-settings:
       refresh-max: 2d
     hopper:
       cooldown-when-full: true
-      disable-move-event: false
+      disable-move-event: true
     squid-spawn-height:
       maximum: 0.0
     anti-xray:
-      enabled: false
-      engine-mode: 1
+      enabled: true
+      engine-mode: 2
       chunk-edge-mode: 2
       max-chunk-section-index: 3
       update-radius: 2
@@ -161,13 +161,19 @@ world-settings:
       - chest
       - diamond_ore
       - redstone_ore
-      - clay
       - emerald_ore
       - ender_chest
       replacement-blocks:
       - stone
-      - oak_planks
     alt-item-despawn-rate:
       enabled: false
       items:
         COBBLESTONE: 300
+  world_nether:
+    auto-save-interval: 9020
+    anti-xray:
+      enabled: false
+  world_the_end:
+    auto-save-interval: 11050
+    anti-xray:
+      enabled: false

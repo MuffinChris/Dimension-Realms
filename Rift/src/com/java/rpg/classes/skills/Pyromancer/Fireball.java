@@ -117,7 +117,11 @@ public class Fireball extends Skill implements Listener {
             Arrow a = (Arrow) e.getEntity();
             if (a.getCustomName() instanceof String && a.getCustomName().contains("Fireball:") && a.getShooter() instanceof Player) {
                 Player shooter = (Player) a.getShooter();
-                lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                if (e.getHitEntity() instanceof Entity) {
+                    lightEntities(e.getHitEntity(), shooter, e.getHitEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                } else {
+                    lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                }
                 e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getEntity().getLocation(), 50, 0.04, 0.08, 0.08, 0.08);
                 a.remove();
             }
@@ -160,7 +164,7 @@ public class Fireball extends Skill implements Listener {
 
     public void lightEntities(Entity e, Player caster, Location loc, double damage) {
         loc.getWorld().spawnParticle(Particle.LAVA, loc, 50, 0.04, 0.12, 0.12, 0.12);
-        for (LivingEntity ent : loc.getNearbyLivingEntities(2)) {
+        for (LivingEntity ent : loc.getNearbyLivingEntities(1.1)) {
             if (ent instanceof ArmorStand) {
                 continue;
             }

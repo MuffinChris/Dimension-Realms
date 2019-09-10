@@ -12,10 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.SlimeSplitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,6 +30,8 @@ public class MobEXP implements Listener {
     public static Map<Biome, LevelRange> getBL() {
         return biomeLevels;
     }
+
+    private static List<EntityType> peaceful;
 
     private static Map<EntityType, Double> xpmods;
 
@@ -184,6 +183,34 @@ public class MobEXP implements Listener {
 
         xp = new HashMap<>();
 
+        peaceful = new ArrayList<>();
+        peaceful.add(EntityType.HORSE);
+        peaceful.add(EntityType.MULE);
+        peaceful.add(EntityType.COW);
+        peaceful.add(EntityType.MUSHROOM_COW);
+        peaceful.add(EntityType.SHEEP);
+        peaceful.add(EntityType.PIG);
+        peaceful.add(EntityType.TROPICAL_FISH);
+        peaceful.add(EntityType.COD);
+        peaceful.add(EntityType.SQUID);
+        peaceful.add(EntityType.RABBIT);
+        peaceful.add(EntityType.TURTLE);
+        peaceful.add(EntityType.SALMON);
+        peaceful.add(EntityType.BAT);
+        peaceful.add(EntityType.CAT);
+        peaceful.add(EntityType.OCELOT);
+        peaceful.add(EntityType.PUFFERFISH);
+        peaceful.add(EntityType.PANDA);
+        peaceful.add(EntityType.PARROT);
+        peaceful.add(EntityType.LLAMA);
+        peaceful.add(EntityType.SKELETON_HORSE);
+        peaceful.add(EntityType.ZOMBIE_HORSE);
+        peaceful.add(EntityType.DONKEY);
+        peaceful.add(EntityType.DOLPHIN);
+        peaceful.add(EntityType.CHICKEN);
+        peaceful.add(EntityType.FOX);
+
+
         new BukkitRunnable() {
             public void run() {
                 for (World w : Bukkit.getServer().getWorlds()) {
@@ -303,6 +330,10 @@ public class MobEXP implements Listener {
                 level = biomeLevels.get(ent.getLocation().getBlock().getBiome()).getRandomLevel();
             }
 
+            if (peaceful.contains(ent.getType())) {
+                level = Math.max(0, Math.min(level, 20));
+            }
+
             if (ent.getName().contains("Lv.")) {
                 setLevel(ent, level);
                 level = getLevel(ent);
@@ -311,9 +342,9 @@ public class MobEXP implements Listener {
                 scaleDamage(ent, level, 1);
             }
 
-        if (ent instanceof Slime || ent instanceof MagmaCube) {
-            scaleHealth(ent, level, 0.5);
-        }
+            if (ent instanceof Slime || ent instanceof MagmaCube) {
+                scaleHealth(ent, level, 0.5);
+            }
 
             setLevel(ent, level);
             //setExp(ent, (0.75 * Math.pow(level, 2.1) + 50) * (Math.random() * 0.1 + 1) * xpmods.get(ent.getType()));
@@ -383,6 +414,12 @@ public class MobEXP implements Listener {
         }
     }
 
+    @EventHandler
+    public void playerDeath (PlayerDeathEvent e) {
+        RPGPlayer rp = main.getRP(e.getEntity());
+        rp.giveExpFromSource(e.getEntity(), e.getEntity().getLocation(), rp.getMaxExp() * -0.2, "");
+    }
+
 
     @EventHandler
     public void onSpawn (EntityAddToWorldEvent e) {
@@ -440,7 +477,7 @@ public class MobEXP implements Listener {
 
     @EventHandler
     public void onKill (EntityDeathEvent e) {
-        if (e.getEntity() instanceof LivingEntity && e.getEntity().getCustomName() != null && getLevel(e.getEntity()) != -1) {
+        if (e.getEntity() instanceof LivingEntity && e.getEntity().getCustomName() != null && getLevel(e.getEntity()) != -1 && !(e.getEntity() instanceof Player || e.getEntity() instanceof ArmorStand)) {
             LivingEntity ent = (LivingEntity) e.getEntity();
             double exp = getExp(ent);
             if (xp.containsKey(ent) && exp > 0) {//e.getEntity().hasMetadata("EXP")) {

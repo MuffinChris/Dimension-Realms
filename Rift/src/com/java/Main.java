@@ -502,6 +502,7 @@ public class Main extends JavaPlugin {
         getCommand("addexp").setExecutor(new ExpCommand());
         getCommand("dummy").setExecutor(new DummyCommand());
         getCommand("help").setExecutor(new HelpCommand());
+        getCommand("biomes").setExecutor(new BiomesCommand());
 
         getCommand("settings").setExecutor(new SettingsCommand());
         so("&bRIFT: &fEnabled commands!");
@@ -546,7 +547,7 @@ public class Main extends JavaPlugin {
         for (World w : Bukkit.getWorlds()) {
             for (Entity e : w.getEntities()) {
                 if (e.getType() == EntityType.ARMOR_STAND) {
-                    if (e.isCustomNameVisible() && e.getCustomName().contains("❤")) {
+                    if (e.isCustomNameVisible() && (e.getCustomName().contains("❤") || e.getCustomName().contains("⚡") || e.getCustomName().contains("♦") || e.getCustomName().contains("⚔"))) {
                         e.remove();
                     }
                     continue;
