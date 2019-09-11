@@ -46,10 +46,10 @@ public class InfernoVault extends Skill implements Listener {
         new BukkitRunnable() {
             double rem = -0.1;
             public void run() {
-                Vector v = new Vector(p.getLocation().getDirection().getX() * 0.7, 0.4 + rem, p.getLocation().getDirection().getZ() * 0.7);
+                Vector v = new Vector(p.getLocation().getDirection().getX() * 0.45, 0.2 + rem, p.getLocation().getDirection().getZ() * 0.45);
                 p.setVelocity(v);
                 rem+=0.1;
-                if (rem > 0.5) {
+                if (rem > 0.4) {
                     cancel();
                 }
             }

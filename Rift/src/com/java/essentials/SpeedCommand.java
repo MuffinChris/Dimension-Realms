@@ -19,12 +19,8 @@ public class SpeedCommand implements CommandExecutor {
 					Main.msg(p, "Usage: /speed <fly/walk> <1-10> <player>");
 				}
 				if (args.length == 2) {
-					if (args[1].contains(".")) {
-						Main.msg(p, "&cNo decimals allowed!");
-						return false;
-					}
 					if (args[0].equalsIgnoreCase("walk")) {
-						if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+						if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 							p.setWalkSpeed(Float.parseFloat(args[1]) / 10);
 							Main.msg(p, "&aSet your walk speed to " + args[1]);
 						} else {
@@ -32,7 +28,7 @@ public class SpeedCommand implements CommandExecutor {
 						}
 					}
 					if (args[0].equalsIgnoreCase("fly")) {
-						if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+						if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 							p.setFlySpeed(Float.parseFloat(args[1]) / 10);
 							Main.msg(p, "&aSet your fly speed to " + args[1]);
 						} else {
@@ -43,12 +39,8 @@ public class SpeedCommand implements CommandExecutor {
 				if (args.length >= 3) {
 					if (Bukkit.getPlayer(args[2]) instanceof Player) {
 						Player t = Bukkit.getPlayer(args[2]);
-						if (args[1].contains(".")) {
-							Main.msg(p, "&cNo decimals allowed!");
-							return false;
-						}
 						if (args[0].equalsIgnoreCase("walk")) {
-							if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+							if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 								t.setWalkSpeed(Float.parseFloat(args[1]) / 10);
 								Main.msg(p, "&aSet " + t.getName()  + "'s walk speed to " + args[1]);
 							} else {
@@ -56,7 +48,7 @@ public class SpeedCommand implements CommandExecutor {
 							}
 						}
 						if (args[0].equalsIgnoreCase("fly")) {
-							if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+							if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 								t.setFlySpeed(Float.parseFloat(args[1]) / 10);
 								Main.msg(p, "&aSet " + t.getName()  + "'s fly speed to " + args[1]);
 							} else {
@@ -78,7 +70,7 @@ public class SpeedCommand implements CommandExecutor {
 				if (Bukkit.getPlayer(args[2]) instanceof Player) {
 					Player t = Bukkit.getPlayer(args[2]);
 					if (args[0].equalsIgnoreCase("walk")) {
-						if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+						if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 							t.setWalkSpeed(Float.parseFloat(args[1]) / 10);
 							Main.so("&aSet " + t.getName()  + "'s walk speed to " + args[1]);
 						} else {
@@ -86,7 +78,7 @@ public class SpeedCommand implements CommandExecutor {
 						}
 					}
 					if (args[0].equalsIgnoreCase("fly")) {
-						if (Integer.parseInt(args[1]) >= 1 && Integer.parseInt(args[1]) <= 10) {
+						if (Float.parseFloat(args[1]) >= 1 && Float.parseFloat(args[1]) <= 10) {
 							t.setFlySpeed(Float.parseFloat(args[1]) / 10);
 							Main.so("&aSet " + t.getName()  + "'s fly speed to " + args[1]);
 						} else {

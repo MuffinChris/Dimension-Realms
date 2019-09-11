@@ -29,9 +29,9 @@ public class Pyroclasm extends Skill implements Listener {
     private double empowered = 1.75;
     private int range = 11;
     private int duration = 20 * 10;
-    private int maxbounces = 10;
+    private int maxbounces = 15;
     private double ratio = 0.75;
-    double travelspeed = 0.3;
+    double travelspeed = 0.5;
 
     public Pyroclasm() {
         super("Pyroclasm", 100, 8 * 20, 20, 6, "%player% has shot a fireball!", "CAST-TARGET");

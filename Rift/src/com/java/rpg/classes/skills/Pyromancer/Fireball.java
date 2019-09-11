@@ -119,10 +119,12 @@ public class Fireball extends Skill implements Listener {
                 Player shooter = (Player) a.getShooter();
                 if (e.getHitEntity() instanceof Entity) {
                     lightEntities(e.getHitEntity(), shooter, e.getHitEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                    e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getHitEntity().getLocation(), 50, 0.04, 0.08, 0.08, 0.08);
                 } else {
                     lightEntities(e.getEntity(), shooter, e.getEntity().getLocation(), Double.valueOf(a.getCustomName().replace("Fireball:", "")));
+                    e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getEntity().getLocation(), 50, 0.04, 0.08, 0.08, 0.08);
+
                 }
-                e.getEntity().getWorld().spawnParticle(Particle.LAVA, e.getEntity().getLocation(), 50, 0.04, 0.08, 0.08, 0.08);
                 a.remove();
             }
         }
