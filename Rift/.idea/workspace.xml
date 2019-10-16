@@ -2,66 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7fdb12d5-aa74-4d44-8dad-1229ed403d55" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/com/java/essentials/SpeedCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/essentials/SpeedCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/AFKInvuln$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/AFKInvuln.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$1$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$10.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$11.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$12.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$2$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$7.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$8.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$9.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/communication/ChatFunctions$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/communication/ChatFunctions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/communication/MsgCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/communication/playerinfo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/essentials/HelpCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/essentials/TimedrestartCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/holograms/EntityHealthBars$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/holograms/EntityHealthBars$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/holograms/EntityHealthBars.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/holograms/Hologram.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/DamageListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/Leveleable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ClassCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ClassManager$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ClassManager$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ExpCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/LevelCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ManaCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/SettingsCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/Skillcast.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/StatusValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/Fireball.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/InfernoVault.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/MeteorShower.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/modifiers/Environmental.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/party/Party.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/player/XPList.class" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Blaze.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/BlazeSpot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/Leveleable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/Leveleable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/ClassManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/ClassManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/Rift-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/Rift-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/Main$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/Leveleable.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/Leveleable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ClassManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/ClassManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/MobEXP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/RPGPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/StatusObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/StatusObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/StatusValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/StatusValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SMP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../SMP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SMP/src/com/java/NoEnd.java" beforeDir="false" afterPath="$PROJECT_DIR$/../SMP/src/com/java/NoEnd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SMP/target/SMP-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../SMP/target/SMP-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SMP/target/classes/com/java/NoEnd.class" beforeDir="false" afterPath="$PROJECT_DIR$/../SMP/target/classes/com/java/NoEnd.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -77,14 +44,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/holograms/Hologram.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Blaze.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="57" column="77" selection-start-line="57" selection-start-column="77" selection-end-line="57" selection-end-column="77" />
+            <state relative-caret-position="240">
+              <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#706#707#0" expanded="true" />
-                <element signature="e#734#735#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -93,22 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="485" column="25" selection-start-line="485" selection-start-column="25" selection-end-line="485" selection-end-column="25" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#13700#13701#0" expanded="true" />
-                <element signature="e#13725#13726#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/modifiers/Environmental.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="79" column="25" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="25" />
+            <state relative-caret-position="285">
+              <caret line="362" column="61" selection-start-line="362" selection-start-column="61" selection-end-line="362" selection-end-column="61" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -117,22 +68,48 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/party/PartyCommand.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/BlazeSpot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="98" column="103" selection-start-line="98" selection-start-column="103" selection-end-line="98" selection-end-column="103" />
+            <state relative-caret-position="300">
+              <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2415">
+              <caret line="217" column="23" selection-start-line="217" selection-start-column="23" selection-end-line="217" selection-end-column="23" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#11022#11023#0" expanded="true" />
+                <element signature="e#11051#11052#0" expanded="true" />
+                <element signature="e#11169#11170#0" expanded="true" />
+                <element signature="e#11197#11198#0" expanded="true" />
+                <element signature="e#11261#11262#0" expanded="true" />
+                <element signature="e#11286#11287#0" expanded="true" />
+                <element signature="e#11424#11425#0" expanded="true" />
+                <element signature="e#11449#11450#0" expanded="true" />
+                <element signature="e#11489#11490#0" expanded="true" />
+                <element signature="e#11540#11541#0" expanded="true" />
+                <element signature="e#11809#11810#0" expanded="true" />
+                <element signature="e#11834#11835#0" expanded="true" />
+                <element signature="e#11932#11933#0" expanded="true" />
+                <element signature="e#11957#11958#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/communication/ChatFunctions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
-              <caret line="55" column="51" lean-forward="true" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
+            <state relative-caret-position="-109">
+              <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -141,21 +118,30 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/essentials/SpeedCommand.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="80" column="96" selection-start-line="80" selection-start-column="96" selection-end-line="80" selection-end-column="96" />
+            <state relative-caret-position="1560">
+              <caret line="147" column="24" selection-start-line="147" selection-start-column="24" selection-end-line="147" selection-end-column="24" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1956#1957#0" expanded="true" />
+                <element signature="e#1987#1988#0" expanded="true" />
+                <element signature="e#2745#2746#0" expanded="true" />
+                <element signature="e#2777#2778#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="133" column="44" selection-start-line="133" selection-start-column="44" selection-end-line="133" selection-end-column="44" />
+            <state relative-caret-position="2550">
+              <caret line="195" column="25" selection-start-line="195" selection-start-column="25" selection-end-line="195" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#988#989#0" expanded="true" />
+                <element signature="e#1020#1021#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -164,17 +150,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/PyroclasmProjectile.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1635">
-              <caret line="120" column="112" selection-start-line="120" selection-start-column="112" selection-end-line="120" selection-end-column="112" />
+            <state relative-caret-position="255">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/Leveleable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="86">
-              <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+            <state relative-caret-position="2115">
+              <caret line="170" column="43" selection-start-line="170" selection-start-column="43" selection-end-line="170" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -183,14 +169,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/Leveleable.java">
+        <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="165" column="52" selection-start-line="165" selection-start-column="52" selection-end-line="165" selection-end-column="52" />
+            <state relative-caret-position="1500">
+              <caret line="130" column="5" selection-start-line="130" selection-start-column="5" selection-end-line="130" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1370#1371#0" expanded="true" />
-                <element signature="e#1436#1437#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -207,13 +191,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>scaleHealth</find>
-      <find>Lava</find>
-      <find>spawn</find>
-      <find>msg</find>
-      <find>scaleHea</find>
-      <find>increment</find>
-      <find>pushFiles</find>
       <find>new Hologram</find>
       <find>SetIdleSlot</find>
       <find>setBaseValue</find>
@@ -237,6 +214,13 @@
       <find>Death</find>
       <find>deathEvent</find>
       <find>hitEvent</find>
+      <find>walkspeed</find>
+      <find>status</find>
+      <find>death</find>
+      <find>updateStats</find>
+      <find>getExp</find>
+      <find>leave</find>
+      <find>join</find>
     </findStrings>
     <replaceStrings>
       <replace>getMsg()</replace>
@@ -261,8 +245,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/java/rpg/party/PartyCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/Damage.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/CDCommand.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/SkillCommand.java" />
@@ -273,7 +255,6 @@
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/BiomeLevelCommand.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/LevelRange.java" />
         <option value="$PROJECT_DIR$/src/com/java/essentials/TimedrestartCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java" />
         <option value="$PROJECT_DIR$/src/com/java/AFKInvuln.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/modifiers/Environmental.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/ManaCommand.java" />
@@ -292,26 +273,29 @@
         <option value="$PROJECT_DIR$/src/com/java/essentials/HelpCommand.java" />
         <option value="$PROJECT_DIR$/src/com/java/communication/ChatFunctions.java" />
         <option value="$PROJECT_DIR$/src/com/java/essentials/SeenCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/ClassManager.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/PyroclasmProjectile.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/player/XPList.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/StatusObject.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/RPGConstants.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/party/Party.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/ExpCommand.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/LevelCommand.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/DamageListener.java" />
-        <option value="$PROJECT_DIR$/src/com/java/Main.java" />
         <option value="$PROJECT_DIR$/src/resources/plugin.yml" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/BiomesCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/Leveleable.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java" />
-        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java" />
         <option value="$PROJECT_DIR$/src/com/java/essentials/SpeedCommand.java" />
         <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/ClassManager.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java" />
+        <option value="$PROJECT_DIR$/src/com/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Blaze.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/BlazeSpot.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/Leveleable.java" />
+        <option value="$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java" />
       </list>
     </option>
   </component>
@@ -333,7 +317,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-12" />
     <option name="y" value="-12" />
     <option name="width" value="981" />
@@ -527,10 +511,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1295" height="695" extended-state="7" />
-    <editor active="true" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2777328" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22267206" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -591,32 +574,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/ManaCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="26" column="32" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/Skillboard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1523#1524#0" expanded="true" />
-            <element signature="e#1554#1555#0" expanded="true" />
-            <element signature="e#1599#1600#0" expanded="true" />
-            <element signature="e#1630#1631#0" expanded="true" />
-            <element signature="e#1666#1667#0" expanded="true" />
-            <element signature="e#1702#1703#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/StatusObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -629,17 +586,6 @@
             <element signature="e#1658#1659#0" expanded="true" />
             <element signature="e#1950#1951#0" expanded="true" />
             <element signature="e#1981#1982#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="38" column="16" selection-start-line="38" selection-start-column="16" selection-end-line="38" selection-end-column="16" />
-          <folding>
-            <element signature="e#822#823#0" expanded="true" />
-            <element signature="e#851#852#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -779,16 +725,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/qol/BetterShulker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/qol/BetterShulker.java" />
     <entry file="file://$PROJECT_DIR$/src/com/java/essentials/HelpCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -803,16 +740,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/communication/ChatFunctions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="45" column="34" lean-forward="true" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -856,18 +783,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="101" column="35" lean-forward="true" selection-start-line="101" selection-start-column="35" selection-end-line="101" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#988#989#0" expanded="true" />
-            <element signature="e#1020#1021#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -946,13 +861,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/BiomesComman.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="25" selection-start-line="2" selection-start-column="25" selection-end-line="2" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/BiomesComman.java" />
     <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/BiomeLevelCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
@@ -967,59 +876,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="695">
           <caret line="94" column="38" selection-start-line="94" selection-start-column="38" selection-end-line="94" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1141">
-          <caret line="656" lean-forward="true" selection-start-line="656" selection-end-line="656" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7808#7952#0" expanded="true" />
-            <element signature="e#7951#7952#0" expanded="true" />
-            <element signature="e#8506#8507#0" expanded="true" />
-            <element signature="e#8535#8536#0" expanded="true" />
-            <element signature="e#9579#10426#0" expanded="true" />
-            <element signature="e#10425#10426#0" expanded="true" />
-            <element signature="e#10828#10829#0" expanded="true" />
-            <element signature="e#10860#10861#0" expanded="true" />
-            <element signature="e#10945#10946#0" expanded="true" />
-            <element signature="e#10984#10985#0" expanded="true" />
-            <element signature="e#11051#11052#0" expanded="true" />
-            <element signature="e#11197#11198#0" expanded="true" />
-            <element signature="e#11286#11287#0" expanded="true" />
-            <element signature="e#11449#11450#0" expanded="true" />
-            <element signature="e#11540#11541#0" expanded="true" />
-            <element signature="e#11834#11835#0" expanded="true" />
-            <element signature="e#11957#11958#0" expanded="true" />
-            <element signature="e#15565#16843#0" expanded="true" />
-            <element signature="e#16842#16843#0" expanded="true" />
-            <element signature="e#16718#16920#0" expanded="true" />
-            <element signature="e#16919#16920#0" expanded="true" />
-            <element signature="e#24018#24019#0" expanded="true" />
-            <element signature="e#25360#25361#0" expanded="true" />
-            <element signature="e#25474#25475#0" expanded="true" />
-            <element signature="e#25587#25588#0" expanded="true" />
-            <element signature="e#25720#25721#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2982">
-          <caret line="288" column="37" selection-start-line="288" selection-start-column="37" selection-end-line="288" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1956#1957#0" expanded="true" />
-            <element signature="e#1987#1988#0" expanded="true" />
-            <element signature="e#30240#30241#0" expanded="true" />
-            <element signature="e#30310#30311#0" expanded="true" />
-            <element signature="e#30402#30403#0" expanded="true" />
-            <element signature="e#30474#30475#0" expanded="true" />
-            <element signature="e#30568#30569#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1055,21 +911,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/Leveleable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="165" column="52" selection-start-line="165" selection-start-column="52" selection-end-line="165" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1370#1371#0" expanded="true" />
-            <element signature="e#1436#1437#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/holograms/Hologram.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
+        <state relative-caret-position="630">
           <caret line="57" column="77" selection-start-line="57" selection-start-column="77" selection-end-line="57" selection-end-column="77" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1079,31 +923,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/party/PartyCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="98" column="103" selection-start-line="98" selection-start-column="103" selection-end-line="98" selection-end-column="103" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="485" column="25" selection-start-line="485" selection-start-column="25" selection-end-line="485" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#13700#13701#0" expanded="true" />
-            <element signature="e#13725#13726#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/rpg/modifiers/Environmental.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
+        <state relative-caret-position="900">
           <caret line="79" column="25" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1111,10 +933,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java">
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/party/PartyCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="133" column="44" selection-start-line="133" selection-start-column="44" selection-end-line="133" selection-end-column="44" />
+        <state relative-caret-position="1095">
+          <caret line="98" column="103" selection-start-line="98" selection-start-column="103" selection-end-line="98" selection-end-column="103" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1123,8 +945,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Pyroclasm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
+        <state relative-caret-position="210">
           <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="43" column="23" lean-forward="true" selection-start-line="31" selection-start-column="3" selection-end-line="43" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1138,17 +970,128 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/PyroclasmProjectile.java">
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/StatusValue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1635">
-          <caret line="120" column="112" selection-start-line="120" selection-start-column="112" selection-end-line="120" selection-end-column="112" />
+        <state relative-caret-position="435">
+          <caret line="39" column="22" lean-forward="true" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="22" />
+          <folding>
+            <element signature="e#822#823#0" expanded="true" />
+            <element signature="e#851#852#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/InfernoVault.java">
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Blaze.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86">
-          <caret line="55" column="51" lean-forward="true" selection-start-line="55" selection-start-column="51" selection-end-line="55" selection-end-column="51" />
+        <state relative-caret-position="240">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/BlazeSpot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2415">
+          <caret line="217" column="23" selection-start-line="217" selection-start-column="23" selection-end-line="217" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11022#11023#0" expanded="true" />
+            <element signature="e#11051#11052#0" expanded="true" />
+            <element signature="e#11169#11170#0" expanded="true" />
+            <element signature="e#11197#11198#0" expanded="true" />
+            <element signature="e#11261#11262#0" expanded="true" />
+            <element signature="e#11286#11287#0" expanded="true" />
+            <element signature="e#11424#11425#0" expanded="true" />
+            <element signature="e#11449#11450#0" expanded="true" />
+            <element signature="e#11489#11490#0" expanded="true" />
+            <element signature="e#11540#11541#0" expanded="true" />
+            <element signature="e#11809#11810#0" expanded="true" />
+            <element signature="e#11834#11835#0" expanded="true" />
+            <element signature="e#11932#11933#0" expanded="true" />
+            <element signature="e#11957#11958#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/RPGPlayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1560">
+          <caret line="147" column="24" selection-start-line="147" selection-start-column="24" selection-end-line="147" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1956#1957#0" expanded="true" />
+            <element signature="e#1987#1988#0" expanded="true" />
+            <element signature="e#2745#2746#0" expanded="true" />
+            <element signature="e#2777#2778#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2550">
+          <caret line="195" column="25" selection-start-line="195" selection-start-column="25" selection-end-line="195" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#988#989#0" expanded="true" />
+            <element signature="e#1020#1021#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/PyroclasmProjectile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/Leveleable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2115">
+          <caret line="170" column="43" selection-start-line="170" selection-start-column="43" selection-end-line="170" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/skills/Pyromancer/Fireball.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1500">
+          <caret line="130" column="5" selection-start-line="130" selection-start-column="5" selection-end-line="130" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/rpg/classes/MobEXP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="362" column="61" selection-start-line="362" selection-start-column="61" selection-end-line="362" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/communication/ChatFunctions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-109">
+          <caret line="53" lean-forward="true" selection-start-line="53" selection-end-line="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -155,6 +155,9 @@ public class Leveleable {
         if (s.length() == 0) {
             flavor = "";
         } else {
+            if (s.equals("SELF")) {
+                flavor = "";
+            }
             if (main.getPM().hasParty(p) && xp >= 0) {
                 Party pa = main.getPM().getParty(p);
                 int amnt = pa.getNearbyPlayersSize(p);
@@ -165,8 +168,13 @@ public class Leveleable {
                         RPGPlayer rp = main.getRP(pp);
                         rp.setExp(rp.getExp() + xp);
                         DecimalFormat dF = new DecimalFormat("#");
-                        Main.msg(pp, "   &7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
-                        rp.getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
+                        if (pp.equals(p)) {
+                            Main.msg(pp, "   &7[+" + dF.format(xp) + "&7 XP]");
+                            rp.getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]");
+                        } else {
+                            Main.msg(pp, "   &7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
+                            rp.getBoard().setBossbar4("&7[+" + dF.format(xp) + "&7 XP]" + " &7(" + p.getName() + "&7)");
+                        }
                     }
                     return;
                 }

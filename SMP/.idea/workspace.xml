@@ -2,26 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45319b02-19b5-471b-beee-edc7033b8896" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/java/NoEnd.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/Blaze.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/skills/Pyromancer/BlazeSpot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Rift/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/BungeeCommands.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/ChatFunctions$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/ChatFunctions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/FlyCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/GamemodeCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/HealCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/InvseeCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/LagCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/ListCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/MsgCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/PlayerinfoListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/Sleep.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/SpeedCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/playerinfo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/java/playerinfoManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/Leveleable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/Leveleable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/ClassManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/MobEXP.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/MobEXP.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/RPGPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/RPGPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/StatusValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/src/com/java/rpg/classes/StatusValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/Rift-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/Rift-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/Leveleable.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/Leveleable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/ClassManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/MobEXP.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/MobEXP.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/RPGPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/StatusObject.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/StatusObject.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/StatusValue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/StatusValue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/classes/com/java/rpg/classes/skills/Pyromancer/WorldOnFire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/../Rift/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/java/NoEnd.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/java/NoEnd.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -36,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="61" column="38" lean-forward="true" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
+            <state relative-caret-position="-24">
+              <caret line="73" column="22" lean-forward="true" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -60,13 +64,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/MsgCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
+            <state relative-caret-position="270">
               <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/java/NoEnd.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
@@ -81,7 +85,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/java/ChatFunctions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1740">
+            <state relative-caret-position="1770">
               <caret line="132" column="88" selection-start-line="132" selection-start-column="88" selection-end-line="132" selection-end-column="96" />
             </state>
           </provider>
@@ -163,8 +167,8 @@
         <option value="$PROJECT_DIR$/src/com/java/BungeeCommands.java" />
         <option value="$PROJECT_DIR$/src/com/java/Sleep.java" />
         <option value="$PROJECT_DIR$/src/com/java/MsgCommand.java" />
-        <option value="$PROJECT_DIR$/src/com/java/NoEnd.java" />
         <option value="$PROJECT_DIR$/src/com/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/java/NoEnd.java" />
       </list>
     </option>
   </component>
@@ -188,6 +192,7 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -221,7 +226,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -327,7 +331,7 @@
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2574899" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26153848" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -401,6 +405,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-24">
+          <caret line="73" column="22" lean-forward="true" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/Sleep.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -408,9 +422,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/java/MsgCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/ChatFunctions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1740">
+        <state relative-caret-position="1770">
           <caret line="132" column="88" selection-start-line="132" selection-start-column="88" selection-end-line="132" selection-end-column="96" />
         </state>
       </provider>
@@ -453,27 +474,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/MsgCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/java/NoEnd.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/java/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="61" column="38" lean-forward="true" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

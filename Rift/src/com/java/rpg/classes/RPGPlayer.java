@@ -158,7 +158,7 @@ public class RPGPlayer extends Leveleable {
         board = new Skillboard(p);
         pstrength = 100;
 
-        walkspeed.getStatuses().add(new StatusValue("Init", 2, 0, 0, true));
+        walkspeed.getStatuses().add(new StatusValue("Init", 20, 0, 0, true));
     }
 
     public Map<String, Integer> getSkillLevels() {
@@ -387,6 +387,7 @@ public class RPGPlayer extends Leveleable {
             player.setHealth(Math.min(hp, hp * hpprev));
             player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(pclass.getBaseDmg());
             player.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0);
+            player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(main.getRP(player).getWalkspeed().getValue() / 100.0F);
         }
     }
 

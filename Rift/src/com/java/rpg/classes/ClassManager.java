@@ -197,7 +197,7 @@ public class ClassManager implements Listener {
                     e.getPlayer().setWalkSpeed(0.0F);
                 }
             } else {
-                float walkspeed = (main.getRP(e.getPlayer()).getWalkspeed().getValue() * 1.0F / 10F);
+                float walkspeed = (main.getRP(e.getPlayer()).getWalkspeed().getValue() / 100.0F);
                 e.getPlayer().setWalkSpeed(walkspeed);
             }
     }

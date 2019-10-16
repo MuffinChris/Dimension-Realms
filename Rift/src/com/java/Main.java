@@ -455,7 +455,7 @@ public class Main extends JavaPlugin {
                     getRP(p).updateStats();
                 }
             }
-        }.runTaskTimer(this, 10L, 80L);
+        }.runTaskTimer(this, 10L, 5L);
     }
 
     public void onEnable() {

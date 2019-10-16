@@ -4,11 +4,11 @@ public class StatusValue {
 
     private int value;
     private String source;
-    private int timestamp;
+    private long timestamp;
     private int duration;
     private boolean durationless;
 
-    public StatusValue(String source, int value, int duration, int timestamp, boolean durationless) {
+    public StatusValue(String source, int value, int duration, long timestamp, boolean durationless) {
         this.source = source;
         this.value = value;
         this.duration = duration;
@@ -24,7 +24,7 @@ public class StatusValue {
         return value;
     }
 
-    public int getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 

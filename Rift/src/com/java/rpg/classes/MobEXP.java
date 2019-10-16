@@ -259,7 +259,7 @@ public class MobEXP implements Listener {
     }
 
     public void scaleHealth(LivingEntity ent, int level, double modifier) {
-        double hp = 200 + Math.pow(level, 1.25) * 20 * Math.pow(ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/20.0, 1.0/2.5);
+        double hp = 200 + Math.pow(level, 1.25) * 8 * Math.pow(ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()/20.0, 1.0/2.5);
         hp*=modifier;
         ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp);
         ent.setHealth(ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
@@ -301,7 +301,7 @@ public class MobEXP implements Listener {
     }
 
     public double getExp(LivingEntity ent) {
-        if (getLevel(ent) == -1) {
+        if (getLevel(ent) == -1 || !(Integer.valueOf(getLevel(ent)) instanceof Integer)) {
             return 0;
         }
         return (0.5 * Math.pow(getLevel(ent), 2.1) + 50) * (Math.random() * 0.1 + 1) * xpmods.get(ent.getType());
@@ -484,7 +484,7 @@ public class MobEXP implements Listener {
                 //double exp = (double) e.getEntity().getMetadata("EXP").get(0).value();
                 for (Player pl : xp.get(ent).getPercentages().keySet()) {
                     if (xp.get(ent).getIndivPer(pl).contains("100%")) {
-                        main.getRP(pl).giveExpFromSource(pl, e.getEntity().getLocation(), exp * xp.get(ent).getPercentages().get(pl), "");
+                        main.getRP(pl).giveExpFromSource(pl, e.getEntity().getLocation(), exp * xp.get(ent).getPercentages().get(pl), "SELF");
                     } else {
                         main.getRP(pl).giveExpFromSource(pl, e.getEntity().getLocation(), exp * xp.get(ent).getPercentages().get(pl), xp.get(ent).getIndivPer(pl));
                     }
